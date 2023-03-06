@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#myForm {
+    width: 1024px;
+    margin: 0 auto;
+}
+
+.textarea-container textarea, .chips {
+    padding-left: 60px;
+}
+
+.select-wrapper input.select-dropdown {
+    font-size: 14px;
+}
+
+.row-counter {
+    pointer-events: none;
+}
