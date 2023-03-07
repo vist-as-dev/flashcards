@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Translation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -54,13 +55,16 @@ class TranslationRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Sentence
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findOneByOriginal(string $original): ?Translation
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.original = :original')
+            ->setParameter('original', $original)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

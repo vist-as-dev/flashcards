@@ -3,10 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use App\Repository\TranslationRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TranslationRepository::class)]
+#[ORM\MappedSuperclass]
 class Translation
 {
     #[ORM\Id]
@@ -14,17 +13,14 @@ class Translation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Direction::class, inversedBy: 'translations')]
-    private ?int $direction = null;
-
     #[ORM\Column(length: 255)]
     private ?string $original = null;
 
-    #[ORM\Column(type: Types::TEXT, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $translation = null;
 
-    #[ORM\OneToOne(mappedBy: 'translation', cascade: ['persist', 'remove'])]
-    private ?Statistics $statistics = null;
+    #[ORM\Column]
+    private ?int $counter = 0;
 
     public function getId(): ?int
     {
@@ -48,27 +44,31 @@ class Translation
         return null === $this->translation ? null : json_decode($this->translation, true);
     }
 
-    public function setTranslation(?array $translation): self
+    public function setTranslation(?string $translation): self
     {
-        $this->translation = json_encode($translation);
+        $this->translation = $translation;
 
         return $this;
     }
 
-    public function getStatistics(): ?Statistics
+    /**
+     * @return int|null
+     */
+    public function getCounter(): ?int
     {
-        return $this->statistics;
+        return $this->counter;
     }
 
-    public function setStatistics(Statistics $statistics): self
+    /**
+     * @param int|null $counter
+     */
+    public function setCounter(?int $counter): void
     {
-        // set the owning side of the relation if necessary
-        if ($statistics->getTranslation() !== $this) {
-            $statistics->setTranslation($this);
-        }
+        $this->counter = $counter;
+    }
 
-        $this->statistics = $statistics;
-
-        return $this;
+    public function addCounter(): void
+    {
+        $this->counter++;
     }
 }
