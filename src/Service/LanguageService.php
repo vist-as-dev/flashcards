@@ -2,26 +2,19 @@
 
 namespace App\Service;
 
-use App\Repository\LanguageRepository;
+use App\Provider\LanguageProvider;
 
 class LanguageService
 {
-    protected ?LanguageRepository $repo;
+    protected ?LanguageProvider $lp;
 
-    public function __construct(LanguageRepository $repo)
+    public function __construct(LanguageProvider $lp)
     {
-        $this->repo = $repo;
+        $this->lp = $lp;
     }
 
     public function list(): array
     {
-        $languages = $this->repo->findAll();
-
-        $result = [];
-        foreach ($languages as $language) {
-            $result[$language->getCode()] = $language->getName();
-        }
-
-        return $result;
+        return $this->lp->getMap();
     }
 }
