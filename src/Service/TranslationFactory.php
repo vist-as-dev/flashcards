@@ -39,8 +39,10 @@ class TranslationFactory
             foreach ($dictionaries as $key => $dictionary) {
                 ['terms' => $terms, 'entry' => $entry] = $dictionary;
                 $mean = 0;
-                foreach ($entry as ['score' => $score]) {
-                    $mean += $score;
+                foreach ($entry as $e) {
+                    if (isset($e['score'])) {
+                        $mean += $e['score'];
+                    }
                 }
                 $mean = $mean / count($entry);
 

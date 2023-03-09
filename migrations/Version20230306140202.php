@@ -15,15 +15,6 @@ use Psr\Log\LoggerInterface;
  */
 final class Version20230306140202 extends AbstractMigration
 {
-    protected LanguageProvider $lp;
-
-    public function __construct(Connection $connection, LoggerInterface $logger, LanguageProvider $lp)
-    {
-        $this->lp = $lp;
-
-        parent::__construct($connection, $logger);
-    }
-
     public function getDescription(): string
     {
         return '';
@@ -34,8 +25,8 @@ final class Version20230306140202 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE language (id INT AUTO_INCREMENT NOT NULL, code VARCHAR(4) NOT NULL, name VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
 
-        foreach ($this->lp->getMap() as $source) {
-            foreach ($this->lp->getMap() as $target) {
+        foreach (LanguageProvider::NAMES as $source) {
+            foreach (LanguageProvider::NAMES as $target) {
                 if ($source !== $target) {
                     $this->addSql(
                         'CREATE TABLE translation_' . strtolower($source[1]) . '_to_' . strtolower($target[1]) . ' (
@@ -53,8 +44,8 @@ final class Version20230306140202 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        foreach ($this->lp->getMap() as $source) {
-            foreach ($this->lp->getMap() as $target) {
+        foreach (LanguageProvider::NAMES as $source) {
+            foreach (LanguageProvider::NAMES as $target) {
                 if ($source !== $target) {
                     $this->addSql(
                         'DROP TABLE translation_' . $source[1] . '_to_' . $target[1]);

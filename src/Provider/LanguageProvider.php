@@ -33,19 +33,16 @@ class LanguageProvider
         self::RUSSIAN,
     ];
 
-    public function getMap(): array
-    {
-        return [
-            self::ENGLISH => 'English',
-            self::SPANISH => 'Spanish',
-            self::FRENCH => 'French',
-            self::GERMAN => 'German',
-            self::ITALIAN => 'Italian',
-            self::POLISH => 'Polish',
-            self::UKRAINIAN => 'Ukrainian',
-            self::RUSSIAN => 'Russian',
-        ];
-    }
+    const NAMES = [
+        self::ENGLISH => 'English',
+        self::SPANISH => 'Spanish',
+        self::FRENCH => 'French',
+        self::GERMAN => 'German',
+        self::ITALIAN => 'Italian',
+        self::POLISH => 'Polish',
+        self::UKRAINIAN => 'Ukrainian',
+        self::RUSSIAN => 'Russian',
+    ];
 
     public function getEntity($source, $target): ?string
     {

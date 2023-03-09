@@ -2,6 +2,7 @@
 
 namespace App\Request;
 
+use App\Provider\FormatterProvider;
 use App\Provider\LanguageProvider;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -36,7 +37,8 @@ class TranslationRequest extends AbstractRequest
     protected bool $examples;
 
     #[NotBlank]
-    protected bool $format;
+    #[Choice(choices: FormatterProvider::FORMATTERS)]
+    protected string $format;
 
     /**
      * @return string
