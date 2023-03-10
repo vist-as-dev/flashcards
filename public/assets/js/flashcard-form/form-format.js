@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.getItem('sentences.format')) {
             formats[i].checked = formats[i].value === localStorage.getItem('sentences.format');
         } else {
-            formats[i].checked = i === 0;
+            formats[i].checked = +i === 0;
+            localStorage.setItem('sentences.format', formats[i].value);
         }
 
         formats[i].addEventListener("change", function() {
