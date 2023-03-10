@@ -20,131 +20,205 @@
     <body>
         {% block body %}
             <div class="container">
-                <form id="myForm" class="col s12">
-                    <div class="row">
-                        <div class="col m7 s12">
-                            <div class="input-field">
-                                <div class="textarea-container">
-                                    <textarea id="sentences" class="materialize-textarea"></textarea>
-                                </div>
-                                <label for="sentences">Words</label>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="row">
+                            <div class="col s12">
+                                <h4>
+                                    Introducing our Language Learning Resource:
+                                    Convert Words and Phrases into Files with Translations, Definitions, Synonyms, and Usage Examples
+                                </h4>
                             </div>
-                            <span class="badge row-counter">0</span>
-                        </div>
-                        <div class="col m5 s12">
-                            <div class="row">
-                                <div class="col s12">
-                                    <span class="card-title">Direction</span>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col m6 s12">
-                                    <div class="input-field">
-                                        <select id="source"></select>
-                                        <label for="source">Source language</label>
-                                    </div>
-                                </div>
-                                <div class="col m6 s12">
-                                    <div class="input-field">
-                                        <select id="target"></select>
-                                        <label for="target">Target language</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col m7 s12">
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <span class="card-title">Options</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <div class="switch">
-                                                <label>
-                                                    <input type="checkbox" id="definitions" checked />
-                                                    <span class="lever"></span>
-                                                    Definitions
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <div class="switch">
-                                                <label>
-                                                    <input type="checkbox" id="definition_examples" />
-                                                    <span class="lever"></span>
-                                                    Examples for Definition
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <div class="switch">
-                                                <label>
-                                                    <input type="checkbox" id="definition_synonyms" />
-                                                    <span class="lever"></span>
-                                                    Synonyms for Definition
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <div class="switch">
-                                                <label>
-                                                    <input type="checkbox" id="examples" />
-                                                    <span class="lever"></span>
-                                                    Examples
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col m5 s12">
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <span class="card-title">Output format</span>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <label>
-                                                <input name="format" type="radio" value="reword" checked />
-                                                <span>Reword (csv)</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <label>
-                                                <input name="format" type="radio" value="anki" disabled />
-                                                <span>Anki (csv)</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <button class="btn waves-effect waves-light" type="submit">Download</button>
-                                </div>
+                            <div class="col s12">
+                                <p>
+                                    This website provides a service that allows you to convert words and phrases into files containing translations, definitions, synonyms, and usage examples,
+                                    which can be imported into language learning applications.
+                                </p>
+                                <p>
+                                    With our service, you can easily expand your word bank and acquire new language skills.
+                                    Our platform is perfect for anyone studying foreign languages, mastering a new language, or simply looking to improve their language fluency.
+                                </p>
+                                <p>
+                                    Our website is currently in a testing phase and we are offering our service for free.
+                                    We hope to receive feedback, comments, and suggestions from our users.
+                                </p>
+                                <p>
+                                    If your language learning application is not supported by our service, please don't hesitate to contact us.
+                                    We will be happy to add the necessary file format to our service.
+                                </p>
+                                <p>
+                                    We strive to meet the needs of our users and value their feedback.
+                                    We encourage you to contact us and let us know your thoughts and requirements.
+                                </p>
+                                <p>
+                                    Thank you for choosing our service and we look forward to a productive partnership!
+                                </p>
+                                <p>
+                                    (<a href="https://t.me/flashcard_dot_uno" target="_blank">
+                                        Support Chat
+                                    </a>)
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col s12">
-                            <div id="myResponse"></div>
-                            <div id="myErrors"></div>
+                    <form id="flashcard-form" class="col s12">
+                        <div class="row">
+                            <div class="col m7 s12">
+                                <div class="input-field">
+                                    <div class="textarea-container">
+                                        <textarea id="sentences" class="materialize-textarea"></textarea>
+                                    </div>
+                                    <label for="sentences">Words</label>
+                                </div>
+                                <span class="badge row-counter">0</span>
+                            </div>
+                            <div class="col m5 s12">
+                                <div class="row">
+                                    <div class="col s12">
+                                        <span class="card-title">Direction</span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col m6 s12">
+                                        <div class="input-field">
+                                            <select id="source"></select>
+                                            <label for="source">Source language</label>
+                                        </div>
+                                    </div>
+                                    <div class="col m6 s12">
+                                        <div class="input-field">
+                                            <select id="target"></select>
+                                            <label for="target">Target language</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col m7 s12">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <span class="card-title">Options</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="switch">
+                                                    <label>
+                                                        <input type="checkbox" id="definitions" />
+                                                        <span class="lever"></span>
+                                                        Definitions
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="switch">
+                                                    <label>
+                                                        <input type="checkbox" id="definition-examples" />
+                                                        <span class="lever"></span>
+                                                        Examples for Definition
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="switch">
+                                                    <label>
+                                                        <input type="checkbox" id="definition-synonyms" />
+                                                        <span class="lever"></span>
+                                                        Synonyms for Definition
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="switch">
+                                                    <label>
+                                                        <input type="checkbox" id="examples" />
+                                                        <span class="lever"></span>
+                                                        Examples
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="switch">
+                                                    <label>
+                                                        <input type="checkbox" id="related-words" />
+                                                        <span class="lever"></span>
+                                                        <span>
+                                                            Translation of related words
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col m5 s12">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <span class="card-title">Output format</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <label>
+                                                    <input name="format" type="radio" value="reword" />
+                                                    <span>Reword (csv)</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <label>
+                                                    <input name="format" type="radio" value="custom" disabled />
+                                                    <span>
+                                                        Your format<br />
+                                                        (<a href="https://t.me/flashcard_dot_uno" target="_blank">
+                                                            <small>suggest to developer</small>
+                                                        </a>)
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="input-field col s12">
+                                        <button class="btn waves-effect waves-light" id="download-btn" type="submit">
+                                            Download
+                                        </button>
+                                        <div class="preloader-wrapper small active hide">
+                                            <div class="spinner-layer">
+                                                <div class="circle-clipper left">
+                                                    <div class="circle"></div>
+                                                </div><div class="gap-patch">
+                                                    <div class="circle"></div>
+                                                </div><div class="circle-clipper right">
+                                                    <div class="circle"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                        <div class="row">
+                            <div class="col s12">
+                                <div id="flashcard-form-response"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         {% endblock %}
     </body>
-    <script src="{{ asset('assets/js/form-on-submit.js') }}"></script>
-    <script src="{{ asset('assets/js/form-row-counter.js') }}"></script>
-    <script src="{{ asset('assets/js/form-select.js') }}"></script>
+    <script src="{{ asset('assets/js/flashcard-form/form-on-submit.js') }}"></script>
+    <script src="{{ asset('assets/js/flashcard-form/form-row-counter.js') }}"></script>
+    <script src="{{ asset('assets/js/flashcard-form/form-select.js') }}"></script>
+    <script src="{{ asset('assets/js/flashcard-form/form-options.js') }}"></script>
+    <script src="{{ asset('assets/js/flashcard-form/form-format.js') }}"></script>
 </html>

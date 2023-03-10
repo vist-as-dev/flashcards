@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="bf489110.ftp.tools" id="64801b42-90c6-4461-a68e-ea1c6b259e7d" port="22" nameFormat="DESCRIPTIVE" username="bf489110" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>

@@ -3,16 +3,24 @@
 namespace App\Service\Formatter;
 
 use App\Model\Translation;
+use App\Request\TranslationRequest;
 
 class Reword implements FormatterInterface
 {
-    public function format(
-        Translation $model,
-        bool        $hasDefinitions,
-        bool        $hasDefinitionExamples,
-        bool        $hasDefinitionSynonyms,
-        bool        $hasExamples,
-    ): string
+    protected bool $hasDefinitions;
+    protected bool $hasDefinitionExamples;
+    protected bool $hasDefinitionSynonyms;
+    protected bool $hasExamples;
+
+    public function __construct(TranslationRequest $request)
+    {
+        $this->hasDefinitions = $request->hasDefinitions();
+        $this->hasDefinitionExamples = $request->hasDefinitionExamples();
+        $this->hasDefinitionSynonyms = $request->hasDefinitionSynonyms();
+        $this->hasExamples = $request->hasExamples();
+    }
+
+    public function format(Translation $model): string
     {
         return '"' . join('"; "', array_merge(
             [
@@ -20,8 +28,10 @@ class Reword implements FormatterInterface
                 $this->renderTransliteration($model),
                 $this->renderTranslations($model),
             ],
-            $hasDefinitions ? $this->renderDefinitions($model, $hasDefinitionExamples, $hasDefinitionSynonyms) : [],
-            $hasExamples ? $this->renderExamples($model) : [],
+            $this->hasDefinitions
+                ? $this->renderDefinitions($model, $this->hasDefinitionExamples, $this->hasDefinitionSynonyms)
+                : [],
+            $this->hasExamples ? $this->renderExamples($model) : [],
         )) . '"';
     }
 
@@ -43,7 +53,7 @@ class Reword implements FormatterInterface
     protected function renderTranslations(Translation $model): string
     {
         $translations = [];
-        foreach ($model->getTranslations() as $key => $value) {
+        foreach ($model->getTranslations() as $value) {
             $translations[] = is_array($value) ? join(', ', $value) : $value;
         }
 

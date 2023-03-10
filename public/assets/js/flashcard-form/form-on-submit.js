@@ -1,5 +1,11 @@
-document.getElementById("myForm").addEventListener("submit", function(event) {
+document.getElementById("flashcard-form").addEventListener("submit", function(event) {
     event.preventDefault();
+
+    const downloadButton = document.querySelector("#flashcard-form #download-btn");
+    const preloader = document.querySelector("#flashcard-form .preloader-wrapper");
+    downloadButton.classList.add('hide');
+    preloader.classList.remove('hide');
+
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/api/translate");
@@ -14,9 +20,10 @@ document.getElementById("myForm").addEventListener("submit", function(event) {
         source,
         target,
         definitions: document.getElementById("definitions").checked,
-        definition_examples: document.getElementById("definition_examples").checked,
-        definition_synonyms: document.getElementById("definition_synonyms").checked,
+        definition_examples: document.getElementById("definition-examples").checked,
+        definition_synonyms: document.getElementById("definition-synonyms").checked,
         examples: document.getElementById("examples").checked,
+        related_words: document.getElementById("related-words").checked,
         format,
     };
 
@@ -37,11 +44,16 @@ document.getElementById("myForm").addEventListener("submit", function(event) {
             (window.URL) ? window.URL.revokeObjectURL(url) : window.webkitURL.revokeObjectURL(url);
 
             document
-                .getElementById("myResponse")
+                .getElementById("flashcard-form-response")
                 .innerHTML = "Done!";
         } else {
-            document.getElementById("myErrors").innerHTML = "Error: " + xhr.statusText;
+            document
+                .getElementById("flashcard-form-response")
+                .innerHTML = "Error: " + xhr.statusText;
         }
+
+        downloadButton.classList.remove('hide');
+        preloader.classList.add('hide');
     });
 
     xhr.send(JSON.stringify(requestBody));

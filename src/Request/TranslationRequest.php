@@ -36,8 +36,11 @@ class TranslationRequest extends AbstractRequest
     #[NotNull]
     protected bool $examples;
 
+    #[NotNull]
+    protected bool $related_words;
+
     #[NotBlank]
-    #[Choice(choices: FormatterProvider::FORMATTERS)]
+    #[Choice(choices: FormatterProvider::FORMATS)]
     protected string $format;
 
     /**
@@ -99,8 +102,16 @@ class TranslationRequest extends AbstractRequest
     /**
      * @return string
      */
-    public function format(): string
+    public function getFormat(): string
     {
         return $this->format;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasRelatedWords(): bool
+    {
+        return $this->related_words;
     }
 }
