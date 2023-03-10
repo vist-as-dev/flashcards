@@ -5,9 +5,14 @@
     height: 100vh;
 }
 
+div#introduction, div#download {
+    width: 100%;
+    min-height: 620px;
+}
+
 #flashcard-form {
     width: 100%;
-    margin: 0 auto;
+    margin: 40px auto 0;
 }
 
 .textarea-container textarea, .chips {
