@@ -5,8 +5,8 @@
     height: 100vh;
 }
 
-#myForm {
-    width: 1024px;
+#flashcard-form {
+    width: 100%;
     margin: 0 auto;
 }
 

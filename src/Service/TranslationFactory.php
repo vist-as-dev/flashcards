@@ -11,9 +11,10 @@ class TranslationFactory
         $sentences = $data['sentences'] ?? null;
         $dictionaries = $data['dict'] ?? null;
 
-        [['orig' => $original, 'trans' => $translation], $transliteration] = $sentences;
+        $original = ($sentences[0] ?? [])['orig'] ?? null;
+        $translation = ($sentences[0] ?? [])['trans'] ?? null;
+        $transliteration = ($sentences[1] ?? [])['src_translit'] ?? null;
 
-        $transliteration = $transliteration['src_translit'] ?? null;
         $definitions = $data['definitions'] ?? [];
         $synonyms = $data['synsets'] ?? [];
         $examples = $data['examples'] ?? [];
@@ -46,9 +47,9 @@ class TranslationFactory
                 }
                 $mean = $mean / count($entry);
 
-                while (isset($scores[strval($mean)])) {
-                    $mean += 0.00000000000000001;
-                }
+//                while (isset($scores[strval($mean)])) {
+//                    $mean += 0.00000000000000001;
+//                }
 
                 $scores[strval($mean)] = $key;
 

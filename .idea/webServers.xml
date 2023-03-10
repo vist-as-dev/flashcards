@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="3166a8cc-fddc-47af-b933-afdf28f1095c" name="bf489110" url="http://bf489110.ftp.tools">
+        <fileTransfer rootFolder="/home/bf489110/flashcard.uno/www" accessType="SFTP" host="bf489110.ftp.tools" port="22" sshConfigId="64801b42-90c6-4461-a68e-ea1c6b259e7d" sshConfig="bf489110@bf489110.ftp.tools:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
