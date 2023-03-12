@@ -3,6 +3,7 @@
 namespace App\Provider;
 
 use App\Request\TranslationRequest;
+use App\Service\Formatter\Anki;
 use App\Service\Formatter\FormatterInterface;
 use App\Service\Formatter\Reword;
 
@@ -20,6 +21,7 @@ class FormatterProvider
     {
         $formatters = [
             self::REWORD => new Reword($request),
+            self::ANKI => new Anki($request),
         ];
 
         return $formatters[$request->getFormat()] ?? null;
