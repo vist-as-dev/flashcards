@@ -29,7 +29,7 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
 
     const extensions = {
         anki: 'txt',
-        reword: 'csv,'
+        reword: 'csv',
     };
 
     xhr.addEventListener("load", function() {
