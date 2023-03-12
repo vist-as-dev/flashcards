@@ -1,4 +1,4 @@
-const ids = ['introduction', 'download'];
+const ids = ['introduction', 'preprocessing', 'download'];
 
 const tabs = M.Tabs.init(document.querySelector('.tabs'), {
     onShow: () => {
