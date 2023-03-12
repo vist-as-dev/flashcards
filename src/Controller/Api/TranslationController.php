@@ -44,7 +44,7 @@ class TranslationController extends AbstractController
         }
 
         return $this->json([
-            'csv' => join(PHP_EOL, $rows),
+            'content' => join(PHP_EOL, $rows),
         ]);
     }
 }

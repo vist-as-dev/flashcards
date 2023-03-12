@@ -16,7 +16,7 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
     const target = document.getElementById("target").value;
 
     const requestBody = {
-        text: document.getElementById("sentences").value.split("\n").filter(i => !!i.length).slice(0, 20),
+        text: document.getElementById("sentences").value.split("\n").filter(i => !!i.length),
         source,
         target,
         definitions: document.getElementById("definitions").checked,
@@ -27,15 +27,20 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
         format,
     };
 
+    const extensions = {
+        anki: 'txt',
+        reword: 'csv,'
+    };
+
     xhr.addEventListener("load", function() {
         if (xhr.status === 200) {
-            const {csv} = JSON.parse(xhr.responseText);
-            const blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+            const {content} = JSON.parse(xhr.responseText);
+            const blob = new Blob([content], {type: "text/csv;charset=utf-8"});
             const url = (window.URL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
             const a = document.createElement('a');
 
             a.href = url;
-            a.download = `${format}-${source}-${target}-flashcards.csv`;
+            a.download = `${format}-${source}-${target}-flashcards.` + extensions[format];
 
             document.body.append(a);
             a.click();
