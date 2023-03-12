@@ -6,6 +6,10 @@ const tabs = M.Tabs.init(document.querySelector('.tabs'), {
     },
 });
 
+function switchPreprocessingTab() {
+    tabs.select('preprocessing')
+}
+
 function switchDownloadTab() {
     tabs.select('download')
 }
