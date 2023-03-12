@@ -22,7 +22,7 @@ class Anki implements FormatterInterface
 
     public function format(Translation $model): string
     {
-        return join("\t", array_merge(
+        return trim(join("\t", array_merge(
             [
                 $this->renderOriginal($model),
                 $this->renderTransliteration($model),
@@ -32,7 +32,7 @@ class Anki implements FormatterInterface
                 ? [$this->renderDefinitions($model, $this->hasDefinitionExamples, $this->hasDefinitionSynonyms)]
                 : [],
             $this->hasExamples ? [$this->renderExamples($model)] : [],
-        ));
+        )));
     }
 
     protected function renderOriginal(Translation $model): string

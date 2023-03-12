@@ -43,10 +43,18 @@ class TranslationService
             $row = new $entity();
             $row->setOriginal($word);
             $row->setTranslation($response);
-            $this->em->persist($row);
+
+            $data = $row->getTranslation();
+            $orig = $data['sentences'][0]['orig'];
+            $trans = $data['sentences'][0]['trans'];
+
+            if (strlen($word) < 60 && ($orig !== $trans || isset($data['dict']))) {
+                $this->em->persist($row);
+            }
         }
 
         $row->addCounter();
+
         $this->em->flush();
 
         return $row;
