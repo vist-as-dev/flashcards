@@ -16,7 +16,7 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
     const target = document.getElementById("target").value;
 
     const requestBody = {
-        text: document.getElementById("sentences").value.split("\n").filter(i => !!i.length).slice(0, 20),
+        text: document.getElementById("sentences").value.split("\n").filter(i => !!i.length),
         source,
         target,
         definitions: document.getElementById("definitions").checked,
