@@ -7,7 +7,7 @@
 
 div#introduction, div#preprocessing, div#download {
     width: 100%;
-    min-height: 620px;
+    min-height: 630px;
 }
 
 #preprocessing-form, #flashcard-form {
