@@ -67,5 +67,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="xregexp" level="application" />
+    <orderEntry type="library" name="materialize" level="application" />
   </component>
 </module>

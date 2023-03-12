@@ -5,18 +5,20 @@
     height: 100vh;
 }
 
-div#introduction, div#download {
+div#introduction, div#preprocessing, div#download {
     width: 100%;
     min-height: 620px;
 }
 
-#flashcard-form {
+#preprocessing-form, #flashcard-form {
     width: 100%;
     margin: 40px auto 0;
 }
 
-.textarea-container textarea, .chips {
+.textarea-container textarea {
     padding-left: 60px;
+    max-height: 470px!important;
+    overflow-y: auto;
 }
 
 .select-wrapper input.select-dropdown {
