@@ -24,6 +24,7 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
         definition_synonyms: document.getElementById("definition-synonyms").checked,
         examples: document.getElementById("examples").checked,
         related_words: document.getElementById("related-words").checked,
+        speech_parts: document.getElementById("speech-parts").checked,
         format,
     };
 

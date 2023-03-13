@@ -5,19 +5,20 @@
     height: 100vh;
 }
 
-div#introduction, div#preprocessing, div#download {
+div#introduction, div#description, div#preprocessing, div#download {
     width: 100%;
-    min-height: 630px;
+    min-height: 700px;
+    padding-top: 40px;
 }
 
 #preprocessing-form, #flashcard-form {
     width: 100%;
-    margin: 40px auto 0;
+    margin: 0 auto;
 }
 
 .textarea-container textarea {
     padding-left: 60px;
-    max-height: 470px!important;
+    height: 502px!important;
     overflow-y: auto;
 }
 

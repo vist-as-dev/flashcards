@@ -5,7 +5,7 @@ function setSentencesCounter() {
     const rows = sentences.value.split("\n");
     const count = rows.filter(i => !!i.length).length;
 
-    counter.innerText = count.toString();
+    counter.innerText = count.toString() + (count === 1 ? ' row' : ' rows');
 }
 
 sentences.addEventListener("input", setSentencesCounter);
