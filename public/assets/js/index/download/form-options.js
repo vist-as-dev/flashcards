@@ -4,12 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const definitionSynonyms = document.querySelector('input#definition-synonyms');
     const examples = document.querySelector('input#examples');
     const relatedWords = document.querySelector('input#related-words');
+    const speechParts = document.querySelector('input#speech-parts');
 
     definitions.checked = localStorage.getItem('sentences.options.definitions') === 'checked';
     definitionExamples.checked = localStorage.getItem('sentences.options.definitionExamples') === 'checked';
     definitionSynonyms.checked = localStorage.getItem('sentences.options.definitionSynonyms') === 'checked';
     examples.checked = localStorage.getItem('sentences.options.examples') === 'checked';
     relatedWords.checked = localStorage.getItem('sentences.options.relatedWords') === 'checked';
+    speechParts.checked = localStorage.getItem('sentences.options.speechParts') === 'checked';
 
     definitions.addEventListener("change", function() {
         localStorage.setItem('sentences.options.definitions', definitions.checked ? 'checked' : 'unchecked');
@@ -25,5 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     relatedWords.addEventListener("change", function() {
         localStorage.setItem('sentences.options.relatedWords', relatedWords.checked ? 'checked' : 'unchecked');
+    });
+    speechParts.addEventListener("change", function() {
+        localStorage.setItem('sentences.options.speechParts', relatedWords.checked ? 'checked' : 'unchecked');
     });
 });

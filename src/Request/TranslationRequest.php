@@ -39,6 +39,9 @@ class TranslationRequest extends AbstractRequest
     #[NotNull]
     protected bool $related_words;
 
+    #[NotNull]
+    protected bool $speech_parts;
+
     #[NotBlank]
     #[Choice(choices: FormatterProvider::FORMATS)]
     protected string $format;
@@ -100,18 +103,26 @@ class TranslationRequest extends AbstractRequest
     }
 
     /**
-     * @return string
-     */
-    public function getFormat(): string
-    {
-        return $this->format;
-    }
-
-    /**
      * @return bool
      */
     public function hasRelatedWords(): bool
     {
         return $this->related_words;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSpeechPartsApart(): bool
+    {
+        return $this->speech_parts;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormat(): string
+    {
+        return $this->format;
     }
 }

@@ -2,7 +2,7 @@
                             <div id="preprocessing" class="col s12">
                                 <form id="preprocessing-form" class="col s12">
                                     <div class="row">
-                                        <div class="col m7 s12">
+                                        <div class="col m6 s12">
                                             <div class="row">
                                                 <div class="col s12">
                                                     <div class="input-field">
@@ -13,21 +13,25 @@
                                                             ></textarea>
                                                         </div>
                                                         <label for="source_text">Text</label>
+                                                        <span class="helper-text">
+                                                            Copy your source text and past it to this field.<br />
+                                                            Or upload as a file.
+                                                        </span>
                                                     </div>
-                                                    <span id="text_volume" class="badge">0</span>
+                                                    <span id="text_volume" class="badge">
+                                                        0 characters / 0 rows
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col m5 s12">
+                                        <div class="col m6 s12">
                                             <div class="row">
                                                 <div class="col s12">
                                                     <div class="row">
                                                         <div class="col s12">
                                                             <span class="card-title">Upload file</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col s12">
+                                                            <label>with text, subtitles or eBook (fb2)</label>
+
                                                             <div class="file-field input-field">
                                                                 <div class="btn waves-effect waves-light">
                                                                     <span>File</span>
@@ -40,7 +44,7 @@
                                                                            placeholder="Upload file"
                                                                     >
                                                                     <span id="upload_file_helper" class="helper-text">
-                                                                        Upload file (<250kb) with text, subtitles or eBook (fb2)
+                                                                        Maximum file size: 250kb
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -53,6 +57,7 @@
                                                     <div class="row">
                                                         <div class="col s12">
                                                             <span class="card-title">Options</span>
+                                                            <label>for processing source text</label>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -74,18 +79,7 @@
                                                                         <label>
                                                                             <input type="checkbox" id="clear_tags" />
                                                                             <span class="lever"></span>
-                                                                            Clear tags
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col s12">
-                                                                    <div class="switch">
-                                                                        <label>
-                                                                            <input type="checkbox" id="clear_empty_rows" />
-                                                                            <span class="lever"></span>
-                                                                            Clear empty rows
+                                                                            Remove &#60;tags&#62;
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -96,7 +90,18 @@
                                                                         <label>
                                                                             <input type="checkbox" id="words_only" />
                                                                             <span class="lever"></span>
-                                                                            Words only
+                                                                            Remove all, but letters
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col s12">
+                                                                    <div class="switch">
+                                                                        <label>
+                                                                            <input type="checkbox" id="split_to_words" />
+                                                                            <span class="lever"></span>
+                                                                            One word in a row
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -107,7 +112,7 @@
                                                                         <label>
                                                                             <input type="checkbox" id="to_lowercase" />
                                                                             <span class="lever"></span>
-                                                                            To lowercase
+                                                                            All to lowercase
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -118,9 +123,9 @@
                                                                 <div class="col s12">
                                                                     <div class="switch">
                                                                         <label>
-                                                                            <input type="checkbox" id="split_to_words" />
+                                                                            <input type="checkbox" id="remove_empty_rows" />
                                                                             <span class="lever"></span>
-                                                                            Split to words
+                                                                            Remove empty rows
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -131,7 +136,7 @@
                                                                         <label>
                                                                             <input type="checkbox" id="remove_duplicates" />
                                                                             <span class="lever"></span>
-                                                                            Remove duplicates
+                                                                            Remove row duplicates
                                                                         </label>
                                                                     </div>
                                                                 </div>
@@ -174,10 +179,20 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="input-field col s12">
-                                                    <button class="btn waves-effect waves-light" id="pass-btn" onclick="return false">
+                                                <div class="col s12">
+                                                    <button class="btn waves-effect waves-light"
+                                                            id="apply-btn"
+                                                            onclick="handle(); return false"
+                                                    >
+                                                        <i class="material-icons left">arrow_back</i>
+                                                        Apply options
+                                                    </button>
+                                                    <button class="btn waves-effect waves-light orange darken-2"
+                                                            id="pass-btn"
+                                                            onclick="return false"
+                                                    >
                                                         <i class="material-icons right">arrow_forward</i>
-                                                        Pass On
+                                                        Pass on the processed text
                                                     </button>
                                                 </div>
                                             </div>

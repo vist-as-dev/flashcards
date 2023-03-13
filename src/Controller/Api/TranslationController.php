@@ -28,14 +28,14 @@ class TranslationController extends AbstractController
             $translation = $service->translate($request->getSource(), $request->getTarget(), $item);
             $translation = $translation->getTranslation();
             $model = $factory->create($translation);
-            $rows[] = $formatter->format($model);
+            $rows = array_merge($rows, $formatter->format($model));
 
             if ($request->hasRelatedWords() && !empty($model->getRelatedWords())) {
                 foreach ($model->getRelatedWords() as $relatedWord) {
                     $translation = $service->translate($request->getSource(), $request->getTarget(), $relatedWord);
-                    $rows[] = $formatter->format(
+                    $rows = array_merge($rows, $formatter->format(
                         $factory->create($translation->getTranslation())
-                    );
+                    ));
                 }
             }
         }

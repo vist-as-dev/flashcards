@@ -11,6 +11,7 @@ class Reword implements FormatterInterface
     protected bool $hasDefinitionExamples;
     protected bool $hasDefinitionSynonyms;
     protected bool $hasExamples;
+    protected bool $hasSpeechPartsApart;
 
     public function __construct(TranslationRequest $request)
     {
@@ -18,11 +19,16 @@ class Reword implements FormatterInterface
         $this->hasDefinitionExamples = $request->hasDefinitionExamples();
         $this->hasDefinitionSynonyms = $request->hasDefinitionSynonyms();
         $this->hasExamples = $request->hasExamples();
+        $this->hasSpeechPartsApart = $request->hasSpeechPartsApart();
     }
 
-    public function format(Translation $model): string
+    public function format(Translation $model): array
     {
-        return '"' . join('"; "', array_merge(
+        if ($this->hasSpeechPartsApart) {
+
+        }
+
+        return ['"' . join('"; "', array_merge(
             [
                 $this->renderOriginal($model),
                 $this->renderTransliteration($model),
@@ -32,7 +38,7 @@ class Reword implements FormatterInterface
                 ? $this->renderDefinitions($model, $this->hasDefinitionExamples, $this->hasDefinitionSynonyms)
                 : [],
             $this->hasExamples ? $this->renderExamples($model) : [],
-        )) . '"';
+        )) . '"'];
     }
 
     protected function renderOriginal(Translation $model): string

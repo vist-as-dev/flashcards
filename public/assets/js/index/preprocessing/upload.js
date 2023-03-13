@@ -29,7 +29,6 @@ field.addEventListener('change', (e) => {
             M.textareaAutoResize(textarea);
 
             sourceText = content;
-            handle()
         }
         reader.onerror = function (evt) {
             console.log(evt)

@@ -1,55 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Flashcard online service for improving your vocabulary.{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-            <link href="{{ asset('assets/css/form.css') }}" rel="stylesheet"/>
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+{% extends 'base.html.twig' %}
 
-        {% block javascripts %}
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-PE97QR6H6F"></script>
-            <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
+{% block content %}
+    <ul class="tabs tabs-fixed-width">
+        <li class="tab col s3"><a href="#introduction">Introduction</a></li>
+        <li class="tab col s3"><a href="#preprocessing">Preprocessing</a></li>
+        <li class="tab col s3"><a href="#download">Download Flashcards</a></li>
+    </ul>
 
-                gtag('config', 'G-PE97QR6H6F');
-            </script>
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
+    {{ include('index/introduction.html.twig') }}
+    {{ include('index/preprocessing.html.twig') }}
+    {{ include('index/download.html.twig') }}
 
-    </head>
-
-    <body>
-        {% block body %}
-
-            <div class="container">
-                <div class="row">
-                    <div class="col s12">
-                        <div class="row">
-                            <div class="col s12">
-                                <ul class="tabs tabs-fixed-width">
-                                    <li class="tab col s4"><a href="#introduction">Introduction</a></li>
-                                    <li class="tab col s4"><a href="#preprocessing">Preprocessing</a></li>
-                                    <li class="tab col s4"><a href="#download">Download Flashcards</a></li>
-                                </ul>
-                            </div>
-                            {{ include('index/introduction.html.twig') }}
-                            {{ include('index/preprocessing.html.twig') }}
-                            {{ include('index/download.html.twig') }}
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        {% endblock %}
-    </body>
     <script src="{{ asset('assets/js/index/tabs.js') }}"></script>
-</html>
+{% endblock %}
