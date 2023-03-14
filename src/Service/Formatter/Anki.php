@@ -11,7 +11,6 @@ class Anki implements FormatterInterface
     protected bool $hasDefinitionExamples;
     protected bool $hasDefinitionSynonyms;
     protected bool $hasExamples;
-    protected bool $hasSpeechPartsApart;
 
     public function __construct(TranslationRequest $request)
     {
@@ -19,12 +18,11 @@ class Anki implements FormatterInterface
         $this->hasDefinitionExamples = $request->hasDefinitionExamples();
         $this->hasDefinitionSynonyms = $request->hasDefinitionSynonyms();
         $this->hasExamples = $request->hasExamples();
-        $this->hasSpeechPartsApart = $request->hasSpeechPartsApart();
     }
 
-    public function format(Translation $model): array
+    public function format(Translation $model): string
     {
-        return [trim(join("\t", array_merge(
+        return trim(join("\t", array_merge(
             [
                 $this->renderOriginal($model),
                 $this->renderTransliteration($model),
@@ -34,7 +32,7 @@ class Anki implements FormatterInterface
                 ? [$this->renderDefinitions($model, $this->hasDefinitionExamples, $this->hasDefinitionSynonyms)]
                 : [],
             $this->hasExamples ? [$this->renderExamples($model)] : [],
-        )))];
+        )));
     }
 
     protected function renderOriginal(Translation $model): string
@@ -49,7 +47,7 @@ class Anki implements FormatterInterface
             return '';
         }
 
-        return "[{$transliteration}]";
+        return "[$transliteration]";
     }
 
     protected function renderTranslations(Translation $model): string
