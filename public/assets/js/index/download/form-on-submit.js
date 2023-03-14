@@ -54,13 +54,9 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
 
             (window.URL) ? window.URL.revokeObjectURL(url) : window.webkitURL.revokeObjectURL(url);
 
-            document
-                .getElementById("flashcard-form-response")
-                .innerHTML = "Done!";
+            M.toast({html: 'Done!'})
         } else {
-            document
-                .getElementById("flashcard-form-response")
-                .innerHTML = "Error: " + xhr.statusText;
+            M.toast({html: 'Error: ' + xhr.statusText})
         }
 
         downloadButton.classList.remove('hide');
