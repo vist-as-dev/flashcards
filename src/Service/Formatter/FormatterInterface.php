@@ -6,5 +6,5 @@ use App\Model\Translation;
 
 interface FormatterInterface
 {
-    public function format(Translation $model): array;
+    public function format(Translation $model): string;
 }

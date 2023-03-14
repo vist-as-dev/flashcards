@@ -148,3 +148,16 @@ isRemove1LetterRows.checked = localStorage.getItem('preprocessing.options.isRemo
 isRemove2LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove2LetterRows') === 'checked';
 isRemove3LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove3LetterRows') === 'checked';
 isToLowercase.checked = localStorage.getItem('preprocessing.options.isToLowercase') === 'checked';
+
+function turnAllProcessingOptions(value) {
+    isClearAsSubtitles.checked = !!value;
+    isClearTags.checked = !!value;
+    isRemoveEmptyRows.checked = !!value;
+    isWordsOnly.checked = !!value;
+    isSplitToWords.checked = !!value;
+    isRemoveDuplicates.checked = !!value;
+    isRemove1LetterRows.checked = !!value;
+    isRemove2LetterRows.checked = !!value;
+    isRemove3LetterRows.checked = !!value;
+    isToLowercase.checked = !!value;
+}

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\TranslationFactory;
 
 use App\Model\Translation;
 
-class TranslationFactory
+class TranslationAllInOneFactory extends TranslationFactory
 {
-    public function create(array $data): Translation
+    public function create(array $data): array
     {
         $sentences = $data['sentences'] ?? null;
         $dictionaries = $data['dict'] ?? null;
@@ -21,14 +21,16 @@ class TranslationFactory
         $examples = $examples['example'] ?? [];
         $relatedWords = $data['related_words'] ?? [];
 
-        return new Translation(
-            $original,
-            $transliteration,
-            $this->makeTranslations($translation, $dictionaries),
-            $this->makeDefinitions($definitions, $this->makeSynonyms($synonyms)),
-            $this->makeExamples($examples),
-            $this->makeRelatedWords($relatedWords),
-        );
+        return [
+            new Translation(
+                $original,
+                $transliteration,
+                $this->makeTranslations($translation, $dictionaries),
+                $this->makeDefinitions($definitions, $this->makeSynonyms($synonyms)),
+                $this->makeExamples($examples),
+                $this->makeRelatedWords($relatedWords),
+            )
+        ];
     }
 
     protected function makeTranslations(string $translation, ?array $dictionaries): array
@@ -89,49 +91,5 @@ class TranslationFactory
         }
 
         return $result;
-    }
-
-    protected function makeSynonyms(array $synonyms): array
-    {
-        $result = [];
-        foreach ($synonyms as $synonym) {
-            $entries = $synonym['entry'] ?? [];
-
-            foreach ($entries as $entry) {
-                $id = $entry['definition_id'] ?? null;
-
-
-                if (null !== $id) {
-                    $_synonyms = $entry['synonym'] ?? [];
-                    $label = $entry['label_info'] ?? [];
-                    $register = $label['register'] ?? ['main'];
-
-                    if (!isset($result[$id])) {
-                        $result[$id] = [];
-                    }
-
-                    foreach ($register as $key) {
-                        $result[$id][$key] = array_merge($result[$id][$key] ?? [], $_synonyms);
-                    }
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    protected function makeExamples(array $examples): array
-    {
-        $result = [];
-        foreach ($examples as ['text' => $text]) {
-            $result[] = $text;
-        }
-
-        return $result;
-    }
-
-    protected function makeRelatedWords(array $relatedWords): array
-    {
-        return $relatedWords['word'] ?? [];
     }
 }

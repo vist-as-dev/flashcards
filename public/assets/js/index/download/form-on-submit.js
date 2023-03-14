@@ -40,8 +40,13 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
             const url = (window.URL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
             const a = document.createElement('a');
 
+            let filename = document.getElementById('custom-filename').value;
+            if (filename.length === 0) {
+                filename = `${format}-${source}-${target}-flashcards.` + extensions[format];
+            }
+
             a.href = url;
-            a.download = `${format}-${source}-${target}-flashcards.` + extensions[format];
+            a.download = filename;
 
             document.body.append(a);
             a.click();
