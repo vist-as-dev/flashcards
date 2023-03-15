@@ -9,6 +9,17 @@ const isRemove1LetterRows = document.getElementById('remove_1_rows');
 const isRemove2LetterRows = document.getElementById('remove_2_rows');
 const isRemove3LetterRows = document.getElementById('remove_3_rows');
 
+isClearAsSubtitles.checked = localStorage.getItem('preprocessing.options.isClearAsSubtitles') === 'checked';
+isClearTags.checked = localStorage.getItem('preprocessing.options.isClearTags') === 'checked';
+isRemoveEmptyRows.checked = localStorage.getItem('preprocessing.options.isRemoveEmptyRows') === 'checked';
+isWordsOnly.checked = localStorage.getItem('preprocessing.options.isWordsOnly') === 'checked';
+isToLowercase.checked = localStorage.getItem('preprocessing.options.isToLowercase') === 'checked';
+isSplitToWords.checked = localStorage.getItem('preprocessing.options.isSplitToWords') === 'checked';
+isRemoveDuplicates.checked = localStorage.getItem('preprocessing.options.isRemoveDuplicates') === 'checked';
+isRemove1LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove1LetterRows') === 'checked';
+isRemove2LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove2LetterRows') === 'checked';
+isRemove3LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove3LetterRows') === 'checked';
+
 function splitToRows(content) {
     let rows = content.split('\r\n');
 
@@ -126,6 +137,10 @@ function handle() {
     document.getElementById('source_text').value = content;
     document.getElementById('text_volume').innerHTML = content.length.toString() + ' characters / ' + splitToRows(content).length.toString() + ' rows';
 
+    toLocalStorage();
+}
+
+function toLocalStorage() {
     localStorage.setItem('preprocessing.options.isClearAsSubtitles', isClearAsSubtitles.checked ? 'checked' : 'unchecked');
     localStorage.setItem('preprocessing.options.isClearTags', isClearTags.checked ? 'checked' : 'unchecked');
     localStorage.setItem('preprocessing.options.isRemoveEmptyRows', isRemoveEmptyRows.checked ? 'checked' : 'unchecked');
@@ -138,17 +153,6 @@ function handle() {
     localStorage.setItem('preprocessing.options.isToLowercase', isClearAsSubtitles.checked ? 'checked' : 'unchecked');
 }
 
-isClearAsSubtitles.checked = localStorage.getItem('preprocessing.options.isClearAsSubtitles') === 'checked';
-isClearTags.checked = localStorage.getItem('preprocessing.options.isClearTags') === 'checked';
-isRemoveEmptyRows.checked = localStorage.getItem('preprocessing.options.isRemoveEmptyRows') === 'checked';
-isWordsOnly.checked = localStorage.getItem('preprocessing.options.isWordsOnly') === 'checked';
-isSplitToWords.checked = localStorage.getItem('preprocessing.options.isSplitToWords') === 'checked';
-isRemoveDuplicates.checked = localStorage.getItem('preprocessing.options.isRemoveDuplicates') === 'checked';
-isRemove1LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove1LetterRows') === 'checked';
-isRemove2LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove2LetterRows') === 'checked';
-isRemove3LetterRows.checked = localStorage.getItem('preprocessing.options.isRemove3LetterRows') === 'checked';
-isToLowercase.checked = localStorage.getItem('preprocessing.options.isToLowercase') === 'checked';
-
 function turnAllProcessingOptions(value) {
     isClearAsSubtitles.checked = !!value;
     isClearTags.checked = !!value;
@@ -160,4 +164,6 @@ function turnAllProcessingOptions(value) {
     isRemove2LetterRows.checked = !!value;
     isRemove3LetterRows.checked = !!value;
     isToLowercase.checked = !!value;
+
+    toLocalStorage();
 }
