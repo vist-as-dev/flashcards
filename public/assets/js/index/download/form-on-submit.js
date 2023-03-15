@@ -1,6 +1,15 @@
 document.getElementById("flashcard-form").addEventListener("submit", function(event) {
     event.preventDefault();
 
+    submit();
+});
+document.getElementById("upload-btn").addEventListener("click", function(event) {
+    event.preventDefault();
+
+    submit('upload');
+});
+
+function submit(type = 'download') {
     const downloadButton = document.querySelector("#flashcard-form #download-btn");
     const preloader = document.querySelector("#flashcard-form .preloader-wrapper");
     downloadButton.classList.add('hide');
@@ -28,33 +37,46 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
         format,
     };
 
-    const extensions = {
-        anki: 'txt',
-        reword: 'csv',
+    const formats = {
+        anki: {
+            extensions: 'txt',
+            mimeType: 'text/plain',
+        },
+        reword: {
+            extensions: 'csv',
+            mimeType: 'text/csv',
+        },
     };
 
     xhr.addEventListener("load", function() {
         if (xhr.status === 200) {
             const {content} = JSON.parse(xhr.responseText);
-            const blob = new Blob([content], {type: "text/csv;charset=utf-8"});
+            const blob = new Blob([content], {type: formats[format].mimeType + ";charset=utf-8"});
             const url = (window.URL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
             const a = document.createElement('a');
 
             let filename = document.getElementById('custom-filename').value;
             if (filename.length === 0) {
-                filename = `${format}-${source}-${target}-flashcards.` + extensions[format];
+                filename = `${format}-${source}-${target}-flashcards.` + formats[format].extensions;
             }
 
-            a.href = url;
-            a.download = filename;
+            if (type === 'download') {
+                a.href = url;
+                a.download = filename;
 
-            document.body.append(a);
-            a.click();
-            a.remove();
+                document.body.append(a);
+                a.click();
+                a.remove();
 
-            (window.URL) ? window.URL.revokeObjectURL(url) : window.webkitURL.revokeObjectURL(url);
+                (window.URL) ? window.URL.revokeObjectURL(url) : window.webkitURL.revokeObjectURL(url);
 
-            M.toast({html: 'Done!'})
+                M.toast({html: 'Done!'})
+            }
+
+            if (type === 'upload') {
+                googleDriveUpload(filename, formats[format].mimeType, content);
+            }
+
         } else {
             M.toast({html: 'Error: ' + xhr.statusText})
         }
@@ -64,4 +86,4 @@ document.getElementById("flashcard-form").addEventListener("submit", function(ev
     });
 
     xhr.send(JSON.stringify(requestBody));
-});
+}

@@ -69,5 +69,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="xregexp" level="application" />
     <orderEntry type="library" name="materialize" level="application" />
+    <orderEntry type="library" name="api" level="application" />
   </component>
 </module>
