@@ -1,5 +1,5 @@
-const CLIENT_ID = '122698539028-cfhj5j86nff05gbi0mjv90p86cs5kuo5.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyCfwJRn2yrms2raBzGRlHGo4e5M2axgpq8';
+const CLIENT_ID = '';
+const API_KEY = '';
 
 // Discovery doc URL for APIs used by the quickstart
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
