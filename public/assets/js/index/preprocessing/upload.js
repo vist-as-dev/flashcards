@@ -18,34 +18,34 @@ field.addEventListener('change', (e) => {
         return;
     }
 
+    function refresh(text) {
+        const textarea = document.getElementById('source_text');
+
+        textarea.value = text;
+        M.textareaAutoResize(textarea);
+
+        sourceText = text;
+    }
+
     if (file) {
         const reader = new FileReader();
         reader.readAsText(file, "UTF-8");
         reader.onload = function (evt) {
             let content = evt.target.result;
+
+            const chapters = document.querySelector('select#chapters');
             if (file.name.endsWith('.fb2')) {
-                let regex = XRegExp('<binary[^>]*>[^<]*<\\/binary>', 'gm');
-                content = XRegExp.replace(content, regex, '\n');
+                const ebook = new FB2(content);
+                ebook.initSelectChapterField(chapters, refresh);
 
-                const matched = content.matchAll(/<section[^>]*?>[^<]*(<title>(?<title>[\s\S]*?)<\/title>)?[^<]*(<subtitle>(?<subtitle>[\s\S]*?)<\/subtitle>)?(?<text>[\s\S]*?)<\/section>/gm);
-                const sections = [...matched].reduce((acc, {groups}) => {
-                    const title = groups.title && groups.title.replaceAll(/<[^>]*>/gm, '').replaceAll(/\s{2,}/gm, ' ');
-                    const subtitle = groups.subtitle && groups.subtitle.replaceAll(/<[^>]*>/gm, '').replaceAll(/\s{2,}/gm, ' ');
-                    const text = groups.text && groups.text.replaceAll(/<[^>]*>/gm, '').replaceAll(/\s{2,}/gm, ' ');
+                content = ebook.content;
 
-                    return {...acc, [title.trim() + (subtitle ? '. ' + subtitle.trim() : '')]: text.trim()};
-                }, {["All contents of the book"]: content});
-
-
-                console.log(sections);
+                chapters.closest('.row').classList.remove('hide');
+            } else {
+                chapters.closest('.row').classList.add('hide');
             }
 
-            const textarea = document.getElementById('source_text');
-
-            textarea.value = content;
-            M.textareaAutoResize(textarea);
-
-            sourceText = content;
+            refresh(content);
         }
         reader.onerror = function (evt) {
             console.log(evt)
