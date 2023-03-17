@@ -1,7 +1,15 @@
-let sourceText = '';
+let sourceText = 'This text is editable!\n' +
+    'You can copy and paste your own text into this space,\n' +
+    'or upload a text file, a file with movie subtitles,\n' +
+    'or an eBook in FB2 format.';
 
 document.addEventListener('DOMContentLoaded', function() {
     const textarea = document.getElementById('source_text');
+    textarea.innerHTML = sourceText;
+
+    const characters = sourceText.length;
+    const rows = splitToRows(sourceText).length;
+    document.getElementById('text_volume').innerHTML = characters + ' characters / ' + rows + (rows === 1 ? ' row' : ' rows');
 
     textarea.addEventListener('input', (e) => {
         const content = e.target.value;

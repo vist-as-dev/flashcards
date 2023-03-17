@@ -11,9 +11,16 @@ document.getElementById("upload-btn").addEventListener("click", function(event) 
 
 function submit(type = 'download') {
     const downloadButton = document.querySelector("#flashcard-form #download-btn");
-    const preloader = document.querySelector("#flashcard-form .preloader-wrapper");
-    downloadButton.classList.add('hide');
-    preloader.classList.remove('hide');
+    const uploadButton = document.querySelector("#flashcard-form #upload-btn");
+    downloadButton.disabled = true;
+    uploadButton.disabled = true;
+
+    if (type === 'download') {
+        downloadButton.classList.add('spinner');
+    }
+    if (type === 'upload') {
+        uploadButton.classList.add('spinner');
+    }
 
 
     const xhr = new XMLHttpRequest();
@@ -81,8 +88,15 @@ function submit(type = 'download') {
             M.toast({html: 'Error: ' + xhr.statusText})
         }
 
-        downloadButton.classList.remove('hide');
-        preloader.classList.add('hide');
+        if (type === 'download') {
+            downloadButton.classList.remove('spinner');
+        }
+        if (type === 'upload') {
+            uploadButton.classList.remove('spinner');
+        }
+
+        downloadButton.disabled = false;
+        uploadButton.disabled = false;
     });
 
     xhr.send(JSON.stringify(requestBody));

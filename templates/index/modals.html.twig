@@ -1,0 +1,9 @@
+{{ include('index/modals/preprocessing-upload.html.twig') }}
+{{ include('index/modals/preprocessing-options.html.twig') }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const elems = document.querySelectorAll('.modal');
+        M.Modal.init(elems);
+    });
+</script>
