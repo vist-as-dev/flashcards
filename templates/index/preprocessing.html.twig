@@ -44,9 +44,17 @@
                                                                            placeholder="Upload file"
                                                                     >
                                                                     <span id="upload_file_helper" class="helper-text">
-                                                                        Maximum file size: 250kb
+                                                                        Maximum file size: 5Mb
                                                                     </span>
                                                                 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row hide">
+                                                        <div class="col s12">
+                                                            <div class="input-field">
+                                                                <select id="chapters"></select>
+                                                                <label for="chapters">eBook chapter</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -183,20 +191,20 @@
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <div class="col s12">
-                                                    <button class="btn waves-effect waves-light"
+                                                <div class="buttons col s12">
+                                                    <button class="btn waves-effect waves-light truncate"
                                                             id="apply-btn"
                                                             onclick="handle(); return false"
                                                     >
                                                         <i class="material-icons left">arrow_back</i>
                                                         Apply options
                                                     </button>
-                                                    <button class="btn waves-effect waves-light orange darken-2"
+                                                    <button class="btn waves-effect waves-light orange darken-2 truncate"
                                                             id="pass-btn"
                                                             onclick="return false"
                                                     >
                                                         <i class="material-icons right">arrow_forward</i>
-                                                        <span class="truncate">Pass on the processed text</span>
+                                                        <span>Pass on the processed text</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -207,5 +215,6 @@
                             <script src="{{ asset('assets/js/xregexp/xregexp-all.js') }}"></script>
                             <script src="{{ asset('assets/js/index/preprocessing/source-text.js') }}"></script>
                             <script src="{{ asset('assets/js/index/preprocessing/upload.js') }}"></script>
+                            <script src="{{ asset('assets/js/index/preprocessing/ebook.js') }}"></script>
                             <script src="{{ asset('assets/js/index/preprocessing/handling.js') }}"></script>
                             <script src="{{ asset('assets/js/index/preprocessing/pass-on.js') }}"></script>

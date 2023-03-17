@@ -1,8 +1,13 @@
 .container {
     display: flex;
     justify-content: center;
+    padding-top: 60px;
+}
+
+.container.onscreen {
     align-items: center;
     height: 100vh;
+    padding-top: 0;
 }
 
 div#introduction, div#description, div#preprocessing, div#download {
@@ -28,4 +33,20 @@ div#introduction, div#description, div#preprocessing, div#download {
 
 .row-counter {
     pointer-events: none;
+}
+
+.switch label.truncate {
+    height: 22px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media only screen and (min-width: 601px) {
+    .buttons {
+        flex-direction: row;
+    }
 }

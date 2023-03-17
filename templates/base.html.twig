@@ -8,7 +8,7 @@
         {% block stylesheets %}
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-            <link href="{{ asset('assets/css/form.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
@@ -31,4 +31,5 @@
         </div>
         {% endblock %}
     </body>
+    <script src="{{ asset('assets/js/base/on-resize.js') }}"></script>
 </html>
