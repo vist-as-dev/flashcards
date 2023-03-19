@@ -71,7 +71,8 @@ function googleDriveUpload(name, mimeType, content) {
             uploadFile(name, mimeType, content).then(() => M.toast({html: 'uploaded'}));
         };
 
-        tokenClient.requestAccessToken({prompt: 'consent'});
+        // tokenClient.requestAccessToken({prompt: 'consent'});
+        tokenClient.requestAccessToken();
     } else {
         uploadFile(name, mimeType, content).then(() => M.toast({html: 'uploaded'}));
     }
@@ -114,7 +115,7 @@ function createFile(name, mimeType, content, parent) {
     xhr.open('post', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id');
     xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
     xhr.responseType = 'json';
-    xhr.onload = () => console.log(xhr.response.id);
+    // xhr.onload = () => console.log(xhr.response.id);
     xhr.onerror = (e) => console.log(e);
     xhr.send(form);
 }

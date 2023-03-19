@@ -3,6 +3,9 @@
   <component name="SshConfigs">
     <configs>
       <sshConfig authType="PASSWORD" host="bf489110.ftp.tools" id="64801b42-90c6-4461-a68e-ea1c6b259e7d" port="22" nameFormat="DESCRIPTIVE" username="bf489110" useOpenSSHConfig="true" />
+      <sshConfig authType="PASSWORD" host="bf489110.ftp.tools" id="001007c9-88dd-4e12-8a08-56c822d53757" port="22" customName="1. bf489110@bf489110.ftp.tools:22" nameFormat="CUSTOM" username="bf489110" useOpenSSHConfig="true">
+        <option name="customName" value="1. bf489110@bf489110.ftp.tools:22" />
+      </sshConfig>
     </configs>
   </component>
 </project>
