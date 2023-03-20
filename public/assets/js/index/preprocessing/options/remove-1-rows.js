@@ -7,7 +7,7 @@ function remove1Rows() {
 
             const result = [];
             for (const i in rows) {
-                if (rows[i].length > 1) {
+                if (rows[i].length !== 1) {
                     result.push(rows[i]);
                 }
             }

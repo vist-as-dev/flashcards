@@ -1,5 +1,5 @@
 const field = document.getElementById('upload_file');
-const maxSize = 5 * 1024 * 1024;
+const maxSize = 7 * 1024 * 1024;
 
 field.addEventListener('change', (e) => {
     const [file] = e.target.files;
@@ -12,7 +12,7 @@ field.addEventListener('change', (e) => {
         document.getElementById('upload_file_text').classList.add('invalid');
         document
             .getElementById('upload_file_helper')
-            .dataset.error = 'File too big, please select a file less than 5Mb.'
+            .dataset.error = 'File too big, please select a file less than 7Mb.'
         ;
 
         return;

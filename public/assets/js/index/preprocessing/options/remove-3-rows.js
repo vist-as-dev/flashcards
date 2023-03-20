@@ -7,7 +7,7 @@ function remove3Rows() {
 
             const result = [];
             for (const i in rows) {
-                if (rows[i].length > 3) {
+                if (rows[i].length !== 3) {
                     result.push(rows[i]);
                 }
             }

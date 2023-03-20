@@ -3,8 +3,17 @@ function wordsOnly() {
         'words_only',
         'preprocessing.options.isWordsOnly',
         (content) => {
-            const regex = XRegExp('\\P{Letter}', 'g');
-            return XRegExp.replace(content, regex, ' ').replaceAll(/\s\s+/g, ' ').trim();
+            let regex;
+
+            regex = XRegExp('(\\S)[^\\p{Letter}\\s`\'.,!?-](\\S)', 'g');
+            content = XRegExp.replace(content, regex, '$1 $2');
+
+            regex = XRegExp('[^\\p{Letter}\\s`\'.,!?-]', 'g');
+            content = XRegExp.replace(content, regex, '');
+
+            content = content.trim();
+
+            return content;
         }
     );
 }

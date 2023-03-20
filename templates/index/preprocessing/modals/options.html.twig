@@ -1,7 +1,450 @@
 <div id="modal-preprocessing-options" class="modal">
     <div class="modal-content">
-        <h4>Modal Header</h4>
-        <p>A bunch of text</p>
+        <div class="row">
+            <div class="col s12">
+                <h6>Options for processing source text</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Clear as subtitles</strong>:
+                            <span>Remove numbering, timings and empty rows from subtitles.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+1
+00:00:02,877 --> 00:00:04,294
+What you guys don't understand is...
+
+2
+00:00:04,504 --> 00:00:07,548
+...for us, kissing is as important
+as any part of it.
+
+3
+00:00:07,924 --> 00:00:09,508
+Yeah, right.
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+What you guys don't understand is...
+...for us, kissing is as important as any part of it.
+Yeah, right.
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove &#60;tags&#62;</strong>:
+                            <span>Remove html and xml tags from text.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+&#60;title&#62;
+&#60;p&#62;Lewis Carroll&#60;/p&#62;
+&#60;empty-line/&#62;
+&#60;p&#62;Alice's Adventures in Wonderland&#60;/p&#62;
+&#60;empty-line/&#62;
+&#60;p id="_Toc64890485"&#62;I. Down the Rabbit-Hole&#60;/p&#62;
+&#60;/title&#62;
+&#60;p&#62;Alice was beginning to get very tired
+    of sitting by her sister on the bank,
+    and of having nothing to do:
+    once or twice she had peeped into
+    the book her sister was reading,
+    but it had no pictures or conversations
+    in it, 'and what is the use of a book,
+    ' thought Alice 'without pictures
+    or conversation?’
+&#60;/p&#62;
+&#60;empty-line/&#62;
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+
+Lewis Carroll
+
+Alice's Adventures in Wonderland
+
+I. Down the Rabbit-Hole
+
+Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do: once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it, 'and what is the use of a book, ' thought Alice 'without pictures or conversation?’
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove all, but letters</strong>:
+                            <span>Remove all symbols, except letters and punctuation marks.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+&#60;title&#62;
+&#60;p&#62;Lewis Carroll&#60;/p&#62;
+&#60;empty-line/&#62;
+&#60;p&#62;Alice's Adventures in Wonderland&#60;/p&#62;
+&#60;empty-line/&#62;
+&#60;p id="_Toc64890485"&#62;I. Down the Rabbit-Hole&#60;/p&#62;
+&#60;/title&#62;
+&#60;p&#62;Alice was beginning to get very tired
+    of sitting by her sister on the bank,
+    and of having nothing to do:
+    once or twice she had peeped into
+    the book her sister was reading,
+    but it had no pictures or conversations
+    in it, 'and what is the use of a book,
+    ' thought Alice 'without pictures
+    or conversation?’
+&#60;/p&#62;
+&#60;empty-line/&#62;
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+title
+p Lewis Carroll p
+empty-line
+p Alice's Adventures in Wonderland p
+empty-line
+p id Toc    I. Down the Rabbit-Hole p
+ title
+p Alice was beginning to get very tired
+    of sitting by her sister on the bank,
+    and of having nothing to do
+    once or twice she had peeped into
+    the book her sister was reading,
+    but it had no pictures or conversations
+    in it, 'and what is the use of a book,
+    ' thought Alice 'without pictures
+    or conversation?
+ p
+empty-line
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Clear punctuation</strong>:
+                            <span>Each symbol from the set ['.,!?-] will be removed.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+’Seven jogged my elbow. '
+On which Seven looked up and said,
+'That's right, Five! Always lay the blame on others!’
+You'd better not talk!’
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+Seven jogged my elbow
+On which Seven looked up and said
+That's right  Five  Always lay the blame on other
+You'd better not talk
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">One word in row</strong>:
+                            <span>Break the words one per line.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+Alice was beginning to get very tired of sitting
+by her sister on the bank, and of having nothing to do.
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+Alice
+was
+beginning
+to
+get
+very
+tired
+of
+sitting
+by
+her
+sister
+on
+the
+bank,
+and
+of
+having
+nothing
+to
+do.
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">All to lowercase</strong>:
+                            <span>Convert all letters to lowercase register.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+Mock Turtle and Gryphon dance the Lobster Quadrille
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+mock turtle and gryphon dance the lobster quadrille
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove empty rows</strong>:
+                            <span>As is. Remove empty rows.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+In another moment down went Alice after it, never once considering how in the world she was to get out again.
+
+The rabbit-hole went straight on like a tunnel for some way, and then dipped suddenly down, so suddenly that
+
+
+Alice had not a moment to think about stopping herself before she found herself falling down a very deep well.
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+In another moment down went Alice after it, never once considering how in the world she was to get out again.
+The rabbit-hole went straight on like a tunnel for some way, and then dipped suddenly down, so suddenly that
+Alice had not a moment to think about stopping herself before she found herself falling down a very deep well.
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove row duplicates</strong>:
+                            <span>If the contents of the lines match, then the repetitions will be removed.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+Oh dear, what nonsense I'm talking!’
+Oh dear, what nonsense I'm talking!’
+Oh dear, what nonsense I'm talking!’
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+Oh dear, what nonsense I'm talking!’
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove 1-letter rows</strong>:
+                            <span>If the content length of the line more than 1 symbol, then the line will be removed.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+Oh
+dear,
+what
+nonsense
+I
+am
+talking!
+a
+nonsense
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+Oh
+dear,
+what
+nonsense
+am
+talking!
+nonsense
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove 2-letter rows</strong>:
+                            <span>If the content length of the line more than 2 symbol, then the line will be removed.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+Oh
+dear,
+what
+nonsense
+I
+am
+talking!
+a
+nonsense
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+dear,
+what
+nonsense
+I
+talking!
+a
+nonsense
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            <strong class="teal-text lighten-1">Remove 3-letter rows</strong>:
+                            <span>If the content length of the line more than 3 symbol, then the line will be removed.</span>
+                        </p>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>before:</p>
+                        <small class="truncate">
+                            <pre>
+and
+mushrooms
+can
+make
+her
+shrink
+to
+ten
+inches
+or
+grow
+to
+the
+size
+of
+a
+house,
+will
+she
+                            </pre>
+                        </small>
+                    </div>
+                    <div class="col m6 s12">
+                        <p>after:</p>
+                        <small class="truncate">
+                            <pre>
+mushrooms
+make
+shrink
+inches
+grow
+size
+house,
+will
+                            </pre>
+                        </small>
+                    </div>
+                </div>
+                <div class="divider"></div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <a href="#" onclick="return false" class="modal-close waves-effect waves-green btn-flat">Close</a>

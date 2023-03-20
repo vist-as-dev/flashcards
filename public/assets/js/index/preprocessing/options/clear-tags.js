@@ -3,8 +3,27 @@ function clearTags() {
         'clear_tags',
         'preprocessing.options.isClearTags',
         (content) => {
-            const regex = XRegExp('[<][^>]*[>]', 'gm');
-            return XRegExp.replace(content, regex, '\n');
+            let regex;
+
+            regex = XRegExp('\s[<][^>]*[>]\s', 'gm');
+            content = XRegExp.replace(content, regex, '');
+
+            regex = XRegExp('\s[<][^>]*[>]', 'gm');
+            content = XRegExp.replace(content, regex, '');
+
+            regex = XRegExp('[<][^>]*[>]\s', 'gm');
+            content = XRegExp.replace(content, regex, '');
+
+            regex = XRegExp('^[<][^>]*[>]', 'gm');
+            content = XRegExp.replace(content, regex, '');
+
+            regex = XRegExp('[<][^>]*[>]$', 'gm');
+            content = XRegExp.replace(content, regex, '');
+
+            regex = XRegExp('([^\s])[<][^>]*[>]([^\s])', 'gm');
+            content = XRegExp.replace(content, regex, '$1 $2');
+
+            return content;
         }
     );
 }
