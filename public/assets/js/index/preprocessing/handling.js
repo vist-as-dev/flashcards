@@ -3,6 +3,7 @@ function PreprocessingOptions() {
         clearAsSubtitles(),
         clearTags(),
         wordsOnly(),
+        clearPunctuation(),
         toLowercase(),
         splitToWords(),
         removeEmptyRows(),

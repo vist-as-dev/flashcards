@@ -7,7 +7,7 @@ function remove2Rows() {
 
             const result = [];
             for (const i in rows) {
-                if (rows[i].length > 2) {
+                if (rows[i].length !== 2) {
                     result.push(rows[i]);
                 }
             }
