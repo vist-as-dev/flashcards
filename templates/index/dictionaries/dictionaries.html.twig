@@ -1,0 +1,69 @@
+
+                            <div id="dictionaries" class="col s12">
+                                <div class="row">
+                                    <div class="col m4 s12">
+                                        <div class="row">
+                                            <div class="col s12">
+                                                <div class="collection with-header">
+                                                    <div class="collection-header">
+                                                        <a class="modal-trigger teal-text lighten-1"
+                                                           href="#modal-preprocessing-options"
+                                                        >Dictionaries</a>
+                                                    </div>
+                                                    <a href="#!" class="collection-item" data-id="1">
+                                                        Alvin
+                                                        <i class="material-icons right remove">remove</i>
+                                                        <i class="material-icons right hide cancel">close</i>
+                                                        <i class="material-icons right hide confirm">check</i>
+                                                    </a>
+                                                    <a href="#!" class="collection-item active" data-id="2">
+                                                        Alvin
+                                                        <i class="material-icons right remove">remove</i>
+                                                        <i class="material-icons right hide cancel">close</i>
+                                                        <i class="material-icons right hide confirm">check</i>
+                                                    </a>
+                                                    <a href="#!" class="collection-item" data-id="3">
+                                                        Alvin
+                                                        <i class="material-icons right remove">remove</i>
+                                                        <i class="material-icons right hide cancel">close</i>
+                                                        <i class="material-icons right hide confirm">check</i>
+                                                    </a>
+                                                    <a href="#!" class="collection-item new">
+                                                        Add new dictionary
+                                                        <i class="material-icons right">add</i>
+                                                    </a>
+                                                    <div class="collection-item hide" id="new-dictionary-form">
+                                                        <div class="input-field">
+                                                            <input id="dictionary-name" type="text" class="validate">
+                                                            <label for="dictionary-name">Dictionary name</label>
+                                                        </div>
+                                                        <div>
+                                                            <div class="input-field">
+                                                                <select id="source"></select>
+                                                                <label for="source">Source language</label>
+                                                            </div>
+                                                            <div class="input-field">
+                                                                <select id="target"></select>
+                                                                <label for="target">Target language</label>
+                                                            </div>
+                                                            <div class="buttons">
+                                                                <button class="btn waves-effect waves-light truncate"
+                                                                        id="save-btn"
+                                                                >Save</button>
+                                                                <button class="btn waves-effect waves-light grey darken-1 truncate"
+                                                                        id="cancel-btn"
+                                                                >Cancel</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col m8 s12">
+                                        <h5 >Hey there!</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <script src="{{ asset('assets/js/index/dictionaries/dictionary.js') }}"></script>
+                            <script src="{{ asset('assets/js/index/dictionaries/dictionary-direction.js') }}"></script>

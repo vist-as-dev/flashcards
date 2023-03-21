@@ -40,9 +40,9 @@ field.addEventListener('change', (e) => {
 
                 content = ebook.content;
 
-                chapters.closest('.row').classList.remove('hide');
+                chapters.closest('.col').classList.remove('hide');
             } else {
-                chapters.closest('.row').classList.add('hide');
+                chapters.closest('.col').classList.add('hide');
             }
 
             refresh(content);
