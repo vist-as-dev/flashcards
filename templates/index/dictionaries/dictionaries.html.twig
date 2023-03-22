@@ -12,9 +12,15 @@
                                                     </div>
                                                     <a href="#!" class="collection-item" data-id="1">
                                                         Alvin
-                                                        <i class="material-icons right remove">remove</i>
-                                                        <i class="material-icons right hide cancel">close</i>
-                                                        <i class="material-icons right hide confirm">check</i>
+                                                        <i class="material-icons right tooltipped remove"
+                                                           data-position="right"
+                                                           data-tooltip="Remove">remove</i>
+                                                        <i class="material-icons right tooltipped hide cancel"
+                                                           data-position="right"
+                                                           data-tooltip="Cancel">close</i>
+                                                        <i class="material-icons right tooltipped hide confirm"
+                                                           data-position="left"
+                                                           data-tooltip="Confirm removing">check</i>
                                                     </a>
                                                     <a href="#!" class="collection-item active" data-id="2">
                                                         Alvin
@@ -66,4 +72,5 @@
                                 </div>
                             </div>
                             <script src="{{ asset('assets/js/index/dictionaries/dictionary.js') }}"></script>
+                            <script src="{{ asset('assets/js/index/dictionaries/dictionary-storage.js') }}"></script>
                             <script src="{{ asset('assets/js/index/dictionaries/dictionary-direction.js') }}"></script>

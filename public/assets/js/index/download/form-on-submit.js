@@ -22,11 +22,6 @@ function submit(type = 'download') {
         uploadButton.classList.add('spinner');
     }
 
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/translate");
-    xhr.setRequestHeader("Content-Type", "application/json");
-
     const format = document.querySelector("input[name=format]:checked").value;
     const source = document.getElementById("source").value;
     const target = document.getElementById("target").value;
@@ -55,12 +50,14 @@ function submit(type = 'download') {
         },
     };
 
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/translate");
+    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("load", function() {
         if (xhr.status === 200) {
             const {content} = JSON.parse(xhr.responseText);
             const blob = new Blob([content], {type: formats[format].mimeType + ";charset=utf-8"});
             const url = (window.URL) ? window.URL.createObjectURL(blob) : window.webkitURL.createObjectURL(blob);
-            const a = document.createElement('a');
 
             let filename = document.getElementById('custom-filename').value;
             if (filename.length === 0) {
@@ -68,6 +65,7 @@ function submit(type = 'download') {
             }
 
             if (type === 'download') {
+                const a = document.createElement('a');
                 a.href = url;
                 a.download = filename;
 
@@ -81,9 +79,9 @@ function submit(type = 'download') {
             }
 
             if (type === 'upload') {
-                googleDriveUpload(filename, formats[format].mimeType, content);
+                googleDriveUpload(filename, formats[format].mimeType, content)
+                    .then(() => M.toast({html: 'uploaded'}));
             }
-
         } else {
             M.toast({html: 'Error: ' + xhr.statusText})
         }
