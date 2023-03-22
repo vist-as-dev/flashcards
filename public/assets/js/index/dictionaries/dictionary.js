@@ -1,19 +1,45 @@
 function Dictionary() {
     const addElement = document.querySelector('div#dictionaries .collection-item.new');
     const formElement = document.querySelector('div#dictionaries .collection-item#new-dictionary-form');
+    const nameElement = formElement.querySelector('#dictionary-name');
+    const sourceElement = formElement.querySelector('#source');
+    const targetElement = formElement.querySelector('#target');
 
-    this.onAddClick = () => {
+    this.onAddClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
         addElement.classList.add('hide');
         formElement.classList.remove('hide');
-        formElement.querySelector('#dictionary-name').focus();
+        nameElement.focus();
     }
 
-    this.onSaveClick = () => {
+    this.onSaveClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        createDictionary(nameElement.value, sourceElement.value, targetElement.value).then(console.log);
+
         formElement.classList.add('hide');
         addElement.classList.remove('hide');
     }
 
-    this.onCancelClick = () => {
+    this.onCancelClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        getDictionaryList().then(
+            dictionaries => {
+                console.log(dictionaries)
+                updateDictionary("1NXN1PkaepYG5lPr4R_MKriy6UriRTfM5bellzO5xYcXPl8f_Sw", {1: {status: 3}}).then(
+                    (res) => {
+                        console.log({update: res})
+                        getDictionary("1NXN1PkaepYG5lPr4R_MKriy6UriRTfM5bellzO5xYcXPl8f_Sw").then((res) => console.log(res))
+                    }
+                )
+            }
+        );
+
         formElement.classList.add('hide');
         addElement.classList.remove('hide');
     }
