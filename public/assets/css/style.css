@@ -1,13 +1,15 @@
 .container {
     display: flex;
     justify-content: center;
-    padding-top: 60px;
+    padding-top: 0;
 }
 
-.container.onscreen {
+.onscreen {
     align-items: center;
-    height: 100vh;
-    padding-top: 0;
+}
+
+nav .container {
+    align-items: center;
 }
 
 div#introduction, div#preprocessing, div#download, div#dictionaries {
@@ -22,9 +24,9 @@ div#introduction, div#preprocessing, div#download, div#dictionaries {
 }
 
 .textarea-container textarea {
-    padding-left: 60px;
+    padding-left: 60px!important;
     height: 502px!important;
-    overflow-y: auto;
+    overflow-y: auto!important;
 }
 
 .select-wrapper input.select-dropdown {
@@ -77,4 +79,32 @@ div#introduction, div#preprocessing, div#download, div#dictionaries {
 
 a.modal-trigger {
     border-bottom: 1px dashed;
+}
+
+nav .input-field {
+    padding-top: 19px;
+}
+
+nav .input-field .select-wrapper + label {
+    top: -26px;
+}
+
+footer .navbar-fixed nav.navbar {
+    bottom: 0;
+}
+
+footer .container {
+    height: 100%;
+}
+
+footer .tabs {
+    height: 100%;
+}
+
+footer .tabs .tab {
+    height: 100%;
+}
+
+footer .tabs .indicator {
+    top: 0;
 }

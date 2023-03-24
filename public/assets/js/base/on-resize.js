@@ -1,8 +1,8 @@
 function resize() {
-    const container = document.querySelector('.container');
-    const row = document.querySelector('.container > .row');
+    const container = document.querySelector('main.container');
+    const row = document.querySelector('main.container > .row');
 
-    if (window.innerHeight > row.offsetHeight) {
+    if ((window.innerHeight - 128) > row.offsetHeight) {
         container.classList.add('onscreen');
     } else {
         container.classList.remove('onscreen');
@@ -11,4 +11,3 @@ function resize() {
 
 window.addEventListener('resize', resize, true);
 document.addEventListener('DOMContentLoaded', resize);
-

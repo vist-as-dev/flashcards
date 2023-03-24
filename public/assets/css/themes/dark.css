@@ -1,0 +1,161 @@
+/* Темная тема Materialize CSS */
+/* Переопределение основных цветов Materialize CSS */
+:root {
+    --primary-color: #008cba;
+    --primary-color-light: #3398c9;
+    --primary-color-dark: #006b8f;
+    --secondary-color: #424242;
+    --error-color: #f44336;
+    --success-color: #4caf50;
+    --link-color: var(--primary-color);
+}
+
+/* Переопределение фона и текста */
+body {
+    background-color: #263238;
+    color: #fff;
+}
+
+/* Переопределение цветов элементов */
+.card {
+    background-color: #37474f;
+    border-radius: 2px;
+}
+
+.chip {
+    background-color: #455a64;
+    color: #fff;
+}
+
+.collapsible-header {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.collapsible-body {
+    background-color: #546e7a;
+    color: #fff;
+}
+
+.dropdown-content {
+    background-color: #37474f;
+}
+
+.footer {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.input-field {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.modal {
+    background-color: var(--secondary-color);
+}
+
+.modal .modal-footer, .modal .modal-header {
+    background-color: var(--secondary-color);
+}
+
+.navbar-fixed {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.sidenav {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.tabs {
+    background-color: var(--secondary-color);
+}
+
+.table-of-contents {
+    background-color: var(--secondary-color);
+}
+
+.tooltip {
+    background-color: var(--secondary-color);
+}
+
+/* Переопределение цветов текста элементов */
+.card .card-content {
+    color: #fff;
+}
+
+.collapsible-header {
+    color: #fff;
+}
+
+.collapsible-body {
+    color: #fff;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: #fff;
+}
+
+.footer {
+    color: #fff;
+}
+
+.input-field input, .input-field textarea {
+    color: #fff;
+}
+
+.modal {
+    color: #fff;
+}
+
+.navbar-fixed .brand-logo {
+    color: #fff;
+}
+
+.sidenav a {
+    color: #fff;
+}
+
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+    background-color: var(--secondary-color-dark);
+}
+
+.table-of-contents li > a, .table-of-contents li > span {
+    color: #fff;
+}
+
+.tooltip {
+    color: #fff;
+}
+
+/* Изменение стилей элементов */
+.material-icons {
+    color: #fff;
+}
+
+.btn {
+    background-color: var(--primary-color);
+}
+
+.btn:hover, .btn-large:hover, .btn-small:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.btn-floating {
+    background-color: var(--primary-color);
+}
+
+.btn-floating:hover {
+    background-color: var(--primary-color-dark);
+}
+
+.btn-flat {
+    color: var(--secondary-color);
+}
+
+.btn-flat:hover {
+    background-color: var(--secondary-color);
+    color: #fff;
+}
