@@ -1,18 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block content %}
-    <ul class="tabs tabs-fixed-width">
-        <li class="tab col s3"><a href="#introduction">Introduction</a></li>
-        <li class="tab col s3"><a href="#preprocessing">Preprocessing</a></li>
-        <li class="tab col s3"><a href="#download">Flashcards</a></li>
-        <li class="tab col s3"><a href="#dictionaries">Dictionaries</a></li>
-    </ul>
+{% block header %}
+    {{ include('header.html.twig') }}
+{% endblock header %}
 
+{% block content %}
     {{ include('index/introduction.html.twig') }}
     {{ include('index/preprocessing/preprocessing.html.twig') }}
     {{ include('index/download.html.twig') }}
     {{ include('index/dictionaries/dictionaries.html.twig') }}
     {{ include('index/modals.html.twig') }}
-
-    <script src="{{ asset('assets/js/index/tabs.js') }}"></script>
 {% endblock %}
+
+{% block footer %}
+    {{ include('footer.html.twig') }}
+{% endblock footer %}

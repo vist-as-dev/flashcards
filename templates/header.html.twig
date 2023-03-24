@@ -1,0 +1,41 @@
+
+    <div class="navbar-fixed">
+        <nav class="navbar white">
+            <div class="nav-wrapper">
+                <a href="#!" data-target="sidenav-left" class="sidenav-trigger left">
+                    <i class="material-icons black-text">spa</i>
+                </a>
+                <a href="#!" class="sidenav-trigger right">
+                    <i class="material-icons black-text">account_circle</i>
+                </a>
+                <div class="container">
+                    <div class="row">
+                        <div class="col s6">
+                            <div class="input-field">
+                                <select id="target"></select>
+                                <label for="target">Your native language</label>
+                            </div>
+                        </div>
+                        <div class="col s6">
+                            <div class="input-field">
+                                <select id="source"></select>
+                                <label for="source">Your learning language</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const direction = new Direction(
+                    'header select#source',
+                    'header.source',
+                    'header select#target',
+                    'header.target',
+                );
+
+                direction.init();
+            });
+        </script>
+    </div>

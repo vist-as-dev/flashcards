@@ -79,7 +79,9 @@ function submit(type = 'download') {
             }
 
             if (type === 'upload') {
-                googleDriveUpload(filename, formats[format].mimeType, content)
+                GDrive.storage
+                    .upload(filename, formats[format].mimeType, content)
+                    .then(console.log)
                     .then(() => M.toast({html: 'uploaded'}));
             }
         } else {
