@@ -12,6 +12,8 @@ class Anki implements FormatterInterface
     protected bool $hasDefinitionSynonyms;
     protected bool $hasExamples;
 
+    protected array $items = [];
+
     public function __construct(TranslationRequest $request)
     {
         $this->hasDefinitions = $request->hasDefinitions();
@@ -20,9 +22,9 @@ class Anki implements FormatterInterface
         $this->hasExamples = $request->hasExamples();
     }
 
-    public function format(Translation $model): string
+    public function add(Translation $model)
     {
-        return trim(join("\t", array_merge(
+        $this->items[] = trim(join("\t", array_merge(
             [
                 $this->renderOriginal($model),
                 $this->renderTransliteration($model),
@@ -33,6 +35,11 @@ class Anki implements FormatterInterface
                 : [],
             $this->hasExamples ? [$this->renderExamples($model)] : [],
         )));
+    }
+
+    public function content(): string
+    {
+        return join(PHP_EOL, $this->items);
     }
 
     protected function renderOriginal(Translation $model): string

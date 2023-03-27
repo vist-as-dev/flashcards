@@ -23,9 +23,6 @@ function switchLearningTab() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const nav = document.querySelectorAll('.sidenav');
-    M.Sidenav.init(nav);
-
     tabs = M.Tabs.init(document.querySelector('.tabs'), {
         onShow: () => {
             localStorage.setItem('index.tabs.active', ids[tabs.index]);

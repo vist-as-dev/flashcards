@@ -12,13 +12,11 @@ export class DriveApiService {
         form.append('metadata', new Blob([JSON.stringify(metadata)], {type: 'application/json'}));
         form.append('file', new Blob([content], {type: mimeType}));
 
-        return new Promise((resolve, reject) => {
-            fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
-                method: 'POST',
-                headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
-                body: form,
-            }).then(response => response.json()).then(resolve).catch(reject);
-        });
+        return fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id', {
+            method: 'POST',
+            headers: new Headers({'Authorization': 'Bearer ' + gapi.auth.getToken().access_token}),
+            body: form,
+        }).then(response => response.json());
     }
 
     async updateFile(id, mimeType, content) {

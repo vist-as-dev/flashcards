@@ -12,7 +12,7 @@ nav .container {
     align-items: center;
 }
 
-div#introduction, div#preprocessing, div#download, div#dictionaries {
+div#introduction, div#preprocessing, div#download, div#dictionaries, div#learning {
     width: 100%;
     min-height: 700px;
     padding-top: 40px;
@@ -107,4 +107,53 @@ footer .tabs .tab {
 
 footer .tabs .indicator {
     top: 0;
+}
+
+div#dictionaries .collection-item.new {
+    display: flex;
+    border-top: 1px solid #e0e0e0;
+}
+
+div#dictionaries .collection-item.new .input-field {
+    width: 100%;
+}
+
+div#dictionaries .collection-item.new .input-field input {
+    /*margin-bottom: 0;*/
+}
+
+div#dictionaries .collection-header .secondary-content {
+    position: absolute;
+    right: 20px;
+    top: 16px;
+}
+
+div#dictionaries .collection-item.new .secondary-content {
+    position: absolute;
+    right: 20px;
+}
+
+div#dictionaries .collection .secondary-content i {
+    cursor: pointer;
+}
+
+div#dictionaries .collection .scrollable {
+    height: 679px;
+    overflow-y: auto;
+}
+
+.collection .collection-item.active .secondary-content {
+    color: #26a69a!important;
+}
+
+.collection .collection-item {
+    background-color: transparent!important;
+}
+
+.collection .collection-item.avatar.active {
+    background-color: #eee!important;
+}
+
+.collection .collection-item.avatar p {
+    padding-right: 60px;
 }

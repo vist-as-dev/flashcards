@@ -2,72 +2,71 @@
                             <div id="dictionaries" class="col s12">
                                 <div class="row">
                                     <div class="col m4 s12">
-                                        <div class="row">
-                                            <div class="col s12">
-                                                <div class="collection with-header">
-                                                    <div class="collection-header">
-                                                        <a class="modal-trigger teal-text lighten-1"
-                                                           href="#modal-preprocessing-options"
-                                                        >Dictionaries</a>
+                                        <div id="dictionary-list" class="collection with-header">
+                                            <div class="collection-header">
+                                                <h6>Dictionaries</h6>
+                                                <span class="secondary-content">
+                                                    <i class="material-icons tooltipped"
+                                                       id="add-btn"
+                                                       data-position="right"
+                                                       data-tooltip="Add dictionary">add</i>
+                                                </span>
+                                            </div>
+                                            <div class="scrollable">
+                                                <div class="collection-item new hide">
+                                                    <div class="input-field">
+                                                        <input id="dictionary-name" type="text" class="validate">
+                                                        <label for="dictionary-name">Type dictionary name</label>
+                                                        <span class="helper-text hide red-text"></span>
                                                     </div>
-                                                    <a href="#!" class="collection-item" data-id="1">
-                                                        Alvin
-                                                        <i class="material-icons right tooltipped remove"
+                                                    <span class="secondary-content">
+                                                        <i class="material-icons tooltipped"
+                                                           id="confirm-btn"
                                                            data-position="right"
-                                                           data-tooltip="Remove">remove</i>
-                                                        <i class="material-icons right tooltipped hide cancel"
-                                                           data-position="right"
-                                                           data-tooltip="Cancel">close</i>
-                                                        <i class="material-icons right tooltipped hide confirm"
+                                                           data-tooltip="Confirm addition">check</i>
+                                                        <i class="material-icons tooltipped"
+                                                           id="cancel-btn"
                                                            data-position="left"
-                                                           data-tooltip="Confirm removing">check</i>
-                                                    </a>
-                                                    <a href="#!" class="collection-item active" data-id="2">
-                                                        Alvin
-                                                        <i class="material-icons right remove">remove</i>
-                                                        <i class="material-icons right hide cancel">close</i>
-                                                        <i class="material-icons right hide confirm">check</i>
-                                                    </a>
-                                                    <a href="#!" class="collection-item" data-id="3">
-                                                        Alvin
-                                                        <i class="material-icons right remove">remove</i>
-                                                        <i class="material-icons right hide cancel">close</i>
-                                                        <i class="material-icons right hide confirm">check</i>
-                                                    </a>
-                                                    <a href="#!" class="collection-item new">
-                                                        Add new dictionary
-                                                        <i class="material-icons right">add</i>
-                                                    </a>
-                                                    <div class="collection-item hide" id="new-dictionary-form">
-                                                        <div class="input-field">
-                                                            <input id="dictionary-name" type="text" class="validate">
-                                                            <label for="dictionary-name">Dictionary name</label>
-                                                        </div>
-                                                        <div>
-                                                            <div class="input-field">
-                                                                <select id="source"></select>
-                                                                <label for="source">Source language</label>
-                                                            </div>
-                                                            <div class="input-field">
-                                                                <select id="target"></select>
-                                                                <label for="target">Target language</label>
-                                                            </div>
-                                                            <div class="buttons">
-                                                                <button class="btn waves-effect waves-light truncate"
-                                                                        id="save-btn"
-                                                                >Save</button>
-                                                                <button class="btn waves-effect waves-light grey darken-1 truncate"
-                                                                        id="cancel-btn"
-                                                                >Cancel</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                           data-tooltip="Cancel">close</i>
+                                                    </span>
                                                 </div>
+                                                <div class="collection-body"></div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col m8 s12">
-                                        <h5 >Hey there!</h5>
+                                        <div id="word-list" class="collection with-header">
+                                            <div class="collection-header">
+                                                <h6>Words</h6>
+                                                <span class="secondary-content">
+                                                    <i class="material-icons tooltipped"
+                                                       id="add-btn"
+                                                       data-position="right"
+                                                       data-tooltip="Add word">add</i>
+                                                </span>
+                                            </div>
+                                            <div class="scrollable">
+                                                <div class="collection-item new hide">
+                                                    <div class="input-field">
+                                                        <input id="word-origin" type="text" class="validate">
+                                                        <label for="word-origin">Type word or phrase</label>
+                                                        <span class="helper-text hide red-text"></span>
+                                                    </div>
+                                                    <span class="secondary-content">
+                                                        <i class="material-icons tooltipped"
+                                                           id="confirm-btn"
+                                                           data-position="right"
+                                                           data-tooltip="Confirm addition">check</i>
+                                                        <i class="material-icons tooltipped"
+                                                           id="cancel-btn"
+                                                           data-position="left"
+                                                           data-tooltip="Cancel">close</i>
+                                                    </span>
+                                                </div>
+                                                <div class="collection-body"></div>
+                                            </div>
+                                        </div>
+                                        <script src="{{ asset('assets/js/index/dictionaries/index.js') }}" type="module"></script>
                                     </div>
                                 </div>
                             </div>

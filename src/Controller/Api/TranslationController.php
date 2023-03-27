@@ -18,10 +18,9 @@ class TranslationController extends AbstractController
     ): JsonResponse
     {
         $service = $serviceProvider->getService($request);
-        $rows = $service->translate($request->getText());
 
         return $this->json([
-            'content' => join(PHP_EOL, $rows),
+            'content' => $service->translate($request->getText())->content(),
         ]);
     }
 }

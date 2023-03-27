@@ -11,10 +11,6 @@ class TranslationAllInOneFactory extends TranslationFactory
         $sentences = $data['sentences'] ?? null;
         $dictionaries = $data['dict'] ?? null;
 
-        $original = ($sentences[0] ?? [])['orig'] ?? null;
-        $translation = ($sentences[0] ?? [])['trans'] ?? null;
-        $transliteration = ($sentences[1] ?? [])['src_translit'] ?? null;
-
         $definitions = $data['definitions'] ?? [];
         $synonyms = $data['synsets'] ?? [];
         $examples = $data['examples'] ?? [];
@@ -23,9 +19,9 @@ class TranslationAllInOneFactory extends TranslationFactory
 
         return [
             new Translation(
-                $original,
-                $transliteration,
-                $this->makeTranslations($translation, $dictionaries),
+                $this->makeOriginal($sentences),
+                $this->makeTransliteration($sentences),
+                $this->makeTranslations($this->makeTranslation($sentences), $dictionaries),
                 $this->makeDefinitions($definitions, $this->makeSynonyms($synonyms)),
                 $this->makeExamples($examples),
                 $this->makeRelatedWords($relatedWords),
