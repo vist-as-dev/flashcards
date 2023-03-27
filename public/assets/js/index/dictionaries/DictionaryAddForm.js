@@ -1,5 +1,0 @@
-export class DictionaryAddForm {
-    render() {
-
-    }
-}

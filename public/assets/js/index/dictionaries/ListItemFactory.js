@@ -1,8 +1,14 @@
-export class DictionaryListItemFactory {
-    get element() {
+export class ListItemFactory {
+    get aItem() {
         const el = document.createElement('a');
-        el.classList.add('collection-item');
+        el.classList.add('collection-item', 'waves-effect');
         el.href = '#';
+        return el;
+    }
+
+    get divItem() {
+        const el = document.createElement('div');
+        el.classList.add('collection-item');
         return el;
     }
 
@@ -20,36 +26,33 @@ export class DictionaryListItemFactory {
 
     get addButton() {
         const el = this.button;
-        el.dataset = {position: 'right', tooltip: 'Add dictionary'};
+        el.setAttribute('data-position', 'right');
+        el.setAttribute('data-tooltip', 'Add dictionary');
         el.innerHTML = 'add';
         return el;
     }
 
     get removeButton() {
         const el = this.button;
-        el.dataset = {position: 'right', tooltip: 'Remove'};
+        el.setAttribute('data-position', 'right');
+        el.setAttribute('data-tooltip', 'Remove');
         el.innerHTML = 'remove';
         return el;
     }
 
     get confirmButton() {
         const el = this.hideButton;
-        el.dataset = {position: 'left', tooltip: 'Confirm removing'};
+        el.setAttribute('data-position', 'left');
+        el.setAttribute('data-tooltip', 'Confirm removing');
         el.innerHTML = 'check';
         return el;
     }
 
     get cancelButton() {
         const el = this.hideButton;
-        el.dataset = {position: 'right', tooltip: 'Cancel'};
+        el.setAttribute('data-position', 'right');
+        el.setAttribute('data-tooltip', 'Cancel');
         el.innerHTML = 'close';
         return el;
-    }
-
-    listener(e, callback) {
-        e.stopPropagation();
-        e.preventDefault();
-
-        callback(e);
     }
 }

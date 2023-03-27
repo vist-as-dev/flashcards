@@ -26,17 +26,12 @@ class TranslationService
         $this->lp = $lp;
     }
 
-    /**
-     * @param array $words
-     * @return array
-     */
-    public function translate(array $words, $layer = 0): array
+    public function translate(array $words, int $layer = 0): TranslationService
     {
         $from = $this->request->getSource();
         $to = $this->request->getTarget();
         $withRelatedWords = $this->request->hasRelatedWords();
 
-        $rows = [];
         foreach ($words as $word) {
             $data = $this->download($from, $to, $word);
             if (null === $data) {
@@ -46,17 +41,21 @@ class TranslationService
             $models = $this->factory->create($data->getTranslation());
             if (!empty($models)) {
                 foreach ($models as $model) {
-                    $rows[] = $this->formatter->format($model);
+                    $this->formatter->add($model);
 
                     if ($layer == 0 && $withRelatedWords && !empty($model->getRelatedWords())) {
-                        $rows = array_merge($rows, $this->translate($model->getRelatedWords(), ++$layer));
+                        $this->translate($model->getRelatedWords(), ++$layer);
                     }
                 }
             }
-
         }
 
-        return $rows;
+        return $this;
+    }
+
+    public function content(): array|string
+    {
+        return $this->formatter->content();
     }
 
     protected function download($source, $target, $word): ?Translation
@@ -95,30 +94,18 @@ class TranslationService
         return $row;
     }
 
-    /**
-     * @param TranslationFactoryInterface $factory
-     * @return TranslationService
-     */
     public function setFactory(TranslationFactoryInterface $factory): TranslationService
     {
         $this->factory = $factory;
         return $this;
     }
 
-    /**
-     * @param FormatterInterface $formatter
-     * @return TranslationService
-     */
     public function setFormatter(FormatterInterface $formatter): TranslationService
     {
         $this->formatter = $formatter;
         return $this;
     }
 
-    /**
-     * @param TranslationRequest $request
-     * @return TranslationService
-     */
     public function setRequest(TranslationRequest $request): TranslationService
     {
         $this->request = $request;

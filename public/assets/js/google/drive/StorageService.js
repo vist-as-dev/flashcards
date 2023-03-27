@@ -6,9 +6,7 @@ export class StorageService {
     }
 
     async upload(name, mimeType, content) {
-        return this.apiService
-            .createFile(name, mimeType, content, await this.getAppFolderId())
-            .then(response => response.json());
+        return this.apiService.createFile(name, mimeType, content, await this.getAppFolderId());
     }
 
     async getAppFolderId() {

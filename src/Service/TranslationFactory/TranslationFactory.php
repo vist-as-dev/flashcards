@@ -8,6 +8,42 @@ abstract class TranslationFactory implements TranslationFactoryInterface
 {
     abstract public function create(array $data): array;
 
+    protected function makeOriginal($sentences): string
+    {
+        $result = [];
+        foreach ($sentences as $sentence) {
+            if (isset($sentence['orig'])) {
+                $result[] = trim($sentence['orig']);
+            }
+        }
+
+        return join(' ', $result);
+    }
+
+    protected function makeTranslation($sentences): string
+    {
+        $result = [];
+        foreach ($sentences as $sentence) {
+            if (isset($sentence['trans'])) {
+                $result[] = trim($sentence['trans']);
+            }
+        }
+
+        return join(' ', $result);
+    }
+
+    protected function makeTransliteration($sentences): string
+    {
+        $result = [];
+        foreach ($sentences as $sentence) {
+            if (isset($sentence['translit'])) {
+                $result[] = trim($sentence['translit']);
+            }
+        }
+
+        return join(' ', $result);
+    }
+
     protected function makeSynonyms(array $synonyms): array
     {
         $result = [];
