@@ -63,8 +63,8 @@
                                                             >Options</a>
                                                             <label>
                                                                 for processing source text
-                                                                ( <a href="#" onclick="return preprocessingOptions.turnAll(true);">All</a> |
-                                                                <a href="#" onclick="return preprocessingOptions.turnAll(false);">Clear</a> )
+                                                                ( <a href="#" id="turnOnAllOptions">All</a> |
+                                                                <a href="#" id="turnOffAllOptions">Clear</a> )
                                                             </label>
                                                         </div>
                                                     </div>
@@ -202,14 +202,13 @@
                                                     <button class="btn waves-effect waves-light truncate"
                                                             id="apply-btn"
                                                             type="button"
-                                                            onclick="preprocessingOptions.handle()"
                                                     >
                                                         <i class="material-icons left">arrow_back</i>
                                                         Apply options
                                                     </button>
                                                     <button class="btn waves-effect waves-light orange darken-2 truncate"
                                                             id="pass-btn"
-                                                            onclick="return false"
+                                                            type="button"
                                                     >
                                                         <i class="material-icons right">arrow_forward</i>
                                                         <span>Pass on the processed text</span>
@@ -220,5 +219,4 @@
                                     </div>
                                 </form>
                             </div>
-                            {{ include('index/preprocessing/scripts.html.twig') }}
                             {{ include('index/preprocessing/modals/modals.html.twig') }}

@@ -12,7 +12,7 @@ nav .container {
     align-items: center;
 }
 
-div#introduction, div#preprocessing, div#download, div#dictionaries, div#learning {
+div#introduction, div#preprocessing, div#flashcards, div#dictionaries, div#learning {
     width: 100%;
     min-height: 700px;
     padding-top: 40px;
@@ -156,4 +156,8 @@ div#dictionaries .collection .scrollable {
 
 .collection .collection-item.avatar p {
     padding-right: 60px;
+}
+
+.collection .collection-item.avatar label.circle {
+    border-radius: 0;
 }
