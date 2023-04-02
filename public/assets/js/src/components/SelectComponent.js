@@ -5,6 +5,7 @@ export class SelectComponent {
     }
 
     render(options) {
+        this.el.innerHTML = '';
         this.el.addEventListener("change", () => localStorage.setItem(this.key, this.el.value));
 
         const selected = localStorage.getItem(this.key);

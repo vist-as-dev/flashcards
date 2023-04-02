@@ -21,8 +21,8 @@ export class MetaService {
         return this.apiService.createFile(`${name}.json`, 'application/json', {}, 'appDataFolder', data);
     }
 
-    async updateMetaFile(id, content) {
-        return this.apiService.updateFile(id, 'application/json', content);
+    async updateMetaFile(id, data) {
+        return this.apiService.updateFile(id, 'application/json', JSON.stringify(data));
     }
 
     async getFileMeta(id) {
@@ -36,7 +36,11 @@ export class MetaService {
 
     async downloadMetaFile(id) {
         const content = await this.apiService.downloadFile(id);
-        return JSON.parse(content);
+        try {
+            return JSON.parse(content);
+        } catch {
+            return {};
+        }
     }
 
     async deleteMetaFile(id) {

@@ -10,7 +10,7 @@ export class DictionaryListItem {
         this.ht = new HideToggler();
     }
 
-    render({id, name, subtitle}) {
+    render({id, name, subtitle}, onDelete) {
         const title = this.factory.title;
         title.innerHTML = name;
 
@@ -52,6 +52,8 @@ export class DictionaryListItem {
 
                 M.Tooltip.getInstance(confirmButton).destroy();
                 el.remove();
+
+                onDelete && onDelete()
             });
         });
 
