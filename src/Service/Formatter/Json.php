@@ -12,7 +12,7 @@ class Json implements FormatterInterface
     protected bool $hasDefinitionSynonyms = true;
     protected bool $hasExamples = true;
 
-    protected array $items;
+    protected array $items = [];
 
     public function __construct(TranslationRequest $request)
     {

@@ -2,18 +2,19 @@ import {ListItemFactory} from "./ListItemFactory";
 import {ListenerWrapper} from "../../share/ListenerWrapper";
 import {HideToggler} from "../../share/HideToggler";
 
-export class ListItem {
-    constructor(storage) {
+export class WordListItem {
+    constructor(dictionary, storage) {
+        this.dictionary = dictionary;
         this.storage = storage;
         this.factory = new ListItemFactory();
         this.lw = new ListenerWrapper();
         this.ht = new HideToggler();
     }
 
-    render(type, {id, name, subtitle}) {
+    render(word, _title, subtitle) {
         const title = document.createElement('span');
         title.classList.add('title');
-        title.innerHTML = name;
+        title.innerHTML = _title;
 
         const label = document.createElement('p');
         label.innerHTML = `${subtitle}`;
@@ -34,7 +35,7 @@ export class ListItem {
 
         confirmButton.addEventListener('click', (e) => {
             this.lw.listener(e, async () => {
-                await this.storage.delete(id);
+                await this.storage.deleteWord(this.dictionary, word);
 
                 M.Tooltip.getInstance(confirmButton).destroy();
                 el.remove();
@@ -53,14 +54,13 @@ export class ListItem {
         secondaryContent.appendChild(cancelButton);
         secondaryContent.appendChild(confirmButton);
 
-        const el = type === 'a' ? this.factory.aItem : this.factory.divItem;
+        const el = this.factory.divItem;
         el.appendChild(img);
         el.appendChild(title);
         el.appendChild(label);
         el.appendChild(secondaryContent);
 
         el.classList.add('avatar');
-        el.setAttribute('data-id', id);
 
         el.addEventListener('blur', (e) => {
             this.lw.listener(e, () => {

@@ -4,15 +4,24 @@ export class AuthorisedDriveApiService {
 
     constructor() {
         this.apiService = new DriveApiService();
+        this.isTokenLoading = false;
     }
 
     async authorized(callback, ...args) {
+        while (this.isTokenLoading) {
+            await (new Promise(resolve => setTimeout(resolve, 1000)));
+        }
+
         return new Promise((resolve, reject) => {
             if (window.gapi && window.gapi.client.getToken() === null) {
-                window.tokenClient.callback = async (resp) => {
+                this.isTokenLoading = true;
+
+                window.tokenClient.callback = (resp) => {
                     if (resp.error !== undefined) {
                         throw (resp);
                     }
+
+                    this.isTokenLoading = false;
 
                     callback(...args).then(resolve).catch(reject);
                 };

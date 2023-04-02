@@ -1,7 +1,6 @@
-import {ListItem} from "./ListItem";
+import {WordListItem} from "./WordListItem";
 import {AddForm} from "./AddForm";
 import {WordStatus} from "../../service";
-import {TranslateService} from "../../api";
 
 export class WordList {
 
@@ -22,7 +21,7 @@ export class WordList {
                 return;
             }
 
-            await storage.createWord(name, this.dictionary);
+            await storage.addWords(this.dictionary, [name]);
             await this.render(this.dictionary);
         });
     }
@@ -32,50 +31,33 @@ export class WordList {
         this.body.innerHTML = '';
 
         this.words = await this.storage.words(dictionary.id);
-        if (this.words.length === 0) {
+
+        const wordCount = Object.keys(this.words).length;
+        this.title.innerHTML = `${dictionary.name} <label>${wordCount} items</label>`;
+        if (wordCount === 0) {
             return;
         }
 
-        this.title.innerHTML = `${dictionary.name} <label>${this.words.length} items</label>`;
+        const item = new WordListItem(dictionary, this.storage);
+        for (const [word, data] of Object.entries(this.words)) {
+            const {step, glossary} = data;
 
-        const source = document.querySelector('header select#source').value;
-        const target = document.querySelector('header select#target').value;
-
-        const translates = await (new TranslateService()).translate({
-            text: this.words.map(({name}) => this.storage.unescapeHtml(name)),
-            source,
-            target,
-            definitions: true,
-            definition_examples: true,
-            definition_synonyms: true,
-            examples: true,
-            related_words: false,
-            speech_parts: false,
-            format: 'json',
-        })
-
-        for (const i in this.words) {
-            this.words[i].glossary = translates.find(
-                ({original}) => original === this.storage.unescapeHtml(this.words[i].name)
-            );
+            this.body.appendChild(item.render(
+                word,
+                this.getTitle(word, step),
+                glossary?.translations || '-',
+            ));
         }
-
-        const item = new ListItem(this.storage);
-        this.words.forEach((word) => this.body.appendChild(item.render('div', {
-            ...word,
-            name: this.getTitle(word),
-            subtitle: word.glossary?.translations,
-        })));
 
         const elems = this.body.querySelectorAll('.tooltipped');
         M.Tooltip.init(elems);
     }
 
-    isExists(name) {
-        return this.words.some(word => word.name === name);
+    isExists(word) {
+        return word in this.words;
     }
 
-    getTitle({name, step}) {
+    getTitle(name, step) {
         const {color, text} = WordStatus.getAttributes(step);
 
         return `<span class="tooltipped ${color}" data-tooltip="${text}" data-position="right">${name}</span>`;
