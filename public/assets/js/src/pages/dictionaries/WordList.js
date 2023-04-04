@@ -1,6 +1,7 @@
 import {WordListItem} from "./WordListItem";
 import {AddForm} from "./AddForm";
 import {WordStatus} from "../../service";
+import {ImageGallery} from "../../components";
 
 export class WordList {
 
@@ -24,28 +25,35 @@ export class WordList {
             await storage.addWords(this.dictionary, [name]);
             await this.render(this.dictionary);
         });
+
+        const gallery = new ImageGallery('#modal-select-word-image', (dictionary, word, url) => {
+            console.log({dictionary, word, url});
+            storage.updateWord(dictionary, word, {image: url})
+        });
     }
 
     async render(dictionary) {
         this.dictionary = dictionary;
         this.body.innerHTML = '';
-
+        this.title.innerHTML = `${dictionary.name} <label>${dictionary.count || 0} items</label>`;
         this.words = await this.storage.words(dictionary.id);
 
-        const wordCount = Object.keys(this.words).length;
-        this.title.innerHTML = `${dictionary.name} <label>${wordCount} items</label>`;
-        if (wordCount === 0) {
+        if (+dictionary.count !== Object.keys(this.words).length) {
+            console.log('error');
+        }
+        if (+dictionary.count === 0) {
             return;
         }
 
         const item = new WordListItem(dictionary, this.storage);
         for (const [word, data] of Object.entries(this.words)) {
-            const {step, glossary} = data;
+            const {step, glossary, image} = data;
 
             this.body.appendChild(item.render(
                 word,
                 this.getTitle(word, step),
                 glossary?.translations || '-',
+                image,
             ));
         }
 
@@ -60,6 +68,9 @@ export class WordList {
     getTitle(name, step) {
         const {color, text} = WordStatus.getAttributes(step);
 
-        return `<span class="tooltipped ${color}" data-tooltip="${text}" data-position="right">${name}</span>`;
+        return `
+            <span class="tooltipped ${color}" data-tooltip="${text}" data-position="right">${name}</span>
+            <label>| ${text}</label>
+        `;
     }
 }
