@@ -1,6 +1,5 @@
 import {App} from "./src/App";
 import Config from "./config";
-import config from "./config";
 
 
 // Discovery doc URL for APIs used by the quickstart
@@ -61,7 +60,7 @@ function checkBeforeStart() {
         window.gapi = gapi;
         window.google = google
 
-        const app = new App(config);
+        const app = new App(Config);
         app.render();
     }
 }
