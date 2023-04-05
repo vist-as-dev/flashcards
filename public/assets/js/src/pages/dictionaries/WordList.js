@@ -5,7 +5,7 @@ import {ImageGallery} from "../../components";
 
 export class WordList {
 
-    constructor(storage) {
+    constructor(storage, imageApi) {
         const collection = document.querySelector('div#dictionaries .collection#word-list');
         this.body = collection.querySelector('.collection-body');
         this.title = collection.querySelector('.collection-header h6');
@@ -26,10 +26,28 @@ export class WordList {
             await this.render(this.dictionary);
         });
 
-        const gallery = new ImageGallery('#modal-select-word-image', (dictionary, word, url) => {
-            console.log({dictionary, word, url});
-            storage.updateWord(dictionary, word, {image: url})
-        });
+        const gallery = new ImageGallery(
+            '#modal-select-word-image',
+            (dictionary, word, url) => {
+                const item = this.body.querySelector(`[data-word="${word}"]`);
+                if (item) {
+                    fetch(url).then(() => {
+                        const wrapper = item.querySelector('a[href="#modal-select-word-image"]');
+                        wrapper.innerHTML = '';
+
+                        const img = new Image();
+                        img.classList.add('circle');
+                        img.src = url;
+                        img.alt = word;
+
+                        wrapper.appendChild(img);
+                    });
+
+                }
+                storage.updateWord(dictionary, word, {image: url});
+            },
+            imageApi
+        );
     }
 
     async render(dictionary) {

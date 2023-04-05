@@ -1,16 +1,18 @@
 import {Bootstrap} from "./bootstrap";
-import {GoogleDriveStorage, TranslateService} from "./api";
+import {BingImageApi, GoogleDriveStorage, PexelImageApi, TranslateService} from "./api";
 import {DictionaryStorage, LanguageStorage} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
 
 export class App {
-    constructor() {
+    constructor(config) {
         new Bootstrap().init();
 
         this.api = {
             gDrive: new GoogleDriveStorage(),
             translate: new TranslateService(),
+            pexel: new PexelImageApi(config),
+            bing: new BingImageApi(config),
         };
 
         this.storage = {

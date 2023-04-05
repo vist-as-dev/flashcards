@@ -1,14 +1,14 @@
 export class ImageGallery {
-    constructor(selector, onClick) {
+    constructor(selector, onClick, api) {
         this.modalSelectWordImage = document.querySelector(selector);
         this.imageList = this.modalSelectWordImage.querySelector('#modal-select-word-image-list');
         this.queryInput = this.modalSelectWordImage.querySelector('#modal-word-image-query');
         this.queryInput.addEventListener('change', () => this.render());
         this.onClick = onClick;
+        this.api = api;
 
         M.Modal.init(this.modalSelectWordImage, {
             onOpenStart: (modal) => {
-                this.imageList.innerHTML = '';
                 this.queryInput.value = modal.dataset.query;
                 M.updateTextFields();
                 this.render();
@@ -17,9 +17,10 @@ export class ImageGallery {
     }
 
     render() {
-        console.log(this.queryInput)
-        this
-            .upload(this.queryInput.value)
+        this.imageList.innerHTML = '';
+
+        this.api
+            .search(this.queryInput.value)
             .then(response => {
                 response.forEach(({url, text}) => {
                     const img = document.createElement('img');
@@ -47,32 +48,5 @@ export class ImageGallery {
                     this.imageList.appendChild(li);
                 });
             });
-    }
-
-    upload(query) {
-        return fetch('https://api.bing.microsoft.com/v7.0/images/search?' + new URLSearchParams({
-            q: query,
-            aspect: 'Square',
-            color: 'ColorOnly',
-            imageType: 'Photo',
-            size: 'Large',
-        }), {
-            headers: {
-                'Ocp-Apim-Subscription-Key': '1b4ab41c0e2a46a4aee257bacf68fd9a',
-            }
-        })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response);
-                return response;
-            })
-            .then(({queryExpansions, relatedSearches, value}) => [
-                ...(value || []).map(({contentUrl: url, name: text}) => ({url, text})),
-                ...(queryExpansions || []).map(({thumbnail: {thumbnailUrl}, text}) => ({url: thumbnailUrl, text})),
-                ...(relatedSearches || []).map(({thumbnail: {thumbnailUrl}, text}) => ({url: thumbnailUrl, text})),
-            ])
-            .then(response => response.filter(
-                ({url}, index, array) => array.findIndex(i => i.url === url) === index)
-            );
     }
 }

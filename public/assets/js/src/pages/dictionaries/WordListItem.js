@@ -78,6 +78,7 @@ export class WordListItem {
         el.appendChild(secondaryContent);
 
         el.classList.add('avatar');
+        el.setAttribute('data-word', word);
 
         el.addEventListener('blur', (e) => {
             this.lw.listener(e, () => {
