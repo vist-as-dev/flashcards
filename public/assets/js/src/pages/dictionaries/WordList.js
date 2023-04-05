@@ -2,6 +2,8 @@ import {WordListItem} from "./WordListItem";
 import {AddForm} from "./AddForm";
 import {WordStatus} from "../../service";
 import {ImageGallery} from "../../components";
+import {TextToSpeechApi} from "../../api/google/text-to-speech/TextToSpeechApi";
+import {right} from "../../../libs/xregexp/xregexp-all";
 
 export class WordList {
 
@@ -86,9 +88,28 @@ export class WordList {
     getTitle(name, step) {
         const {color, text} = WordStatus.getAttributes(step);
 
-        return `
-            <span class="tooltipped ${color}" data-tooltip="${text}" data-position="right">${name}</span>
-            <label>| ${text}</label>
-        `;
+        const a = document.createElement('a');
+        a.setAttribute('href', '#!');
+        a.addEventListener('click', async e => {
+            e.stopPropagation();
+            e.preventDefault();
+            await TextToSpeechApi.speech(name);
+        });
+        a.innerHTML = `<i class="material-icons small">record_voice_over</i>`;
+
+        const span = document.createElement('span');
+        span.classList.add('tooltipped', ...color.split(' '));
+        span.setAttribute('data-tooltip', text);
+        span.setAttribute('data-position', 'right');
+        span.innerHTML = name;
+
+        const label = document.createElement('label');
+        label.innerHTML = '| ' + text;
+
+        const title = document.createElement('span');
+        title.classList.add('title');
+        title.append(span, label, a);
+
+        return title;
     }
 }
