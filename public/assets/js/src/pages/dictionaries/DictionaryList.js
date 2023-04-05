@@ -4,14 +4,14 @@ import {AddForm} from "./AddForm";
 import {FlashcardSelectDictionary} from "./FlashcardSelectDictionary";
 
 export class DictionaryList {
-    constructor({storage: {dictionaries}}) {
+    constructor({storage: {dictionaries}, api: {pexel}}) {
         this.body = document.querySelector('div#dictionaries .collection#dictionary-list .collection-body');
         this.storage = dictionaries;
 
         this.dictionaries = [];
         this.active = null;
 
-        this.words = new WordList(this.storage);
+        this.words = new WordList(this.storage, pexel);
         const form = new AddForm('div#dictionaries .collection#dictionary-list');
         form.init(async (name) => {
             if (this.isExists(name)) {

@@ -45,6 +45,7 @@ export class DictionaryStorage {
         }), words);
 
         return this.api.updateMetaFile(dictionary.id, merged).then(() => {
+            this.api.updateMetaFileProperties(dictionary.id, {count: Object.keys(merged).length});
             this.apiWordGlossary(newWords).then(glossary => {
                 for (const word in merged) {
                     merged[word] = {...merged[word], ...(word in glossary ? {glossary: glossary[word]} : {})}
@@ -72,7 +73,9 @@ export class DictionaryStorage {
 
         delete words[word];
 
-        return this.api.updateMetaFile(dictionary.id, words);
+        return this.api.updateMetaFile(dictionary.id, words).then(() => {
+            this.api.updateMetaFileProperties(dictionary.id, {count: Object.keys(words).length});
+        });
     }
 
     async getWordTranslation(dictionary, word, data = {}) {

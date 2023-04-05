@@ -7,13 +7,14 @@ export class AddForm {
         this.ht = new HideToggler();
 
         this.el = document.querySelector(selector);
-        this.addButton = this.el.querySelector('#add-btn');
+        this.header = this.el.querySelector('.collection-header');
+        this.addButton = this.header.querySelector('#add-btn');
+        this.confirmButton = this.header.querySelector('#confirm-btn');
+        this.cancelButton = this.header.querySelector('#cancel-btn');
 
         this.form = this.el.querySelector('.new');
         this.input = this.form.querySelector('input[type=text]');
         this.helperText = this.form.querySelector('.helper-text');
-        this.confirmButton = this.form.querySelector('#confirm-btn');
-        this.cancelButton = this.form.querySelector('#cancel-btn');
     }
 
     init(onSubmit) {
@@ -26,14 +27,14 @@ export class AddForm {
 
         this.addButton.addEventListener('click', (e) => {
             this.lw.listener(e, () => {
-                this.ht.toggle([this.addButton], [this.form]);
+                this.ht.toggle([this.addButton], [this.form, this.confirmButton, this.cancelButton]);
                 this.input.focus();
             });
         });
 
         this.cancelButton.addEventListener('click', (e) => {
             this.lw.listener(e, () => {
-                this.ht.toggle([this.form], [this.addButton]);
+                this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
             });
         });
 
@@ -44,7 +45,7 @@ export class AddForm {
                 }
 
                 onSubmit(this.input.value);
-                this.ht.toggle([this.form], [this.addButton]);
+                this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
             });
         });
     }

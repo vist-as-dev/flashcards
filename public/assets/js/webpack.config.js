@@ -1,7 +1,7 @@
 const path = require('path')
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './index.js',
     module: {
         rules: [
             { test: /\.svg$/, use: 'svg-inline-loader' },
@@ -10,8 +10,8 @@ module.exports = {
         ]
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'app.js'
+        path: path.resolve(__dirname, '.'),
+        filename: 'script.js'
     },
     mode: 'development'
     // mode: 'production'

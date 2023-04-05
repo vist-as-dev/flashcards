@@ -9,5 +9,6 @@
 /vendor/
 ###< symfony/framework-bundle ###
 /public/assets/js/node_modules/
-/public/assets/js/package-lock.json
 /public/assets/js/dist/
+/public/assets/js/config.js
+/public/assets/js/package-lock.json

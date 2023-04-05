@@ -10,12 +10,12 @@ export class DictionaryListItem {
         this.ht = new HideToggler();
     }
 
-    render({id, name, subtitle}, onDelete) {
+    render({id, name, count}, onDelete) {
         const title = this.factory.title;
         title.innerHTML = name;
 
         const label = document.createElement('p');
-        label.innerHTML = `${subtitle}`;
+        label.innerHTML = `count: ${count || 0}`;
 
         const avatar = document.createElement('i');
         avatar.classList.add('material-icons', 'circle');

@@ -11,7 +11,7 @@ export class WordListItem {
         this.ht = new HideToggler();
     }
 
-    render(word, _title, subtitle) {
+    render(word, _title, subtitle, image) {
         const title = document.createElement('span');
         title.classList.add('title');
         title.innerHTML = _title;
@@ -19,9 +19,26 @@ export class WordListItem {
         const label = document.createElement('p');
         label.innerHTML = `${subtitle}`;
 
-        const img = document.createElement('i');
-        img.classList.add('material-icons', 'circle', 'green');
-        img.innerHTML = 'insert_chart';
+        const wordImage = document.createElement('a');
+        wordImage.setAttribute('href', '#modal-select-word-image');
+        wordImage.classList.add('modal-trigger');
+        wordImage.addEventListener('click', () => {
+            const modal = document.querySelector('#modal-select-word-image');
+            modal.setAttribute('data-query', word);
+            modal.setAttribute('data-dictionary', this.dictionary?.id);
+        })
+
+        const img = document.createElement(image ? 'img' : 'i');
+        img.classList.add('circle');
+        if (image) {
+            img.setAttribute('src', image);
+            img.setAttribute('alt', word);
+        } else {
+            img.classList.add('material-icons', 'green');
+            img.innerHTML = 'insert_chart';
+        }
+
+        wordImage.appendChild(img);
 
         const removeButton = this.factory.removeButton;
         const confirmButton = this.factory.confirmButton;
@@ -55,12 +72,13 @@ export class WordListItem {
         secondaryContent.appendChild(confirmButton);
 
         const el = this.factory.divItem;
-        el.appendChild(img);
+        el.appendChild(wordImage);
         el.appendChild(title);
         el.appendChild(label);
         el.appendChild(secondaryContent);
 
         el.classList.add('avatar');
+        el.setAttribute('data-word', word);
 
         el.addEventListener('blur', (e) => {
             this.lw.listener(e, () => {
