@@ -11,11 +11,7 @@ export class WordListItem {
         this.ht = new HideToggler();
     }
 
-    render(word, _title, subtitle, image) {
-        const title = document.createElement('span');
-        title.classList.add('title');
-        title.innerHTML = _title;
-
+    render(word, title, subtitle, image) {
         const label = document.createElement('p');
         label.innerHTML = `${subtitle}`;
 
