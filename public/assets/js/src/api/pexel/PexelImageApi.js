@@ -3,11 +3,13 @@ export class PexelImageApi {
         this.key = KEY;
     }
 
-    search(query, options = {orientation: 'portrait', per_page: 80}) {
+    search(query, options = {}) {
         return fetch('https://api.pexels.com/v1/search?' + new URLSearchParams({
             query: query,
-            ...options,
+            orientation: 'portrait',
+            per_page: 80,
             // size: 'small',
+            ...options,
         }), {
             headers: {
                 'Authorization': this.key,
