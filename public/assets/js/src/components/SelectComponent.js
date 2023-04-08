@@ -18,4 +18,8 @@ export class SelectComponent {
 
         M.FormSelect.init(this.el);
     }
+
+    get value() {
+        return this.el.value;
+    }
 }

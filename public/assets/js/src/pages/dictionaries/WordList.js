@@ -1,37 +1,42 @@
-import {WordListItem} from "./WordListItem";
-import {AddForm} from "./AddForm";
 import {WordStatus} from "../../service";
 import {ImageGallery} from "../../components";
-import {TextToSpeechApi} from "../../api/google/text-to-speech/TextToSpeechApi";
-import {right} from "../../../libs/xregexp/xregexp-all";
+import {TextToSpeechApi} from "../../api";
+
+import {AddFormWord} from "./forms/AddFormWord";
+import {WordListItem} from "./WordListItem";
 
 export class WordList {
+    #body;
+    #title;
 
-    constructor(storage, imageApi) {
+    #dictionary = {};
+    #words = {};
+    #unsubscribe;
+    #form;
+
+    constructor({api: {pexel}}, state) {
         const collection = document.querySelector('div#dictionaries .collection#word-list');
-        this.body = collection.querySelector('.collection-body');
-        this.title = collection.querySelector('.collection-header h6');
-        this.storage = storage;
+        this.#body = collection.querySelector('.collection-body');
+        this.#title = collection.querySelector('.collection-header h6');
+        this.#form = new AddFormWord();
 
-        this.words = [];
-        this.active = null;
-        this.dictionary = null;
-
-        const form = new AddForm('div#dictionaries .collection#word-list');
-        form.init(async (name) => {
-            if (this.isExists(name)) {
-                form.error('Already exists');
-                return;
+        state.subscribe(({dictionary}) => {
+            if (this.#dictionary?.id !== dictionary?.id) {
+                this.#unsubscribe && this.#unsubscribe();
+                this.#unsubscribe = dictionary.words?.subscribe(words => {
+                    this.#words = words;
+                    this.render();
+                });
+                this.#form.setStorage(dictionary.words);
             }
-
-            await storage.addWords(this.dictionary, [name]);
-            await this.render(this.dictionary);
+            this.#dictionary = dictionary;
+            this.render();
         });
 
-        const gallery = new ImageGallery(
+        new ImageGallery(
             '#modal-select-word-image',
-            (dictionary, word, url) => {
-                const item = this.body.querySelector(`[data-word="${word}"]`);
+            (word, url) => {
+                const item = this.#body.querySelector(`[data-word="${word}"]`);
                 if (item) {
                     fetch(url).then(() => {
                         const wrapper = item.querySelector('a[href="#modal-select-word-image"]');
@@ -46,47 +51,41 @@ export class WordList {
                     });
 
                 }
-                storage.updateWord(dictionary, word, {image: url});
+                this.#dictionary?.words?.update(word, {image: url});
             },
-            imageApi
+            pexel
         );
     }
 
-    async render(dictionary) {
-        this.dictionary = dictionary;
-        this.body.innerHTML = '';
-        this.title.innerHTML = `${dictionary.name} <label>${dictionary.count || 0} items</label>`;
-        this.words = await this.storage.words(dictionary.id);
+    render() {
+        this.#title.innerHTML = `${this.#dictionary?.name || 'Words'} <label>${this.#dictionary?.count || 0} items</label>`;
 
-        if (+dictionary.count !== Object.keys(this.words).length) {
-            console.log('error');
-        }
-        if (+dictionary.count === 0) {
-            return;
-        }
+        Object.values(this.#words).forEach(({word, step, glossary, image}) => {
+            new WordListItem(this.#body, {onDelete: () => this.#dictionary?.words?.delete(word)})
+                .render(
+                    word,
+                    this.getTitle(word, step, glossary?.transliteration),
+                    glossary?.translations || 'translation in progress...',
+                    image,
+                );
+        });
 
-        const item = new WordListItem(dictionary, this.storage);
-        for (const [word, data] of Object.entries(this.words)) {
-            const {step, glossary, image} = data;
+        [...this.#body.querySelectorAll('.collection-item')].forEach((el) => {
+            if (!(el.dataset.word in this.#words)) {
+                el.remove();
+            }
+        });
 
-            this.body.appendChild(item.render(
-                word,
-                this.getTitle(word, step),
-                glossary?.translations || '-',
-                image,
-            ));
-        }
-
-        const elems = this.body.querySelectorAll('.tooltipped');
+        const elems = this.#body.querySelectorAll('.tooltipped');
         M.Tooltip.init(elems);
     }
 
-    isExists(word) {
-        return word in this.words;
-    }
-
-    getTitle(name, step) {
+    getTitle(name, step, transliteration) {
         const {color, text} = WordStatus.getAttributes(step);
+
+        const span = document.createElement('span');
+        span.classList.add(...color.split(' '));
+        span.innerHTML = name;
 
         const a = document.createElement('a');
         a.setAttribute('href', '#!');
@@ -95,20 +94,14 @@ export class WordList {
             e.preventDefault();
             await TextToSpeechApi.speech(name);
         });
-        a.innerHTML = `<i class="material-icons small">record_voice_over</i>`;
-
-        const span = document.createElement('span');
-        span.classList.add('tooltipped', ...color.split(' '));
-        span.setAttribute('data-tooltip', text);
-        span.setAttribute('data-position', 'right');
-        span.innerHTML = name;
+        a.appendChild(span);
 
         const label = document.createElement('label');
-        label.innerHTML = '| ' + text;
+        label.innerHTML = (transliteration && transliteration.length < 50 ? ' | ' + transliteration : '') + ' | ' + text;
 
         const title = document.createElement('span');
         title.classList.add('title');
-        title.append(span, label, a);
+        title.append(a, label);
 
         return title;
     }

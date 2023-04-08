@@ -1,14 +1,23 @@
-import {ListItemFactory} from "./ListItemFactory";
 import {ListenerWrapper} from "../../share/ListenerWrapper";
 import {HideToggler} from "../../share/HideToggler";
 
+import {ListItemFactory} from "./ListItemFactory";
+
 export class WordListItem {
-    constructor(dictionary, storage) {
-        this.dictionary = dictionary;
-        this.storage = storage;
-        this.factory = new ListItemFactory();
-        this.lw = new ListenerWrapper();
-        this.ht = new HideToggler();
+    #parent;
+    #handlers;
+
+    #factory;
+    #lw;
+    #ht;
+
+    constructor(parent, {onDelete}) {
+        this.#parent = parent;
+        this.#handlers = {onDelete};
+
+        this.#factory = new ListItemFactory();
+        this.#lw = new ListenerWrapper();
+        this.#ht = new HideToggler();
     }
 
     render(word, title, subtitle, image) {
@@ -21,7 +30,6 @@ export class WordListItem {
         wordImage.addEventListener('click', () => {
             const modal = document.querySelector('#modal-select-word-image');
             modal.setAttribute('data-query', word);
-            modal.setAttribute('data-dictionary', this.dictionary?.id);
         })
 
         const img = document.createElement(image ? 'img' : 'i');
@@ -36,19 +44,27 @@ export class WordListItem {
 
         wordImage.appendChild(img);
 
-        const removeButton = this.factory.removeButton;
-        const confirmButton = this.factory.confirmButton;
-        const cancelButton = this.factory.cancelButton;
+        let el = this.#parent.querySelector(`.collection-item[data-word="${word}"]`);
+        if (el) {
+            el.querySelector('.title')?.replaceWith(title);
+            el.querySelector('.title + p')?.replaceWith(label);
+            el.querySelector('.modal-trigger')?.replaceWith(wordImage);
+            return;
+        }
+
+        const removeButton = this.#factory.removeButton;
+        const confirmButton = this.#factory.confirmButton;
+        const cancelButton = this.#factory.cancelButton;
 
         removeButton.addEventListener('click', (e) => {
-            this.lw.listener(e, () => {
-                this.ht.toggle([removeButton], [confirmButton, cancelButton]);
+            this.#lw.listener(e, () => {
+                this.#ht.toggle([removeButton], [confirmButton, cancelButton]);
             });
         });
 
         confirmButton.addEventListener('click', (e) => {
-            this.lw.listener(e, async () => {
-                await this.storage.deleteWord(this.dictionary, word);
+            this.#lw.listener(e, async () => {
+                await this.#handlers.onDelete();
 
                 M.Tooltip.getInstance(confirmButton).destroy();
                 el.remove();
@@ -56,8 +72,8 @@ export class WordListItem {
         });
 
         cancelButton.addEventListener('click', (e) => {
-            this.lw.listener(e, () => {
-                this.ht.toggle([confirmButton, cancelButton], [removeButton]);
+            this.#lw.listener(e, () => {
+                this.#ht.toggle([confirmButton, cancelButton], [removeButton]);
             });
         });
 
@@ -67,7 +83,7 @@ export class WordListItem {
         secondaryContent.appendChild(cancelButton);
         secondaryContent.appendChild(confirmButton);
 
-        const el = this.factory.divItem;
+        el = this.#factory.divItem;
         el.appendChild(wordImage);
         el.appendChild(title);
         el.appendChild(label);
@@ -77,11 +93,11 @@ export class WordListItem {
         el.setAttribute('data-word', word);
 
         el.addEventListener('blur', (e) => {
-            this.lw.listener(e, () => {
-                this.ht.toggle([confirmButton, cancelButton], [removeButton]);
+            this.#lw.listener(e, () => {
+                this.#ht.toggle([confirmButton, cancelButton], [removeButton]);
             });
         });
 
-        return el;
+        this.#parent.prepend(el);
     }
 }

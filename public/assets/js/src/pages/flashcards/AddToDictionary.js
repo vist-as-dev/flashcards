@@ -1,5 +1,15 @@
+import {FlashcardSelectDictionary} from "./FlashcardSelectDictionary";
+
 export class AddToDictionary {
-    constructor({storage: {dictionaries}}) {
+    #dictionaries = {};
+
+    constructor({storage: {dictionary}}) {
+        const select = new FlashcardSelectDictionary();
+        dictionary.subscribe((dictionaries) => {
+            this.#dictionaries = dictionaries;
+            select.render(Object.values(dictionaries));
+        });
+
         document
             .querySelector('div#flashcards button#add-to-dictionary-btn')
             .addEventListener('click', async (e) => {
@@ -15,9 +25,8 @@ export class AddToDictionary {
                     .filter(i => !!i.length)
                     .filter((word, index, array) => array.indexOf(word) === index)
                 ;
-                const dictionaryId = document.getElementById('select-dictionary').value;
 
-                await dictionaries.addWords({id: dictionaryId}, words);
+                this.#dictionaries[select.value]?.words?.add(words);
 
                 el.classList.remove('spinner')
                 el.disabled = false;

@@ -36,8 +36,8 @@ abstract class TranslationFactory implements TranslationFactoryInterface
     {
         $result = [];
         foreach ($sentences as $sentence) {
-            if (isset($sentence['translit'])) {
-                $result[] = trim($sentence['translit']);
+            if (isset($sentence['src_translit'])) {
+                $result[] = trim($sentence['src_translit']);
             }
         }
 

@@ -31,11 +31,7 @@ export class ImageGallery {
                     overlay.classList.add('overlay');
                     overlay.innerHTML = '<span>Select image</span>';
                     overlay.addEventListener('click', () => {
-                        this.onClick && this.onClick(
-                            {id: this.modalSelectWordImage.dataset.dictionary},
-                            this.modalSelectWordImage.dataset.query,
-                            url
-                        );
+                        this.onClick && this.onClick(this.modalSelectWordImage.dataset.query, url);
 
                         const instance = M.Modal.getInstance(this.modalSelectWordImage);
                         instance.close();

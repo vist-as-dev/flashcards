@@ -1,5 +1,5 @@
-import {ListenerWrapper} from "../../share/ListenerWrapper";
-import {HideToggler} from "../../share/HideToggler";
+import {ListenerWrapper} from "../../../share/ListenerWrapper";
+import {HideToggler} from "../../../share/HideToggler";
 
 export class AddForm {
     constructor(selector) {
@@ -18,11 +18,15 @@ export class AddForm {
     }
 
     init(onSubmit) {
-        this.input.addEventListener('change', (e) => {
-            this.lw.listener(e, () => {
-                this.helperText.innerHTML = '';
-                this.ht.toggle([this.helperText], []);
-            });
+        this.input.addEventListener('input', (e) => {
+            this.lw.listener(e, () => this.reset());
+        });
+
+        this.input.addEventListener('keydown', (e) => {
+            if (e.keyCode !== 13 || this.input.value.trim().length === 0) {
+                return;
+            }
+            this.lw.listener(e, () => this.process(onSubmit));
         });
 
         this.addButton.addEventListener('click', (e) => {
@@ -39,19 +43,32 @@ export class AddForm {
         });
 
         this.confirmButton.addEventListener('click', (e) => {
-            this.lw.listener(e, () => {
-                if (this.input.value.length === 0) {
-                    return;
-                }
-
-                onSubmit(this.input.value);
-                this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
-            });
+            if (this.input.value.trim().length === 0) {
+                return;
+            }
+            this.lw.listener(e, () => this.process(onSubmit));
         });
     }
 
     error(message) {
         this.helperText.innerHTML = message;
         this.ht.toggle([], [this.helperText]);
+    }
+
+    reset() {
+        this.helperText.innerHTML = '';
+        this.ht.toggle([this.helperText], []);
+    }
+
+    async process(handle) {
+        this.form.classList.add('loader');
+        try {
+            await handle(this.input.value.trim());
+            this.input.value = '';
+            this.reset();
+        } catch (e) {
+            this.error(e.message);
+        }
+        this.form.classList.remove('loader');
     }
 }
