@@ -3,6 +3,8 @@ import {BingImageApi, GoogleDriveStorage, PexelImageApi, TranslateService} from 
 import {DictionaryStorage, LanguageStorage} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
+import {DictionaryCollection} from "./storage/DictionaryCollection";
+import {DirectionStorage} from "./storage/DirectionStorage";
 
 export class App {
     constructor(config) {
@@ -17,6 +19,7 @@ export class App {
 
         this.storage = {
             dictionaries: new DictionaryStorage(this.api.gDrive.meta),
+            dictionary: new DictionaryCollection(this.api.gDrive.meta, new DirectionStorage()),
             languages: new LanguageStorage(),
         }
 
