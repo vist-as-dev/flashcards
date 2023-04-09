@@ -1,124 +1,91 @@
-import {TranslateService} from "../api";
+import {Dictionary} from "../model";
+import {Storage} from "./Storage";
+import {WordStorage} from "./WordStorage";
+import {Direction} from "../model/Direction";
 
-export class DictionaryStorage {
-    constructor(api) {
+export class DictionaryStorage extends Storage {
+    #items = {};
+    #direction = {};
+    #isLoaded = false;
+
+    constructor(api, direction) {
+        super();
         this.api = api;
-    }
 
-    list() {
-        return this.api.listFiles({type: 'dictionary'})
-            .then(files => files.reverse())
-            .then((files) => files.map(({id, properties}) => ({id, ...properties})));
-    }
+        direction.subscribe((direction) => {
+            this.#direction = new Direction(direction);
+            this.#isLoaded = false;
 
-    async words(id) {
-        return await this.api.downloadMetaFile(id);
-    }
+            const {source, target} = this.#direction;
+            this.api.listFiles({type: 'dictionary', source, target})
+                .then(files => files.reverse())
+                .then((files) => {
+                    this.#isLoaded = true;
 
-    async get(id) {
-        return this.api.getFileMeta(id);
-    }
+                    const ids = files.map((id) => id);
+                    Object.keys(this.#items).forEach(id => {
+                        if (!ids.includes(id)) {
+                            this.#items[id]?.unsubscribe && this.#items[id].unsubscribe();
+                            delete this.#items[id];
+                        }
+                    });
+                    this.notify(this.#items);
 
-    async delete(id) {
-        return this.api.deleteMetaFile(id);
-    }
-
-    async update(id, data) {
-        return this.api.updateMetaFileProperties(id, data);
-    }
-
-    async create(name, source, target) {
-        return this.api.createMetaFile(encodeURIComponent(name), {name, source, target, type: 'dictionary'});
-    }
-
-    async addWords(dictionary, newWords) {
-        const words = await this.words(dictionary.id);
-        const merged = newWords.reduce((map, word) => ({
-            ...map,
-            ...(word in map ? {} : {
-                [word]: {
-                    step: 0,
-                    timestamp: Date.now(),
-                    image: '',
-                }
-            })
-        }), words);
-
-        return this.api.updateMetaFile(dictionary.id, merged).then(() => {
-            this.api.updateMetaFileProperties(dictionary.id, {count: Object.keys(merged).length});
-            this.apiWordGlossary(newWords).then(glossary => {
-                for (const word in merged) {
-                    merged[word] = {...merged[word], ...(word in glossary ? {glossary: glossary[word]} : {})}
-                }
-                this.api.updateMetaFile(dictionary.id, merged);
-            });
+                    files.forEach(({id, properties}) => {
+                        this.#set(id, properties);
+                        this.api.downloadMetaFile(id).then(data => this.#items[id]?.words.set(data));
+                    });
+                });
         });
     }
 
-    async updateWord(dictionary, word, data = {}) {
-        let words = await this.words(dictionary.id);
-        words = {
-            ...words,
-            [word]: {
-                ...(word in words ? words[word] : {}),
-                ...data,
+    subscribe(callback) {
+        this.#isLoaded && callback(this.#items);
+        return super.subscribe(callback);
+    }
+
+    #set(id, data) {
+        if (this.#direction.source !== data.source || this.#direction.target !== data.target) {
+            return;
+        }
+
+        if (id) {
+            const dictionary = new Dictionary({id, ...data});
+            if (this.#items[id]?.words instanceof WordStorage) {
+                dictionary.words = this.#items[id].words;
+                dictionary.unsubscribe = this.#items[id].unsubscribe;
+            } else {
+                dictionary.words = new WordStorage(dictionary);
+                dictionary.unsubscribe = dictionary.words.subscribe(async (words) => {
+                    this.notify(this.#items);
+                    await this.api.updateMetaFile(id, words);
+                    this.update(id, {count: Object.keys(words).length});
+                });
             }
-        };
-
-        return this.api.updateMetaFile(dictionary.id, words);
+            this.#items[id] = dictionary;
+            this.notify(this.#items);
+        }
     }
 
-    async deleteWord(dictionary, word) {
-        let words = await this.words(dictionary.id);
+    async create(name) {
+        const {source, target} = this.#direction;
+        const data = {name, source, target, type: 'dictionary'};
+        const {id} = await this.api.createMetaFile(encodeURIComponent(name), data);
 
-        delete words[word];
+        this.#set(id, data)
+    }
 
-        return this.api.updateMetaFile(dictionary.id, words).then(() => {
-            this.api.updateMetaFileProperties(dictionary.id, {count: Object.keys(words).length});
+    update(id, data) {
+        this.api.updateMetaFileProperties(id, data).then(() => {
+            this.#set(id, {...this.#items[id], ...data});
         });
     }
 
-    async getWordTranslation(dictionary, word, data = {}) {
-        if ('glossary' in data) {
-            return data.glossary.translations;
-        }
-
-        let words = await this.words(dictionary.id);
-        if (word in words) {
-            if ('glossary' in words[word]) {
-                return words[word].glossary.translations;
-            }
-        }
-
-        const {[word]: glossary} = await this.apiWordGlossary([word]);
-
-        if (word in words) {
-            await this.updateWord(dictionary, word, {glossary});
-        }
-
-        return glossary?.translations;
-    }
-
-    async apiWordGlossary(words) {
-        const source = document.querySelector('header select#source').value;
-        const target = document.querySelector('header select#target').value;
-
-        const translates = await (new TranslateService()).translate({
-            text: words,
-            source,
-            target,
-            definitions: true,
-            definition_examples: true,
-            definition_synonyms: true,
-            examples: true,
-            related_words: false,
-            speech_parts: false,
-            format: 'json',
+    delete(id) {
+        this.api.deleteMetaFile(id).then(() => {
+            this.#items[id]?.unsubscribe && this.#items[id].unsubscribe();
+            delete this.#items[id];
+            this.notify(this.#items);
         });
-
-        return translates.reduce((result, translate) => ({
-            ...result,
-            [translate.original]: translate,
-        }), {});
     }
 }

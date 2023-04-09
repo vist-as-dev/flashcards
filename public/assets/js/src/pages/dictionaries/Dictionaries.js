@@ -1,4 +1,4 @@
-import {State} from "../../storage/State";
+import {State} from "../../storage";
 
 import {DictionaryList} from "./DictionaryList";
 import {WordList} from "./WordList";

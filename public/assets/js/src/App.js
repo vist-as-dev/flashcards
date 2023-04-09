@@ -1,10 +1,9 @@
 import {Bootstrap} from "./bootstrap";
 import {BingImageApi, GoogleDriveStorage, PexelImageApi, TranslateService} from "./api";
-import {DictionaryStorage, LanguageStorage} from "./storage";
+import {LanguageStorage} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
-import {DictionaryCollection} from "./storage/DictionaryCollection";
-import {DirectionStorage} from "./storage/DirectionStorage";
+import {DirectionStorage, DictionaryStorage} from "./storage";
 
 export class App {
     constructor(config) {
@@ -17,9 +16,10 @@ export class App {
             bing: new BingImageApi(config),
         };
 
+        const direction = new DirectionStorage();
         this.storage = {
-            dictionaries: new DictionaryStorage(this.api.gDrive.meta),
-            dictionary: new DictionaryCollection(this.api.gDrive.meta, new DirectionStorage()),
+            direction,
+            dictionary: new DictionaryStorage(this.api.gDrive.meta, direction),
             languages: new LanguageStorage(),
         }
 

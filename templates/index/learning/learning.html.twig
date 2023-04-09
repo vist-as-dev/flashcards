@@ -22,42 +22,48 @@
                                 </ul>
                                 <div id="addition">
                                     <div class="row">
-                                        <div class="col m4 s12">
-                                            <div class="row">
-                                                <div class="col s12 truncate">
-                                                    Dictionaries
-                                                    <label>for new words</label>
-                                                </div>
-                                            </div>
-                                            <div id="dictionary-list" class="scrollable">
-                                            </div>
-                                        </div>
-                                        <div class="col m8 s12">
-                                            <div class="row">
-                                                <div class="col m4 s12">
-                                                    <img src="./"  alt="" />
-                                                </div>
-                                                <div class="col m8 s12">
-                                                    <h5>test</h5>
-                                                    <p>
-                                                        test
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col s12">
-                                                    <p>definition</p>
-                                                    <p>examples</p>
-                                                    <p>synonyms</p>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col s12">
-                                                    <div class="buttons center">
-                                                        <button class="btn waves-effect waves-light truncate">I know it</button>
-                                                        <button class="btn waves-effect waves-light lime lighten-1 truncate">Skip now</button>
-                                                        <button class="btn waves-effect waves-light orange darken-2 truncate">Add to memorization</button>
+                                        <div class="col s12">
+                                            <ul class='collapsible'>
+                                                <li>
+                                                    <div class="collapsible-header">
+                                                        <i class="material-icons">expand_more</i>
+                                                        Select dictionaries
                                                     </div>
+                                                    <div class="collapsible-body" data-component="dictionaries"></div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col s12 hide" data-component="word">
+                                            <div class="card horizontal">
+                                                <div class="card-image">
+                                                    <a href="#modal-select-word-image" class="modal-trigger" data-component="image-wrapper">
+                                                        <img src="./"  alt="" class="responsive-img" />
+                                                    </a>
+                                                </div>
+                                                <div class="card-stacked">
+                                                    <div class="card-content">
+                                                        <span class="card-title activator grey-text text-darken-4">
+                                                            <a href="#!" data-component="original"></a>
+                                                            <i class="material-icons right">more_vert</i>
+                                                        </span>
+                                                        <label data-component="transliteration"></label>
+                                                        <p data-component="translations"></p>
+                                                    </div>
+                                                    <div class="card-action">
+                                                        <a href="#" data-component="well-known">I already know it</a>
+                                                        <a href="#" data-component="skip">Skip now</a>
+                                                        <a href="#" data-component="add">Add to memorization</a>
+                                                    </div>
+                                                </div>
+                                                <div class="card-reveal">
+                                                    <span class="card-title grey-text text-darken-4">Examples<i class="material-icons right">close</i></span>
+                                                    <p data-component="examples"></p>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col s12">
+                                                    <p data-component="definitions"></p>
                                                 </div>
                                             </div>
                                         </div>
