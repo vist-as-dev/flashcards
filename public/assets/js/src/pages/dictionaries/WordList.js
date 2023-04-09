@@ -49,7 +49,6 @@ export class WordList {
 
                         wrapper.appendChild(img);
                     });
-
                 }
                 this.#dictionary?.words?.update(word, {image: url});
             },

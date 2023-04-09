@@ -1,11 +1,11 @@
 import {LearningTabs} from "./LearningTabs.js";
-import {Dictionaries} from "./Dictionaries";
+import {Addition} from "./addition";
 
 export class Learning {
     constructor(container) {
         this.components = [
             new LearningTabs(),
-            new Dictionaries(container),
+            new Addition(container),
         ]
     }
 

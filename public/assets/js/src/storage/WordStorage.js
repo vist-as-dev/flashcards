@@ -2,7 +2,7 @@ import {TranslateService} from "../api";
 import {Word, Glossary, Dictionary} from "../model";
 import {Storage} from "./Storage";
 
-export class WordCollection extends Storage {
+export class WordStorage extends Storage {
     #items = {};
     #dictionary;
     #isLoaded = false;
@@ -15,6 +15,10 @@ export class WordCollection extends Storage {
     subscribe(callback) {
         this.#isLoaded && callback(this.#items);
         return super.subscribe(callback);
+    }
+
+    filter(callback) {
+        return Object.values(this.#items).filter(callback).reduce((words, word) => ({...words, [word.word]: word}), {});
     }
 
     set(words) {
@@ -46,6 +50,9 @@ export class WordCollection extends Storage {
     }
 
     update(word, data = {}) {
+        if (('step' in data) && !('timestamp' in data)) {
+            data = {...data, timestamp: Date.now()}
+        }
         this.#items[word] = new Word({...this.#items[word], ...data});
         this.notify(this.#items);
     }

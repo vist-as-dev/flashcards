@@ -1,2 +1,5 @@
 export * from './DictionaryStorage.js'
 export * from './LanguageStorage.js'
+export * from './DirectionStorage'
+export * from './State'
+export * from './WordStorage'
