@@ -1,10 +1,11 @@
 export class ImageGallery {
-    constructor(selector, onClick, api) {
-        this.modalSelectWordImage = document.querySelector(selector);
+    #callbacks = {}
+
+    constructor(api) {
+        this.modalSelectWordImage = document.querySelector('#modal-select-word-image');
         this.imageList = this.modalSelectWordImage.querySelector('#modal-select-word-image-list');
         this.queryInput = this.modalSelectWordImage.querySelector('#modal-word-image-query');
         this.queryInput.addEventListener('change', () => this.render());
-        this.onClick = onClick;
         this.api = api;
 
         M.Modal.init(this.modalSelectWordImage, {
@@ -14,6 +15,10 @@ export class ImageGallery {
                 this.render();
             }
         });
+    }
+
+    addCallback(key, callback) {
+        this.#callbacks[key] = callback;
     }
 
     render() {
@@ -31,7 +36,8 @@ export class ImageGallery {
                     overlay.classList.add('overlay');
                     overlay.innerHTML = '<span>Select image</span>';
                     overlay.addEventListener('click', () => {
-                        this.onClick && this.onClick(this.modalSelectWordImage.dataset.query, url);
+                        const onClick = this.#callbacks[this.modalSelectWordImage.dataset.callback];
+                        onClick && onClick(this.modalSelectWordImage.dataset.query, url);
 
                         const instance = M.Modal.getInstance(this.modalSelectWordImage);
                         instance.close();

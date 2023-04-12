@@ -7,6 +7,7 @@ export class AdditionState extends State{
     #direction = {};
     #dictionaries = {};
     #set = [];
+    #count = 0;
 
     constructor({storage: {direction, dictionary}}) {
         super({});
@@ -26,6 +27,7 @@ export class AdditionState extends State{
         this.setState({
             dictionaries: this.#activeDictionaries,
             word: this.#word,
+            count: this.#count,
         });
     }
 
@@ -50,17 +52,6 @@ export class AdditionState extends State{
     get #word() {
         const getNew = dictionary => dictionary?.words?.filter(({step}) => step === Word.STATUS_NEW) || {};
 
-        if (this.#set.length > 0) {
-            const [dictionaryId, {word}] = this.#set || [];
-            if (this.#activeDictionaries.includes(dictionaryId)) {
-                const words = getNew(this.#dictionaries[dictionaryId]);
-                if (word in words) {
-                    this.#set[1] = words[word];
-                    return this.#set;
-                }
-            }
-        }
-
         const dictionaries = this.#activeDictionaries.reduce(
             (dictionaries, id) =>([...dictionaries, ...(this.#dictionaries[id] ? [this.#dictionaries[id]] : [])]),
             []
@@ -73,6 +64,19 @@ export class AdditionState extends State{
             ;
             return words;
         }, []);
+
+        this.#count = words.length;
+
+        if (this.#set.length > 0) {
+            const [dictionaryId, {word}] = this.#set || [];
+            if (this.#activeDictionaries.includes(dictionaryId)) {
+                const words = getNew(this.#dictionaries[dictionaryId]);
+                if (word in words) {
+                    this.#set[1] = words[word];
+                    return this.#set;
+                }
+            }
+        }
 
         this.#set = words[Math.floor(Math.random() * words.length)] || [];
 
