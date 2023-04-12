@@ -4,6 +4,7 @@ namespace App\Service\Formatter;
 
 use App\Model\Translation;
 use App\Request\TranslationRequest;
+use Psr\Log\LoggerInterface;
 
 class Json implements FormatterInterface
 {
@@ -14,12 +15,16 @@ class Json implements FormatterInterface
 
     protected array $items = [];
 
-    public function __construct(TranslationRequest $request)
+    protected LoggerInterface $logger;
+
+    public function __construct(TranslationRequest $request, LoggerInterface $logger)
     {
         $this->hasDefinitions = $request->hasDefinitions();
         $this->hasDefinitionExamples = $request->hasDefinitionExamples();
         $this->hasDefinitionSynonyms = $request->hasDefinitionSynonyms();
         $this->hasExamples = $request->hasExamples();
+
+        $this->logger = $logger;
     }
 
     public function add(Translation $model)
@@ -62,27 +67,11 @@ class Json implements FormatterInterface
 
     protected function renderDefinitions(Translation $model, bool $hasExample, bool $hasSynonyms): array
     {
+        $this->logger->debug(json_encode($model->getDefinitions()));
         $definitions = [];
         foreach ($model->getDefinitions() ?: [] as $key => $definition) {
             if (is_array($definition)) {
-                foreach ($definition as $def) {
-                    $definitions[$key]['gloss'] = $def['gloss'];
-                    if ($hasExample && !empty($def['example'])) {
-                        $definitions[$key]['example'] = $def['example'];
-                    }
-
-                    if ($hasSynonyms && !empty($def['synonyms'])) {
-                        $synonyms = $def['synonyms'];
-                        $_str = isset($synonyms['main']) ? join(', ', $synonyms['main']) : '';
-                        unset($synonyms['main']);
-
-                        foreach ($synonyms as $register => $values) {
-                            $_str .= (empty($_str) ? '' : $_str . ' | ') . $register . ': ' . join(', ', $values);
-                        }
-
-                        $definitions[$key]['synonyms'] = $_str;
-                    }
-                }
+                $definitions[$key] = array_values($definition);
             } else {
                 $definitions[$key] = $definition;
             }

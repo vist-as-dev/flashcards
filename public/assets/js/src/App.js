@@ -4,6 +4,7 @@ import {LanguageStorage} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
 import {DirectionStorage, DictionaryStorage} from "./storage";
+import {ImageGallery} from "./components";
 
 export class App {
     constructor(config) {
@@ -12,9 +13,10 @@ export class App {
         this.api = {
             gDrive: new GoogleDriveStorage(),
             translate: new TranslateService(),
-            pexel: new PexelImageApi(config),
             bing: new BingImageApi(config),
         };
+
+        this.imageGallery = new ImageGallery(new PexelImageApi(config));
 
         const direction = new DirectionStorage();
         this.storage = {

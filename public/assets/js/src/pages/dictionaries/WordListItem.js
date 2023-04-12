@@ -2,6 +2,7 @@ import {ListenerWrapper} from "../../share/ListenerWrapper";
 import {HideToggler} from "../../share/HideToggler";
 
 import {ListItemFactory} from "./ListItemFactory";
+import {GALLERY_CALLBACK_KEY} from "./WordList";
 
 export class WordListItem {
     #parent;
@@ -30,6 +31,7 @@ export class WordListItem {
         wordImage.addEventListener('click', () => {
             const modal = document.querySelector('#modal-select-word-image');
             modal.setAttribute('data-query', word);
+            modal.setAttribute('data-callback', GALLERY_CALLBACK_KEY);
         })
 
         const img = document.createElement(image ? 'img' : 'i');

@@ -1,9 +1,11 @@
 import {WordStatus} from "../../service";
-import {ImageGallery} from "../../components";
 import {TextToSpeechApi} from "../../api";
+import {Word} from "../../model";
 
 import {AddFormWord} from "./forms/AddFormWord";
 import {WordListItem} from "./WordListItem";
+
+export const GALLERY_CALLBACK_KEY = 'dictionaries.wordList';
 
 export class WordList {
     #body;
@@ -14,7 +16,7 @@ export class WordList {
     #unsubscribe;
     #form;
 
-    constructor({api: {pexel}}, state) {
+    constructor({imageGallery}, state) {
         const collection = document.querySelector('div#dictionaries .collection#word-list');
         this.#body = collection.querySelector('.collection-body');
         this.#title = collection.querySelector('.collection-header h6');
@@ -33,27 +35,23 @@ export class WordList {
             this.render();
         });
 
-        new ImageGallery(
-            '#modal-select-word-image',
-            (word, url) => {
-                const item = this.#body.querySelector(`[data-word="${word}"]`);
-                if (item) {
-                    fetch(url).then(() => {
-                        const wrapper = item.querySelector('a[href="#modal-select-word-image"]');
-                        wrapper.innerHTML = '';
+        imageGallery.addCallback(GALLERY_CALLBACK_KEY, (word, url) => {
+            const item = this.#body.querySelector(`[data-word="${word}"]`);
+            if (item) {
+                fetch(url).then(() => {
+                    const wrapper = item.querySelector('a[href="#modal-select-word-image"]');
+                    wrapper.innerHTML = '';
 
-                        const img = new Image();
-                        img.classList.add('circle');
-                        img.src = url;
-                        img.alt = word;
+                    const img = new Image();
+                    img.classList.add('circle');
+                    img.src = url;
+                    img.alt = word;
 
-                        wrapper.appendChild(img);
-                    });
-                }
-                this.#dictionary?.words?.update(word, {image: url});
-            },
-            pexel
-        );
+                    wrapper.appendChild(img);
+                });
+            }
+            this.#dictionary?.words?.update(word, {image: url});
+        });
     }
 
     render() {
@@ -75,12 +73,12 @@ export class WordList {
             }
         });
 
-        const elems = this.#body.querySelectorAll('.tooltipped');
-        M.Tooltip.init(elems);
+        M.Tooltip.init(this.#body.querySelectorAll('.tooltipped'));
+        M.Dropdown.init(this.#body.querySelectorAll('.dropdown-trigger'));
     }
 
     getTitle(name, step, transliteration) {
-        const {color, text} = WordStatus.getAttributes(step);
+        const {color, text} = WordStatus.map[step] || WordStatus.map[Word.STATUS_NEW];
 
         const span = document.createElement('span');
         span.classList.add(...color.split(' '));
@@ -96,11 +94,31 @@ export class WordList {
         a.appendChild(span);
 
         const label = document.createElement('label');
-        label.innerHTML = (transliteration && transliteration.length < 50 ? ' | ' + transliteration : '') + ' | ' + text;
+        label.innerHTML = (transliteration && transliteration.length < 50 ? ' | ' + transliteration : '');
+
+        const status = document.createElement('label');
+        const dropDownId = `status-list-${encodeURIComponent(name)}`
+        status.innerHTML = ` | 
+            <a class='dropdown-trigger' href='#' data-target='${dropDownId}' style="width: 150px; display: inline-block">${text}</a>
+        `;
+        const dropdown = document.createElement('ul');
+        dropdown.setAttribute('id', dropDownId);
+        dropdown.classList.add('dropdown-content');
+        dropdown.innerHTML = Object.entries(WordStatus.map).map(
+            ([value, {text}]) => `<li><a href="#!" data-value="${value}">${text}</a></li>`
+        ).join('\n');
+        [...dropdown.querySelectorAll('[data-value]')].forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                (+el.dataset.value !== step) && this.#dictionary?.words?.update(name, {step: el.dataset.value})
+            })
+        });
+        document.querySelector('div#dictionaries').appendChild(dropdown);
 
         const title = document.createElement('span');
         title.classList.add('title');
-        title.append(a, label);
+        title.append(a, label, status);
 
         return title;
     }

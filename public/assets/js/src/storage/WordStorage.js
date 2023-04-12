@@ -50,9 +50,6 @@ export class WordStorage extends Storage {
     }
 
     update(word, data = {}) {
-        if (('step' in data) && !('timestamp' in data)) {
-            data = {...data, timestamp: Date.now()}
-        }
         this.#items[word] = new Word({...this.#items[word], ...data});
         this.notify(this.#items);
     }

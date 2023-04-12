@@ -1,6 +1,7 @@
 import {Word as Model} from '../../../model'
 import {TextToSpeechApi} from "../../../api";
-import {ImageGallery} from "../../../components";
+
+const GALLERY_CALLBACK_KEY = 'addition.word'
 
 export class Word {
     #body;
@@ -10,7 +11,7 @@ export class Word {
     #state;
     #word = [];
 
-    constructor({storage: {dictionary}, api: {pexel}}, state) {
+    constructor({storage: {dictionary}, imageGallery}, state) {
         this.#body = document.querySelector('div#learning div#addition [data-component="word"]');
         this.#state = state;
 
@@ -19,13 +20,16 @@ export class Word {
             this.render();
         });
 
-        state.subscribe(({word}) => {
+        state.subscribe(({word, count}) => {
             this.#word = word;
             if (word.length === 0) {
                 this.#body.classList.add('hide');
             } else {
                 this.#body.classList.remove('hide');
             }
+
+            document.querySelector('.tab a[href="#addition"] .badge').innerHTML = count;
+
             this.render();
         });
 
@@ -52,34 +56,31 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
             const [dictionaryId, {word}] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word, {step: Model.STATUS_STARTED});
+            this.#dictionaries[dictionaryId]?.words.update(word, {step: Model.STATUS_IN_PROGRESS});
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {
             const [, {word}] = this.#word || [];
             const modal = document.querySelector('#modal-select-word-image');
             modal.setAttribute('data-query', word);
+            modal.setAttribute('data-callback', GALLERY_CALLBACK_KEY);
         });
 
-        new ImageGallery(
-            '#modal-select-word-image',
-            (word, url) => {
-                fetch(url).then(() => {
-                    const wrapper = this.#body.querySelector(`a[data-component="image-wrapper"]`);
-                    const img = new Image();
-                    img.classList.add('responsive-img');
-                    img.setAttribute('data-component', 'image');
-                    img.src = url;
-                    img.alt = word;
-                    wrapper.innerHTML = '';
-                    wrapper.append(img);
-                });
+        imageGallery.addCallback(GALLERY_CALLBACK_KEY, (word, url) => {
+            fetch(url).then(() => {
+                const wrapper = this.#body.querySelector(`a[data-component="image-wrapper"]`);
+                const img = new Image();
+                img.classList.add('responsive-img');
+                img.setAttribute('data-component', 'image');
+                img.src = url;
+                img.alt = word;
+                wrapper.innerHTML = '';
+                wrapper.append(img);
+            });
 
-                const [dictionaryId] = this.#word || [];
-                this.#dictionaries[dictionaryId]?.words.update(word, {image: url});
-            },
-            pexel
-        );
+            const [dictionaryId] = this.#word || [];
+            this.#dictionaries[dictionaryId]?.words.update(word, {image: url});
+        });
     }
 
     render() {
@@ -91,13 +92,30 @@ export class Word {
         const definitions = this.#body.querySelector('[data-component="definitions"]');
         const examples = this.#body.querySelector('[data-component="examples"]');
 
-        image?.setAttribute('src', word?.image);
-        original.innerHTML = word?.word;
-        transliteration.innerHTML = word?.glossary?.transliteration;
-        translations.innerHTML = word?.glossary?.translations;
+        word?.image && image?.setAttribute('src', word?.image);
+        original.innerHTML = word?.word || '';
+        transliteration.innerHTML = word?.glossary?.transliteration || '';
+        translations.innerHTML = word?.glossary?.translations || '';
         definitions.innerHTML = Object.entries(word?.glossary?.definitions || {})
-            .map(([pos, {gloss, synonyms}]) => {
-                return `<p class="flow-text">${gloss} <label>| ${pos}</label>${synonyms && ('<label> | Synonyms: ' + synonyms + '</label>')}</p>`;
+            .map(([pos, definitions]) => {
+                if (!Array.isArray(definitions)) {
+                    definitions = [definitions];
+                }
+
+                return definitions
+                    .map(({gloss, synonyms}) => {
+                        return `<p class="flow-text"># ${gloss} <label>| ${pos}</label>${
+                            Object.keys({...synonyms}).length > 0
+                                ? `<label> | Synonyms: ${
+                                    Object
+                                        .entries({...synonyms})
+                                        .map(([type, items]) => `<strong>${type}</strong>: ${items.join(', ')}`)
+                                        .join('; ')
+                                }</label>`
+                                : ''
+                        }</p>`
+                    })
+                    .join('\n');
             })
             .join('\n');
         examples.innerHTML = '<p class="flow-text"> - ' + word?.glossary?.examples?.join('</p><p class="flow-text"> - ') + '</p>';
