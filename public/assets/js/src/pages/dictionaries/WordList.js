@@ -23,13 +23,19 @@ export class WordList {
         this.#form = new AddFormWord();
 
         state.subscribe(({dictionary}) => {
+            this.#form.toggle(!!dictionary);
+
+            if (!dictionary) {
+                this.#words = {};
+            }
+
             if (this.#dictionary?.id !== dictionary?.id) {
                 this.#unsubscribe && this.#unsubscribe();
-                this.#unsubscribe = dictionary.words?.subscribe(words => {
+                this.#unsubscribe = dictionary?.words?.subscribe(words => {
                     this.#words = words;
                     this.render();
                 });
-                this.#form.setStorage(dictionary.words);
+                this.#form.setStorage(dictionary?.words);
             }
             this.#dictionary = dictionary;
             this.render();
@@ -56,6 +62,11 @@ export class WordList {
 
     render() {
         this.#title.innerHTML = `${this.#dictionary?.name || 'Words'} <label>${this.#dictionary?.count || 0} items</label>`;
+
+        if (!this.#dictionary) {
+            this.#body.innerHTML = '';
+            return;
+        }
 
         Object.values(this.#words).forEach(({word, step, glossary, image}) => {
             new WordListItem(this.#body, {onDelete: () => this.#dictionary?.words?.delete(word)})

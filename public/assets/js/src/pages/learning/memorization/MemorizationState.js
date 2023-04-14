@@ -84,7 +84,7 @@ export class MemorizationState extends State{
 
         const words = shuffle(Object.values(this.#dictionaries).reduce((words, dictionary) => {
             const _words = dictionary?.words?.filter(({step}) => step !== Word.STATUS_WELL_KNOWN);
-            Object.keys(_words).forEach(_word => words.push(_word));
+            Object.keys(_words).forEach(_word => (_word !== word) && words.push(_word));
             return words;
         }, []));
 
@@ -94,7 +94,7 @@ export class MemorizationState extends State{
         if (words.length < 3) {
             result = [...result, ...words];
         } else {
-            while (result.length < 4) {
+            while (result.length < 4 && diff < 10) {
                 for (const _word of words) {
                     if (Math.abs(_word.length - word.length) < diff && !result.includes(_word)) {
                         result.push(_word);

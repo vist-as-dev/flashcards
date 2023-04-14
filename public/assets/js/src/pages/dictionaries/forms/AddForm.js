@@ -2,6 +2,8 @@ import {ListenerWrapper} from "../../../share/ListenerWrapper";
 import {HideToggler} from "../../../share/HideToggler";
 
 export class AddForm {
+    #isOpen = false;
+
     constructor(selector) {
         this.lw = new ListenerWrapper();
         this.ht = new HideToggler();
@@ -32,6 +34,7 @@ export class AddForm {
         this.addButton.addEventListener('click', (e) => {
             this.lw.listener(e, () => {
                 this.ht.toggle([this.addButton], [this.form, this.confirmButton, this.cancelButton]);
+                this.#isOpen = true;
                 this.input.focus();
             });
         });
@@ -39,6 +42,7 @@ export class AddForm {
         this.cancelButton.addEventListener('click', (e) => {
             this.lw.listener(e, () => {
                 this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
+                this.#isOpen = false;
             });
         });
 
@@ -70,5 +74,13 @@ export class AddForm {
             this.error(e.message);
         }
         this.form.classList.remove('loader');
+    }
+
+    toggle(isAvailable) {
+        if (isAvailable) {
+            this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
+        } else {
+            this.ht.toggle([this.form, this.confirmButton, this.cancelButton, this.addButton], []);
+        }
     }
 }

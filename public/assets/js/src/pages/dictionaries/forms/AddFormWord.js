@@ -23,6 +23,6 @@ export class AddFormWord extends AddForm {
         this.#storage = storage;
 
         this.#unsubscribe && this.#unsubscribe();
-        this.#unsubscribe = this.#storage.subscribe(words => this.#words = words);
+        this.#unsubscribe = this.#storage?.subscribe(words => this.#words = words);
     }
 }

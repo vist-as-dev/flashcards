@@ -175,7 +175,7 @@ div#dictionaries .collection .scrollable {
 .image-gallery {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 1rem;
 }
 
 .image-gallery::after {
@@ -192,7 +192,7 @@ div#dictionaries .collection .scrollable {
 
 .image-gallery[data-component="choice"] > li {
     height: 100px;
-    flex: 1 1 49%;
+    flex: 1 1 calc((100% - 1rem) / 2);
 }
 
 .image-gallery li img, .image-gallery li a {

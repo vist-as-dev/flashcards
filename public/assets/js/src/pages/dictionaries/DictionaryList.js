@@ -18,6 +18,10 @@ export class DictionaryList {
         this.#storage.subscribe((items) => {
             this.#dictionaries = items;
 
+            if (Object.keys(this.#dictionaries).length === 0) {
+                this.#setActive(null);
+            }
+
             if (this.#active?.id in this.#dictionaries) {
                 this.#setActive(this.#dictionaries[this.#active.id]);
             }
