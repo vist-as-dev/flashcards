@@ -253,3 +253,24 @@ div#dictionaries .collection .scrollable {
     transform: scale(1);
     transition: all 0.2s 0.1s ease-in-out;
 }
+
+.row .col.collapsible-wrapper {
+    position: relative;
+    padding: 35px;
+}
+
+.row .col.collapsible-wrapper .collapsible {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 0;
+    z-index: 1;
+}
+
+.row .col.collapsible-wrapper .collapsible .collapsible-body {
+    background-color: #f4f4f4;
+}
+
+.card.horizontal .card-image {
+    max-width: 30%!important;
+}

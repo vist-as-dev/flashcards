@@ -41,26 +41,36 @@ export class StatisticsStorage extends Storage {
     }
 
     addStarted() {
+        this.#initDay();
         this.#statistics[new Date().toLocaleDateString()].started++;
         this.api.updateMetaFile(this.#file.id, this.#statistics);
         this.notify(this.#statistics);
     }
 
     addRepeated() {
+        this.#initDay();
         this.#statistics[new Date().toLocaleDateString()].repeated++;
         this.api.updateMetaFile(this.#file.id, this.#statistics);
         this.notify(this.#statistics);
     }
 
     addCompleted() {
+        this.#initDay();
         this.#statistics[new Date().toLocaleDateString()].completed++;
         this.api.updateMetaFile(this.#file.id, this.#statistics);
         this.notify(this.#statistics);
     }
 
     addWellKnown() {
+        this.#initDay();
         this.#statistics[new Date().toLocaleDateString()].wellKnown++;
         this.api.updateMetaFile(this.#file.id, this.#statistics);
         this.notify(this.#statistics);
+    }
+
+    #initDay() {
+        if (!this.#statistics[new Date().toLocaleDateString()]) {
+            this.#statistics[new Date().toLocaleDateString()] = new DayStatistics();
+        }
     }
 }

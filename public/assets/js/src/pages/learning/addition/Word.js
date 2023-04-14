@@ -97,7 +97,8 @@ export class Word {
         const definitions = this.#body.querySelector('[data-component="definitions"]');
         const examples = this.#body.querySelector('[data-component="examples"]');
 
-        word?.image && image?.setAttribute('src', word?.image);
+        image?.setAttribute('src', word?.image || 'assets/img/no-image.svg');
+
         original.innerHTML = word?.word || '';
         transliteration.innerHTML = word?.glossary?.transliteration || '';
         translations.innerHTML = word?.glossary?.translations || '';
@@ -114,7 +115,7 @@ export class Word {
                                 ? `<label> | Synonyms: ${
                                     Object
                                         .entries({...synonyms})
-                                        .map(([type, items]) => `<strong>${type}</strong>: ${items.join(', ')}`)
+                                        .map(([type, items]) => `<strong>${type}</strong>: ${Array.isArray(items) ? items.join(', ') : items}`)
                                         .join('; ')
                                 }</label>`
                                 : ''
