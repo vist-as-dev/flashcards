@@ -29,17 +29,17 @@
     </head>
     <body>
         {% block body %}
-        <header>
+        <header class="hide">
             {% block header %}{% endblock header %}
         </header>
-        <main class="container">
+        <main class="container hide">
             <div class="row" style="flex: 1">
                 <div class="col s12">
                     {% block content %}{% endblock %}
                 </div>
             </div>
         </main>
-        <footer>
+        <footer class="hide">
             {% block footer %}{% endblock footer %}
         </footer>
         {% endblock %}

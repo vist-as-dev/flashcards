@@ -61,10 +61,10 @@ export class Chart {
     get #data() {
         const result = {};
         const now = new Date();
-        const endDate = new Date();
+        const endDate = new Date(now.getTime());
 
         const byDay = () => {
-            while (endDate.toLocaleDateString() !== now.toLocaleDateString()) {
+            while (endDate.getTime() <= now.getTime()) {
                 result[`${endDate.getMonth() + 1}/${endDate.getDate()}`] = this.#statistics[endDate.toLocaleDateString()] || {};
                 endDate.setDate(endDate.getDate() + 1);
             }
@@ -72,7 +72,7 @@ export class Chart {
         }
 
         const byMonth = () => {
-            while (endDate.toLocaleDateString() !== now.toLocaleDateString()) {
+            while (endDate.getTime() <= now.getTime()) {
                 if (!result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`]) {
                     result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`] = {};
                 }

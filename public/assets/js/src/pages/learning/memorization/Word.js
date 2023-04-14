@@ -25,14 +25,14 @@ export class Word {
         });
 
         state.subscribe(({word, choice, count}) => {
+            document.querySelector('.tab a[href="#memorization"] .badge').innerHTML = count;
+
             if (this.#word === word) {
                 return;
             }
 
             this.#word = word;
             this.#choice = choice ? [choice[0] || '', choice[1] || '', choice[2] || '', choice[3] || ''] : ['', '', '', ''];
-
-            document.querySelector('.tab a[href="#memorization"] .badge').innerHTML = count;
 
             if (word.length === 0) {
                 this.#body.classList.add('hide');
@@ -169,7 +169,8 @@ export class Word {
         const examples = this.#body.querySelector('[data-component="examples"]');
         const choice = this.#body.querySelector('[data-component="choice"]');
 
-        word?.image && image?.setAttribute('src', word?.image);
+        image?.setAttribute('src', word?.image || 'assets/img/no-image.svg');
+
         original.innerHTML = word?.word || '';
         transliteration.innerHTML = word?.glossary?.transliteration || '';
         translations.innerHTML = word?.glossary?.translations || '';
@@ -186,7 +187,7 @@ export class Word {
                                 ? `<label> | Synonyms: ${
                                     Object
                                         .entries({...synonyms})
-                                        .map(([type, items]) => `<strong>${type}</strong>: ${items.join(', ')}`)
+                                        .map(([type, items]) => `<strong>${type}</strong>: ${Array.isArray(items) ? items.join(', ') : items}`)
                                         .join('; ')
                                 }</label>`
                                 : ''

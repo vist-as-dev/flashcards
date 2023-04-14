@@ -38,6 +38,16 @@ export class MemorizationState extends State{
             ({step, nextReview}) => step === Word.STATUS_IN_PROGRESS && nextReview < Date.now()
         ) || {};
 
+        const words = Object.values(this.#dictionaries).reduce((words, dictionary) => {
+            Object
+                .values(getRepeating(dictionary))
+                .forEach(word => {words.push([dictionary.id, word])})
+            ;
+            return words;
+        }, []);
+
+        this.#count = words.length;
+
         if (this.#set.length > 0) {
             const [dictionaryId, {word}] = this.#set || [];
             const words = getRepeating(this.#dictionaries[dictionaryId]);
@@ -47,16 +57,7 @@ export class MemorizationState extends State{
             }
         }
 
-        const words = Object.values(this.#dictionaries).reduce((words, dictionary) => {
-            Object
-                .values(getRepeating(dictionary))
-                .forEach(word => {words.push([dictionary.id, word])})
-            ;
-            return words;
-        }, []);
-
         this.#set = words[Math.floor(Math.random() * words.length)] || [];
-        this.#count = words.length;
 
         return this.#set;
     }
