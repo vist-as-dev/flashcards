@@ -190,12 +190,24 @@ div#dictionaries .collection .scrollable {
     flex: 1 1 auto;
 }
 
-.image-gallery li img {
+.image-gallery[data-component="choice"] > li {
+    height: 100px;
+    flex: 1 1 49%;
+}
+
+.image-gallery li img, .image-gallery li a {
     object-fit: cover;
     width: 100%;
     height: 100%;
     vertical-align: middle;
     border-radius: 5px;
+}
+
+.image-gallery li a {
+    background-color: #f4f4f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .image-gallery li .overlay {

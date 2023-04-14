@@ -55,7 +55,14 @@ export class Word {
                 e.preventDefault();
 
                 const [, word] = this.#word;
-                el.setAttribute('style', `border: 1px solid ${el.innerText === word?.word ? 'green' : 'red'}`);
+
+                if (el.innerText === word?.word) {
+                    this.toggle()
+                    el.closest('.card-reveal').querySelector('.card-title').click();
+                    [...el.closest('[data-component="choice"]').querySelectorAll('a.collection-item')].forEach(i => i.setAttribute('style', ''));
+                } else {
+                    el.setAttribute('style', `border: 1px solid red`);
+                }
             })
         );
 
@@ -104,6 +111,7 @@ export class Word {
             }
 
             input.classList.remove('invalid');
+            this.toggle();
         });
 
         this.#body.querySelector('[data-component="open"]').addEventListener('click', (e) => {
