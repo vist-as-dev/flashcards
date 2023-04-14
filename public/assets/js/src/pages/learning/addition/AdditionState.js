@@ -10,7 +10,11 @@ export class AdditionState extends State{
     #count = 0;
 
     constructor({storage: {direction, dictionary}}) {
-        super({});
+        super({
+            dictionaries: [],
+            word: [],
+            count: 0,
+        });
 
         direction.subscribe(direction => {
             this.#direction = direction;

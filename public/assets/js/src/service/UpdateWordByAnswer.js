@@ -1,9 +1,7 @@
 import {Word} from "../model";
 
 export function updateWordByAnswer(word, isCorrect) {
-    let {repetitions, interval, easeFactor, nextReview} = word;
-
-    console.log({repetitions, interval, easeFactor, nextReview})
+    let {repetitions, interval, easeFactor} = word;
 
     if (isCorrect) {
         repetitions += 1;
@@ -22,8 +20,7 @@ export function updateWordByAnswer(word, isCorrect) {
     }
 
     easeFactor = Math.max(easeFactor, 1.3);
-    nextReview = Date.now() + interval * 24 * 60 * 60 * 1000;
+    const nextReview = Date.now() + interval * 24 * 60 * 60 * 1000;
 
-    console.log(new Word({...word, repetitions, interval, easeFactor, nextReview}));
     return new Word({...word, repetitions, interval, easeFactor, nextReview});
 }

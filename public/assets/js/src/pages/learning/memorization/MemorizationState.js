@@ -8,7 +8,11 @@ export class MemorizationState extends State{
     #count = 0;
 
     constructor({storage: {direction, dictionary}}) {
-        super({});
+        super({
+            word: [],
+            choice: [],
+            count: 0,
+        });
 
         direction.subscribe(direction => {
             this.#direction = direction;

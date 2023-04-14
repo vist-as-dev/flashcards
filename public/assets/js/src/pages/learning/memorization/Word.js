@@ -9,12 +9,15 @@ export class Word {
     #dictionaries = {};
 
     #state;
+    #statistics;
+
     #word = [];
     #choice = [];
 
-    constructor({storage: {dictionary}, imageGallery}, state) {
+    constructor({storage: {dictionary, statistics}, imageGallery}, state) {
         this.#body = document.querySelector('div#learning div#memorization [data-component="word"]');
         this.#state = state;
+        this.#statistics = statistics;
 
         dictionary.subscribe((items) => {
             this.#dictionaries = items;
@@ -114,7 +117,9 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
             const [dictionaryId, word] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word.word, updateWordByAnswer(word, true));
+            const updated = updateWordByAnswer(word, true);
+            this.#dictionaries[dictionaryId]?.words.update(word.word, updated);
+            updated.repetitions > 6 ? this.#statistics.addCompleted() : this.#statistics.addRepeated();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
