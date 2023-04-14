@@ -1,6 +1,7 @@
 import {LearningTabs} from "./LearningTabs.js";
 import {Addition} from "./addition";
 import {Memorization} from "./memorization";
+import {Statistics} from "./statistics";
 
 export class Learning {
     constructor(container) {
@@ -8,6 +9,7 @@ export class Learning {
             new LearningTabs(),
             new Addition(container),
             new Memorization(container),
+            new Statistics(container),
         ]
     }
 

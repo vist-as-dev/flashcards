@@ -9,11 +9,14 @@ export class Word {
     #dictionaries = {};
 
     #state;
+    #statistics;
+
     #word = [];
 
-    constructor({storage: {dictionary}, imageGallery}, state) {
+    constructor({storage: {dictionary, statistics}, imageGallery}, state) {
         this.#body = document.querySelector('div#learning div#addition [data-component="word"]');
         this.#state = state;
+        this.#statistics = statistics;
 
         dictionary.subscribe((items) => {
             this.#dictionaries = items;
@@ -44,6 +47,7 @@ export class Word {
             e.preventDefault();
             const [dictionaryId, {word}] = this.#word || [];
             this.#dictionaries[dictionaryId]?.words.update(word, {step: Model.STATUS_WELL_KNOWN});
+            this.#statistics.addWellKnown();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -57,6 +61,7 @@ export class Word {
             e.preventDefault();
             const [dictionaryId, {word}] = this.#word || [];
             this.#dictionaries[dictionaryId]?.words.update(word, {step: Model.STATUS_IN_PROGRESS});
+            this.#statistics.addStarted();
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {

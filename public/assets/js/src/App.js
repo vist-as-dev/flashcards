@@ -3,7 +3,7 @@ import {BingImageApi, GoogleDriveStorage, PexelImageApi, TranslateService} from 
 import {LanguageStorage} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
-import {DirectionStorage, DictionaryStorage} from "./storage";
+import {DirectionStorage, DictionaryStorage, StatisticsStorage} from "./storage";
 import {ImageGallery} from "./components";
 
 export class App {
@@ -22,6 +22,7 @@ export class App {
         this.storage = {
             direction,
             dictionary: new DictionaryStorage(this.api.gDrive.meta, direction),
+            statistics: new StatisticsStorage(this.api.gDrive.meta, direction),
             languages: new LanguageStorage(),
         }
 
