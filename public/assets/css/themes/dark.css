@@ -86,7 +86,7 @@ body {
 }
 
 .dropdown-content {
-    background-color: #37474f;
+    background-color: var(--background-keypad-shadow);
 }
 
 .footer {
@@ -95,7 +95,7 @@ body {
 }
 
 .input-field {
-    background-color: var(--card-primary);
+    background-color: transparent;
     color: var(--text-heading);
 }
 
@@ -331,4 +331,10 @@ div#dictionaries .collection-item.new {
 
 #preprocessing-form .input-field {
     background-color: transparent;
+}
+
+.image-gallery[data-component="choice"] > li a {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
 }
