@@ -89,7 +89,7 @@ export class Word {
             const input = this.#body.querySelector('[data-component="input"]');
             let attempt = input.dataset.attempt || 3;
 
-            if (word.toLowerCase() !== input.value.toLowerCase()) {
+            if (word.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
                 input.classList.add('invalid');
                 input.focus();
@@ -125,7 +125,7 @@ export class Word {
             const input = e.target;
             let attempt = input.dataset.attempt || 3;
 
-            if (word.toLowerCase() !== input.value.toLowerCase()) {
+            if (word.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
                 input.classList.add('invalid');
                 input.focus();
