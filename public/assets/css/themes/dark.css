@@ -1,40 +1,88 @@
 /* Темная тема Materialize CSS */
 /* Переопределение основных цветов Materialize CSS */
 :root {
-    --primary-color: #008cba;
+    --primary-color: #009688;
     --primary-color-light: #3398c9;
     --primary-color-dark: #006b8f;
     --secondary-color: #424242;
     --error-color: #f44336;
     --success-color: #4caf50;
     --link-color: var(--primary-color);
+
+    --box-shadow-sidebar: -4px 10px 10px rgba(0,0,0,.25);
+    --background-primary: #211e1b;
+    --background-success: hsla(34,4%,68%,.03);
+    --background-partition-label: hsla(34,4%,68%,.1);
+    --background-interactive-bar-warning: #4a3473;
+    --background-red: #c00;
+    --background-tooltip: rgba(0,0,0,.9);
+    --background-blackout: rgba(0,0,0,.6);
+    --background-device-shadow: rgba(46,44,43,.65);
+    --background-keypad-shadow: rgba(46,44,43,.9);
+    --background-app-bar: #252525;
+    --background-menu-dropdown: hsla(0,0%,8%,.99);
+    --card-primary: #2e2c2b;
+    --text-heading: #b0ada9;
+    --text-heading-subtitle: hsla(34,4%,68%,.45);
+    --text-highlight: #fff;
+    --icon-primary: hsla(34,4%,68%,.6);
+    --icon-disabled: hsla(34,4%,68%,.2);
+    --table-primary: #2e2c2b;
+    --table-active: #453d31;
+    --table-hover: rgba(85,85,85,.2);
+    --table-hover-table: rgba(85,85,85,.2);
+    --line-primary: #de7e03;
+    --line-general: hsla(34,4%,68%,.08);
+    --line-table: rgba(0,0,0,.12);
+    --line-additional: hsla(0,0%,100%,.13);
+    --button-primary: #de7e03;
+    --button-success: #2e2c2b;
+    --button-search: #6f3d14;
+    --button-light: hsla(0,0%,100%,.1);
+    --message-primary: rgba(222,126,3,.02);
+    --message-success: hsla(34,4%,68%,.02);
+    --color-primary: #de7e03;
+    --color-primary30: rgba(222,126,3,.3);
+    --color-hover: #ffd8a6;
 }
 
 /* Переопределение фона и текста */
 body {
-    background-color: #263238;
-    color: #fff;
+    background-color: var(--background-primary);
+    color: var(--text-heading);
 }
 
 /* Переопределение цветов элементов */
 .card {
-    background-color: #37474f;
-    border-radius: 2px;
+    background-color: var(--card-primary);
+}
+
+.card .card-reveal {
+    background-color: var(--card-primary);
 }
 
 .chip {
     background-color: #455a64;
-    color: #fff;
+    color: var(--text-heading);
+}
+
+.collapsible {
+    border-color: var(--line-general);
 }
 
 .collapsible-header {
-    background-color: var(--secondary-color);
-    color: #fff;
+    background-color: var(--card-primary);
+    border-color: var(--line-general);
+    color: var(--text-heading);
 }
 
 .collapsible-body {
-    background-color: #546e7a;
-    color: #fff;
+    background-color: var(--card-primary);
+    color: var(--text-heading);
+}
+
+.row .col.collapsible-wrapper .collapsible .collapsible-body {
+    background-color: var(--card-primary);
 }
 
 .dropdown-content {
@@ -42,17 +90,17 @@ body {
 }
 
 .footer {
-    background-color: var(--secondary-color);
-    color: #fff;
+    background-color: var(--card-primary);
+    color: var(--text-heading);
 }
 
 .input-field {
-    background-color: var(--secondary-color);
-    color: #fff;
+    background-color: var(--card-primary);
+    color: var(--text-heading);
 }
 
 .modal {
-    background-color: var(--secondary-color);
+    background-color: var(--card-primary);
 }
 
 .modal .modal-footer, .modal .modal-header {
@@ -60,17 +108,29 @@ body {
 }
 
 .navbar-fixed {
-    background-color: var(--secondary-color);
-    color: #fff;
+    background-color: var(--card-primary);
+    color: var(--text-heading);
 }
 
 .sidenav {
-    background-color: var(--secondary-color);
-    color: #fff;
+    background-color: var(--card-primary);
+    color: var(--text-heading);
 }
 
 .tabs {
-    background-color: var(--secondary-color);
+    background-color: var(--background-primary);
+}
+
+.tabs .tab a {
+    color: var(--text-heading);
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+    color: var(--color-primary);
+}
+
+.tabs .indicator {
+    background-color: var(--color-primary);
 }
 
 .table-of-contents {
@@ -83,56 +143,52 @@ body {
 
 /* Переопределение цветов текста элементов */
 .card .card-content {
-    color: #fff;
-}
-
-.collapsible-header {
-    color: #fff;
-}
-
-.collapsible-body {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .dropdown-content li > a, .dropdown-content li > span {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .footer {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .input-field input, .input-field textarea {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .modal {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .navbar-fixed .brand-logo {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .sidenav a {
-    color: #fff;
+    color: var(--text-heading);
+}
+
+nav .select-wrapper input.select-dropdown, nav .select-wrapper input.select-dropdown:focus {
+    color: var(--text-highlight);
 }
 
 .tabs .tab a:focus, .tabs .tab a:focus.active {
-    background-color: var(--secondary-color-dark);
+    /*background-color: var(--secondary-color-dark);*/
 }
 
 .table-of-contents li > a, .table-of-contents li > span {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 .tooltip {
-    color: #fff;
+    color: var(--text-heading);
 }
 
 /* Изменение стилей элементов */
 .material-icons {
-    color: #fff;
+    color: var(--icon-primary);
 }
 
 .btn {
@@ -157,5 +213,122 @@ body {
 
 .btn-flat:hover {
     background-color: var(--secondary-color);
-    color: #fff;
+    color: var(--text-heading);
+}
+
+.nav-wrapper {
+    background-color: var(--card-primary);
+}
+
+nav a > i.material-icons {
+    color: var(--text-heading);
+}
+
+.select-wrapper .caret {
+    fill: var(--icon-primary);
+}
+
+.switch label .lever:after {
+    background-color: var(--icon-primary);
+}
+
+.switch label input[type=checkbox]:checked+.lever {
+    background-color: var(--color-primary30);
+}
+
+.switch label input[type=checkbox]:checked+.lever:after {
+    background-color: var(--color-primary);
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+    color: var(--color-primary);
+}
+
+footer .tabs {
+    background-color: var(--card-primary);
+}
+
+.card .card-content .card-title i {
+    color: var(--text-heading) !important;
+}
+
+#memorization .card.horizontal .card-content .buttons button {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+}
+
+#memorization .card.horizontal .card-content .buttons button:hover {
+    color: var(--color-hover);
+    border: 1px solid var(--color-hover);
+}
+
+#memorization .card.horizontal .card-content .buttons button .material-icons {
+    color: var(--color-primary);
+}
+
+#memorization .card.horizontal .card-content .buttons button:hover .material-icons {
+    color: var(--color-hover);
+}
+
+[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:after {
+    background-color: var(--color-primary);
+}
+
+[type="radio"]:checked+span:after, [type="radio"].with-gap:checked+span:before, [type="radio"].with-gap:checked+span:after {
+    border-color: var(--color-primary);
+}
+
+[type="checkbox"]:checked+span:not(.lever):before {
+    border-right-color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+}
+
+.collection {
+    border-color: var(--line-general);
+}
+
+.collection.with-header .collection-header {
+    background-color: var(--card-primary);
+    border-color: var(--line-general);
+}
+
+.collection .collection-item {
+    border-color: var(--line-general);
+}
+
+.collection .collection-item.avatar i.circle {
+    background-color: var(--color-primary);
+}
+
+.collection .collection-item.avatar.active {
+    background-color: var(--background-success)!important;
+}
+
+div#dictionaries .collection-item.new .input-field {
+    background-color: transparent;
+}
+
+div#dictionaries .collection-item.new {
+    border-color: var(--line-general);
+}
+
+#flashcard-form .input-field {
+    background-color: transparent;
+}
+
+.input-field .helper-text {
+    color: var(--text-heading-subtitle);
+}
+
+[type="radio"]:disabled, [type="radio"]:disabled+span {
+    color: var(--text-heading-subtitle);
+}
+
+[type="radio"]:disabled:not(:checked)+span:before {
+    border-color: var(--line-general);
+}
+
+#preprocessing-form .input-field {
+    background-color: transparent;
 }

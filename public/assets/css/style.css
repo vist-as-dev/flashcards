@@ -119,6 +119,15 @@ nav .input-field .select-wrapper + label {
 
 nav .select-wrapper input.select-dropdown, nav .select-wrapper input.select-dropdown:focus {
     border-bottom: none;
+    margin-bottom: 0;
+}
+
+nav a > i.material-icons {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+footer {
+    position: fixed;
 }
 
 footer .navbar-fixed nav.navbar {
@@ -364,6 +373,7 @@ div#dictionaries .collection .scrollable {
 .card.horizontal .card-content a[data-component="original"] {
     color: #009688;
     border-bottom: 1px dashed #009688;
+    font-size: 32px;
 }
 
 @media only screen and (max-width: 600px) {

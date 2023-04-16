@@ -29,10 +29,7 @@ export class AuthorisedDriveApiService {
                 // tokenClient.requestAccessToken({prompt: 'consent'});
                 window.tokenClient.requestAccessToken();
             } else {
-                callback(...args).then(resolve).catch((e) => {
-                    reject(e);
-                    M.toast({html: 'Error: ' + JSON.stringify(e)})
-                });
+                callback(...args).then(resolve).catch(reject);
             }
         })
     }
