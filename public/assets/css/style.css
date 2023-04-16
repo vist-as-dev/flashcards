@@ -357,6 +357,8 @@ div#dictionaries .collection .scrollable {
     font-weight: bold;
     margin: 0;
     min-width: auto;
+    left: 10px;
+    top: 10px;
 }
 
 .card.horizontal .card-content a[data-component="original"] {
