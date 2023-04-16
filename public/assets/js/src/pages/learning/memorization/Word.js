@@ -206,7 +206,6 @@ export class Word {
 
     render() {
         const [, word] = this.#word || [];
-        console.log(word)
         const image = this.#body.querySelector('[data-component="image-wrapper"] > img');
         const repetitions = this.#body.querySelector('.card-image > .badge');
         const original = this.#body.querySelector('[data-component="original"]');
