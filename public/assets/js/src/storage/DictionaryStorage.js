@@ -72,7 +72,8 @@ export class DictionaryStorage extends Storage {
         const data = {name, source, target, type: 'dictionary'};
         const {id} = await this.api.createMetaFile(encodeURIComponent(name), data);
 
-        this.#set(id, data)
+        this.#set(id, data);
+        this.#items[id]?.words.set({});
     }
 
     update(id, data) {

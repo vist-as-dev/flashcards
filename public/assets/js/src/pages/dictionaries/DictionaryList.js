@@ -18,12 +18,12 @@ export class DictionaryList {
         this.#storage.subscribe((items) => {
             this.#dictionaries = items;
 
-            if (this.#active?.id in this.#dictionaries) {
-                this.#setActive(this.#dictionaries[this.#active.id]);
+            if (Object.keys(this.#dictionaries).length === 0) {
+                this.#setActive(null);
             }
 
-            if (Object.keys(this.#dictionaries).length > 0 && (!this.#active || !(this.#active.id in this.#dictionaries))) {
-                this.#setActive(this.#dictionaries[Object.keys(this.#dictionaries).shift()]);
+            if (this.#active?.id in this.#dictionaries) {
+                this.#setActive(this.#dictionaries[this.#active.id]);
             }
 
             this.render();

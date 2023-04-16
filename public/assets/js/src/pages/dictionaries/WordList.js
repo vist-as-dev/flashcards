@@ -23,13 +23,24 @@ export class WordList {
         this.#form = new AddFormWord();
 
         state.subscribe(({dictionary}) => {
+            this.#form.toggle(!!dictionary);
+
+            if (!dictionary) {
+                this.#words = {};
+                document.querySelector('div#dictionaries .collection#dictionary-list').classList.remove('hide-on-small-and-down');
+                document.querySelector('div#dictionaries .collection#word-list').classList.add('hide-on-small-and-down');
+            } else {
+                document.querySelector('div#dictionaries .collection#dictionary-list').classList.add('hide-on-small-and-down');
+                document.querySelector('div#dictionaries .collection#word-list').classList.remove('hide-on-small-and-down');
+            }
+
             if (this.#dictionary?.id !== dictionary?.id) {
                 this.#unsubscribe && this.#unsubscribe();
-                this.#unsubscribe = dictionary.words?.subscribe(words => {
+                this.#unsubscribe = dictionary?.words?.subscribe(words => {
                     this.#words = words;
                     this.render();
                 });
-                this.#form.setStorage(dictionary.words);
+                this.#form.setStorage(dictionary?.words);
             }
             this.#dictionary = dictionary;
             this.render();
@@ -52,10 +63,21 @@ export class WordList {
             }
             this.#dictionary?.words?.update(word, {image: url});
         });
+
+        this.#title.closest('.collection-header').querySelector('#back-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            state.setState({dictionary: null});
+        })
     }
 
     render() {
         this.#title.innerHTML = `${this.#dictionary?.name || 'Words'} <label>${this.#dictionary?.count || 0} items</label>`;
+
+        if (!this.#dictionary) {
+            this.#body.innerHTML = '';
+            return;
+        }
 
         Object.values(this.#words).forEach(({word, step, glossary, image}) => {
             new WordListItem(this.#body, {onDelete: () => this.#dictionary?.words?.delete(word)})

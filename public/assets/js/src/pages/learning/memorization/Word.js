@@ -89,8 +89,8 @@ export class Word {
             const input = this.#body.querySelector('[data-component="input"]');
             let attempt = input.dataset.attempt || 3;
 
-            if (word !== input.value) {
-                this.#body.querySelector('[data-component="input"]').setAttribute('data-attempt', --attempt);
+            if (word.toLowerCase() !== input.value.toLowerCase()) {
+                input.setAttribute('data-attempt', --attempt);
                 input.classList.add('invalid');
                 input.focus();
 
@@ -104,6 +104,43 @@ export class Word {
                     case 0:
                         e.target.querySelector('.material-icons').innerHTML = `looks_3`;
                         e.target.disabled = true;
+                        break;
+                }
+
+                return;
+            }
+
+            input.classList.remove('invalid');
+            this.toggle();
+        });
+
+        this.#body.querySelector('[data-component="input"]').addEventListener('keydown', (e) => {
+            if (e.keyCode !== 13 || e.target.value.trim().length === 0) {
+                return;
+            }
+
+            e.stopPropagation();
+            e.preventDefault();
+            const [, {word}] = this.#word || [];
+            const input = e.target;
+            let attempt = input.dataset.attempt || 3;
+
+            if (word.toLowerCase() !== input.value.toLowerCase()) {
+                input.setAttribute('data-attempt', --attempt);
+                input.classList.add('invalid');
+                input.focus();
+
+                const btn = this.#body.querySelector('[data-component="check"]');
+                switch (attempt) {
+                    case 2:
+                        btn.querySelector('.material-icons').innerHTML = `looks_two`;
+                        break;
+                    case 1:
+                        btn.querySelector('.material-icons').innerHTML = `looks_one`;
+                        break;
+                    case 0:
+                        btn.querySelector('.material-icons').innerHTML = `looks_3`;
+                        btn.disabled = true;
                         break;
                 }
 
@@ -169,7 +206,9 @@ export class Word {
 
     render() {
         const [, word] = this.#word || [];
+        console.log(word)
         const image = this.#body.querySelector('[data-component="image-wrapper"] > img');
+        const repetitions = this.#body.querySelector('.card-image > .badge');
         const original = this.#body.querySelector('[data-component="original"]');
         const translations = this.#body.querySelector('[data-component="translations"]');
         const transliteration = this.#body.querySelector('[data-component="transliteration"]');
@@ -179,6 +218,7 @@ export class Word {
 
         image?.setAttribute('src', word?.image || 'assets/img/no-image.svg');
 
+        repetitions.innerHTML = word?.repetitions || 0;
         original.innerHTML = word?.word || '';
         transliteration.innerHTML = word?.glossary?.transliteration || '';
         translations.innerHTML = word?.glossary?.translations || '';

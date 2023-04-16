@@ -8,7 +8,7 @@ export class PexelImageApi {
             query: query,
             orientation: 'portrait',
             per_page: 80,
-            // size: 'small',
+            // size: 'medium',
             ...options,
         }), {
             headers: {
@@ -20,6 +20,6 @@ export class PexelImageApi {
             //     console.log(response);
             //     return response;
             // })
-            .then(({photos}) => photos.map(({src}) => ({url: src?.medium, text: src?.alt})));
+            .then(({photos}) => photos.map(({src}) => ({url: src?.large, text: src?.alt})));
     }
 }
