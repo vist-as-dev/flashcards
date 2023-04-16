@@ -26,10 +26,6 @@ export class DictionaryList {
                 this.#setActive(this.#dictionaries[this.#active.id]);
             }
 
-            if (Object.keys(this.#dictionaries).length > 0 && (!this.#active || !(this.#active.id in this.#dictionaries))) {
-                this.#setActive(this.#dictionaries[Object.keys(this.#dictionaries).shift()]);
-            }
-
             this.render();
         });
 

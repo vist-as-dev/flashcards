@@ -4,18 +4,46 @@
     padding-top: 0;
 }
 
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+    }
+}
+
 .onscreen {
     align-items: center;
 }
 
-nav .container {
-    align-items: center;
+.nav-content {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+@media only screen and (max-width: 600px) {
+    .nav-content {
+        display: flex;
+        gap: 10px;
+    }
+}
+
+@media only screen and (min-width: 993px) {
+    nav a.sidenav-trigger {
+         display: block;
+    }
 }
 
 div#introduction, div#preprocessing, div#flashcards, div#dictionaries, div#learning {
     width: 100%;
     min-height: 700px;
     padding-top: 40px;
+}
+
+@media only screen and (max-width: 600px) {
+    div#introduction, div#preprocessing, div#flashcards, div#dictionaries, div#learning {
+        min-height: 700px;
+        padding-top: 16px;
+    }
 }
 
 #preprocessing-form, #flashcard-form {
@@ -89,6 +117,10 @@ nav .input-field .select-wrapper + label {
     top: -26px;
 }
 
+nav .select-wrapper input.select-dropdown, nav .select-wrapper input.select-dropdown:focus {
+    border-bottom: none;
+}
+
 footer .navbar-fixed nav.navbar {
     bottom: 0;
 }
@@ -129,6 +161,24 @@ div#dictionaries .collection-header .secondary-content {
     top: 16px;
 }
 
+@media only screen and (max-width: 600px) {
+    div#dictionaries #word-list .collection-header .secondary-content {
+        position: relative;
+        right: 0;
+        top: 0;
+    }
+
+    div#dictionaries #word-list .collection-header {
+        display: flex;
+        gap: 10px;
+    }
+
+    div#dictionaries #word-list .collection-header h6 {
+        margin-top: 4px;
+        flex: 1;
+    }
+}
+
 div#dictionaries .collection-item.new .secondary-content {
     position: absolute;
     right: 20px;
@@ -141,6 +191,13 @@ div#dictionaries .collection .secondary-content i {
 div#dictionaries .collection .scrollable {
     height: 679px;
     overflow-y: auto;
+}
+
+@media only screen and (max-width: 600px) {
+    div#dictionaries .collection .scrollable {
+        height: auto;
+        overflow-y: initial;
+    }
 }
 
 .collection .collection-item.active .secondary-content {
@@ -237,6 +294,12 @@ div#dictionaries .collection .scrollable {
     height: 498px;
 }
 
+@media only screen and (max-width: 600px) {
+    #modal-select-word-image {
+        max-height: 85%;
+    }
+}
+
 .loader:before {
     content: '';
     box-sizing: border-box;
@@ -285,4 +348,44 @@ div#dictionaries .collection .scrollable {
 
 .card.horizontal .card-image {
     max-width: 30%!important;
+}
+
+@media only screen and (max-width: 600px) {
+    .card.horizontal {
+        flex-direction: column;
+    }
+
+    .card.horizontal .card-image {
+        max-width: 100%!important;
+        height: 200px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f4f4f4;
+    }
+
+    .card.horizontal .card-image a[data-component="image-wrapper"] {
+        border-bottom: none;
+    }
+
+    .card.horizontal .card-action {
+        display: flex;
+        gap: 10px;
+    }
+
+    .card.horizontal .card-content a[data-component="original"] {
+        color: #009688;
+        border-bottom: 1px dashed #009688;
+    }
+
+    #memorization .card.horizontal .card-content .buttons {
+        flex-direction: row;
+    }
+
+    .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
+        flex: 1;
+        margin-right: 0;
+        text-align: center;
+    }
 }

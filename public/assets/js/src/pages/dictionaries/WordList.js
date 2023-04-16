@@ -27,6 +27,11 @@ export class WordList {
 
             if (!dictionary) {
                 this.#words = {};
+                document.querySelector('div#dictionaries .collection#dictionary-list').classList.remove('hide-on-small-and-down');
+                document.querySelector('div#dictionaries .collection#word-list').classList.add('hide-on-small-and-down');
+            } else {
+                document.querySelector('div#dictionaries .collection#dictionary-list').classList.add('hide-on-small-and-down');
+                document.querySelector('div#dictionaries .collection#word-list').classList.remove('hide-on-small-and-down');
             }
 
             if (this.#dictionary?.id !== dictionary?.id) {
@@ -58,6 +63,12 @@ export class WordList {
             }
             this.#dictionary?.words?.update(word, {image: url});
         });
+
+        this.#title.closest('.collection-header').querySelector('#back-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            state.setState({dictionary: null});
+        })
     }
 
     render() {
