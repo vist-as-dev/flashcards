@@ -27,9 +27,13 @@ export class AuthorisedDriveApiService {
                 };
 
                 // tokenClient.requestAccessToken({prompt: 'consent'});
-                window.tokenClient.requestAccessToken();
+                const result = window.tokenClient.requestAccessToken();
+                console.log(result)
             } else {
-                callback(...args).then(resolve).catch(reject);
+                callback(...args).then(resolve).catch((e) => {
+                    reject(e);
+                    M.toast({html: 'Error: ' + JSON.stringify(e)})
+                });
             }
         })
     }
