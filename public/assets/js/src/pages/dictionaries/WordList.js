@@ -84,7 +84,7 @@ export class WordList {
                 .render(
                     word,
                     this.getTitle(word, step, glossary?.transliteration),
-                    glossary?.translations || 'translation in progress...',
+                    glossary,
                     image,
                 );
         });

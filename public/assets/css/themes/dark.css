@@ -208,12 +208,12 @@ nav .select-wrapper input.select-dropdown, nav .select-wrapper input.select-drop
 }
 
 .btn-flat {
-    color: var(--secondary-color);
+    color: var(--text-heading);
 }
 
 .btn-flat:hover {
     background-color: var(--secondary-color);
-    color: var(--text-heading);
+    color: var(--text-highlight);
 }
 
 .nav-wrapper {
@@ -337,4 +337,8 @@ div#dictionaries .collection-item.new {
     background-color: transparent;
     color: var(--color-primary);
     border: 1px solid var(--color-primary);
+}
+
+#modal-select-word-image [data-component="synonyms"] a {
+    color: var(--primary-color);
 }

@@ -21,9 +21,18 @@ export class WordListItem {
         this.#ht = new HideToggler();
     }
 
-    render(word, title, subtitle, image) {
+    render(word, title, glossary, image) {
         const label = document.createElement('p');
-        label.innerHTML = `${subtitle}`;
+        label.innerHTML = `${glossary?.translations || 'translation in progress...'}`;
+
+        const synonyms = Object.entries(glossary?.definitions || {})
+            .reduce((set, [, definitions]) => {
+                definitions
+                    .forEach(({synonyms}) => {
+                        Object.values(synonyms).forEach(items => items.forEach(i => set.add(i)))
+                    });
+                return set;
+            }, new Set());
 
         const wordImage = document.createElement('a');
         wordImage.setAttribute('href', '#modal-select-word-image');
@@ -31,6 +40,7 @@ export class WordListItem {
         wordImage.addEventListener('click', () => {
             const modal = document.querySelector('#modal-select-word-image');
             modal.setAttribute('data-query', word);
+            modal.setAttribute('data-synonyms', [...synonyms].join('|'));
             modal.setAttribute('data-callback', GALLERY_CALLBACK_KEY);
         })
 

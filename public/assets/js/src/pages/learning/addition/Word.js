@@ -65,9 +65,20 @@ export class Word {
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {
-            const [, {word}] = this.#word || [];
+            const [, {word, glossary}] = this.#word || [];
+
+            const synonyms = Object.entries(glossary?.definitions || {})
+                .reduce((set, [, definitions]) => {
+                    definitions
+                        .forEach(({synonyms}) => {
+                            Object.values(synonyms).forEach(items => items.forEach(i => set.add(i)))
+                        });
+                    return set;
+                }, new Set());
+
             const modal = document.querySelector('#modal-select-word-image');
             modal.setAttribute('data-query', word);
+            modal.setAttribute('data-synonyms', [...synonyms].join('|'));
             modal.setAttribute('data-callback', GALLERY_CALLBACK_KEY);
         });
 

@@ -11,6 +11,22 @@ export class ImageGallery {
         M.Modal.init(this.modalSelectWordImage, {
             onOpenStart: (modal) => {
                 this.queryInput.value = modal.dataset.query;
+
+                const synonyms = this.modalSelectWordImage.querySelector('[data-component="synonyms"]');
+                synonyms.innerHTML = '';
+                modal.dataset.synonyms.split('|').forEach(synonym => {
+                    const el = document.createElement('a');
+                    el.setAttribute('href', '#!');
+                    el.innerHTML = synonym;
+                    el.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        this.queryInput.value = synonym;
+                        this.render();
+                    });
+                    synonyms.appendChild(el);
+                });
+
                 M.updateTextFields();
                 this.render();
             }

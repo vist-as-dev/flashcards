@@ -299,9 +299,26 @@ div#dictionaries .collection .scrollable {
     transform: scale(1);
 }
 
+#modal-select-word-image {
+    max-height: 80%;
+}
+
+#modal-select-word-image .modal-content {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: calc(80vh - 56px);
+}
+
 #modal-select-word-image .scrollable {
     overflow-y: auto;
-    height: 498px;
+    margin-top: 24px;
+}
+
+#modal-select-word-image [data-component="synonyms"] {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
 }
 
 @media only screen and (max-width: 600px) {
