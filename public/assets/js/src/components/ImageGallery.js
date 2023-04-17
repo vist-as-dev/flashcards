@@ -39,10 +39,13 @@ export class ImageGallery {
 
     render() {
         this.imageList.innerHTML = '';
+        this.modalSelectWordImage.querySelector('.scrollable').classList.add('loader');
 
         this.api
             .search(this.queryInput.value)
             .then(response => {
+                this.modalSelectWordImage.querySelector('.scrollable').classList.remove('loader');
+
                 response.forEach(({url, text}) => {
                     const img = document.createElement('img');
                     img.setAttribute('src', url);
