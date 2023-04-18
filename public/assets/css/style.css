@@ -313,6 +313,8 @@ div#dictionaries .collection .scrollable {
 #modal-select-word-image .scrollable {
     overflow-y: auto;
     margin-top: 24px;
+    flex: 1;
+    position: relative;
 }
 
 #modal-select-word-image [data-component="synonyms"] {

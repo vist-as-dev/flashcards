@@ -342,3 +342,12 @@ div#dictionaries .collection-item.new {
 #modal-select-word-image [data-component="synonyms"] a {
     color: var(--primary-color);
 }
+
+.loader:before {
+    border-color: var(--line-general);
+    border-top-color: var(--line-primary);
+}
+
+.loader:after {
+    background-color: var(--background-blackout);
+}
