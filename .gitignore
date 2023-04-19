@@ -12,3 +12,4 @@
 /public/assets/js/dist/
 /public/assets/js/config.js
 /public/assets/js/package-lock.json
+/config/packages/client_secret.json

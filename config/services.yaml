@@ -22,3 +22,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Predis\Client:
+        # you can also use \RedisArray, \RedisCluster or \Predis\Client classes
+        class: Predis\Client
+        # See all parameters here: https://github.com/predis/predis/wiki/Connection-Parameters#list-of-connection-parameters
+        arguments:
+            - host: '%env(REDIS_HOST)%'
+            - port: '%env(int:REDIS_PORT)%'
