@@ -23,7 +23,7 @@ class AuthController extends AbstractController
         $client->addScope(Drive::DRIVE);
         $client->addScope(Drive::DRIVE_APPDATA);
         $client->addScope(Speech::CLOUD_PLATFORM);
-        $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/auth/complete');
+        $client->setRedirectUri($request->getScheme() . '://' . $request->getHost() . '/auth/complete');
         $client->setAccessType('offline');
 
         $client->setPrompt('consent');
@@ -38,7 +38,7 @@ class AuthController extends AbstractController
     public function authComplete(Request $request, Client $client, \Predis\Client $redis): RedirectResponse
     {
         $code = $request->query->get('code');
-        $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/auth/complete');
+        $client->setRedirectUri($request->getScheme() . '://' . $request->getHost() . '/auth/complete');
 
         $token = $client->fetchAccessTokenWithAuthCode($code);
         if (isset($token['access_token']) && isset($token['refresh_token'])) {
