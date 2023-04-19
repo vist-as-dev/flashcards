@@ -17,7 +17,6 @@ export class AuthorisedDriveApiService {
 
         return new Promise((resolve, reject) => {
             callback(...args).then(resolve).catch(async (err) => {
-                console.log(err)
                 if ([401, 403].includes(err.status) && window.gapi) {
                     window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
                     callback(...args).then(resolve).catch(reject);

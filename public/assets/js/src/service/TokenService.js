@@ -9,7 +9,6 @@ export class TokenService {
     }
 
     static async refreshToken() {
-        console.log(111)
         await fetch('/auth/refresh');
         const token = TokenService.getToken();
         localStorage.setItem('token', token);
