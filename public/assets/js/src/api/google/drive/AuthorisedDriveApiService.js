@@ -1,4 +1,5 @@
 import {DriveApiService} from "./DriveApiService.js";
+import {TokenService} from "../../../service/TokenService";
 
 export class AuthorisedDriveApiService {
 
@@ -8,29 +9,22 @@ export class AuthorisedDriveApiService {
     }
 
     async authorized(callback, ...args) {
-        while (this.isTokenLoading) {
-            await (new Promise(resolve => setTimeout(resolve, 1000)));
+        if (!TokenService.getToken()) {
+            window.location.href = `${location.protocol}//${location.host}/auth`;
+        } else if (window.gapi) {
+            window.gapi.client.setToken({access_token: TokenService.getToken()});
         }
 
         return new Promise((resolve, reject) => {
-            if (window.gapi && window.gapi.client.getToken() === null) {
-                this.isTokenLoading = true;
-
-                window.tokenClient.callback = (resp) => {
-                    if (resp.error !== undefined) {
-                        throw (resp);
-                    }
-
-                    this.isTokenLoading = false;
-
+            callback(...args).then(resolve).catch(async (err) => {
+                console.log(err)
+                if ([401, 403].includes(err.status) && window.gapi) {
+                    window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
                     callback(...args).then(resolve).catch(reject);
-                };
-
-                // tokenClient.requestAccessToken({prompt: 'consent'});
-                window.tokenClient.requestAccessToken();
-            } else {
-                callback(...args).then(resolve).catch(reject);
-            }
+                } else {
+                    reject(err);
+                }
+            });
         })
     }
 

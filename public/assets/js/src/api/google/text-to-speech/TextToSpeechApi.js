@@ -1,3 +1,5 @@
+import {TokenService} from "../../../service/TokenService";
+
 const voices = {
     'en': {
         code: 'en-US',
@@ -35,7 +37,14 @@ const voices = {
 
 export class TextToSpeechApi {
     static async speech(text) {
+        if (!TokenService.getToken()) {
+            window.location.href = `${location.protocol}//${location.host}/auth`;
+        } else if (window.gapi) {
+            window.gapi.client.setToken({access_token: TokenService.getToken()});
+        }
+
         const {code, name} = voices[document.querySelector('header select#source').value || 'en'];
+
         fetch('https://texttospeech.googleapis.com/v1/text:synthesize/', {
             body: JSON.stringify({
                 input: {text},
@@ -56,6 +65,10 @@ export class TextToSpeechApi {
             .then(({audioContent}) => {
                 const audio = new Audio('data:audio/mp3;base64,' + audioContent);
                 audio.play();
-            })
+            }).catch(async (err) => {
+                if ([401, 403].includes(err.status) && window.gapi) {
+                    window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
+                }
+            });
     }
 }
