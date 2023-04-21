@@ -1,38 +1,14 @@
 import {TokenService} from "../../../service/TokenService";
 
 const voices = {
-    'en': {
-        code: 'en-US',
-        name: 'en-US-Neural2-C',
-    },
-    'es': {
-        code: 'es-ES',
-        name: 'es-ES-Neural2-D',
-    },
-    'fr': {
-        code: 'fr-FR',
-        name: 'fr-FR-Wavenet-E',
-    },
-    'de': {
-        code: 'de-DE',
-        name: 'de-DE-Wavenet-C',
-    },
-    'it': {
-        code: 'it-IT',
-        name: 'it-IT-Wavenet-A',
-    },
-    'pl': {
-        code: 'pl-PL',
-        name: 'pl-PL-Standard-E',
-    },
-    'uk': {
-        code: 'uk-UA',
-        name: 'uk-UA-Standard-A',
-    },
-    'ru': {
-        code: 'ru-RU',
-        name: 'ru-RU-Standard-C',
-    },
+    'en': {code: 'en-US', name: 'en-US-Neural2-C'},
+    'es': {code: 'es-ES', name: 'es-ES-Neural2-D'},
+    'fr': {code: 'fr-FR', name: 'fr-FR-Wavenet-E'},
+    'de': {code: 'de-DE', name: 'de-DE-Wavenet-C'},
+    'it': {code: 'it-IT', name: 'it-IT-Wavenet-A'},
+    'pl': {code: 'pl-PL', name: 'pl-PL-Standard-E'},
+    'uk': {code: 'uk-UA', name: 'uk-UA-Standard-A'},
+    'ru': {code: 'ru-RU', name: 'ru-RU-Standard-C'},
 }
 
 export class TextToSpeechApi {
