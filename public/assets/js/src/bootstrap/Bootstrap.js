@@ -11,8 +11,19 @@ export class Bootstrap {
 
         window.addEventListener('resize', resize, true);
 
-        document.querySelector('header').classList.remove('hide');
-        document.querySelector('main').classList.remove('hide');
-        document.querySelector('footer').classList.remove('hide');
+        const source = document.querySelector('header select#source');
+        const target = document.querySelector('header select#target');
+
+        function expose() {
+            if (source.value && target.value) {
+                document.querySelector('header').classList.remove('hide');
+                document.querySelector('main').classList.remove('hide');
+                document.querySelector('footer').classList.remove('hide');
+            } else {
+                setTimeout(() => expose(), 500);
+            }
+        }
+
+        expose();
     }
 }

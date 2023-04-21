@@ -15,10 +15,15 @@ export class DirectionStorage extends Storage {
         this.source.addEventListener('change', () => this.refresh());
         this.target.addEventListener('change', () => this.refresh());
 
-        setTimeout(() => this.refresh(), 1000);
+        this.refresh();
     }
 
     refresh() {
+        if (!this.source.value || !this.target.value) {
+            setTimeout(() => this.refresh(), 1000);
+            return;
+        }
+
         this.#direction = new Direction({source: this.source.value, target: this.target.value});
         this.notify(this.#direction);
     }

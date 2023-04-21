@@ -9,7 +9,7 @@ export class TokenService {
     }
 
     static async refreshToken() {
-        console.log(111)
+        document.cookie = `access-token=${TokenService.getToken()}; SameSite=None; Secure`;
         await fetch('/auth/refresh');
         const token = TokenService.getToken();
         localStorage.setItem('token', token);

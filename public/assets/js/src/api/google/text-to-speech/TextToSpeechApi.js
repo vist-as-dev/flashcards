@@ -1,38 +1,14 @@
 import {TokenService} from "../../../service/TokenService";
 
 const voices = {
-    'en': {
-        code: 'en-US',
-        name: 'en-US-Neural2-C',
-    },
-    'es': {
-        code: 'es-ES',
-        name: 'es-ES-Neural2-D',
-    },
-    'fr': {
-        code: 'fr-FR',
-        name: 'fr-FR-Wavenet-E',
-    },
-    'de': {
-        code: 'de-DE',
-        name: 'de-DE-Wavenet-C',
-    },
-    'it': {
-        code: 'it-IT',
-        name: 'it-IT-Wavenet-A',
-    },
-    'pl': {
-        code: 'pl-PL',
-        name: 'pl-PL-Standard-E',
-    },
-    'uk': {
-        code: 'uk-UA',
-        name: 'uk-UA-Standard-A',
-    },
-    'ru': {
-        code: 'ru-RU',
-        name: 'ru-RU-Standard-C',
-    },
+    'en': {code: 'en-US', name: 'en-US-Neural2-C'},
+    'es': {code: 'es-ES', name: 'es-ES-Neural2-D'},
+    'fr': {code: 'fr-FR', name: 'fr-FR-Wavenet-E'},
+    'de': {code: 'de-DE', name: 'de-DE-Wavenet-C'},
+    'it': {code: 'it-IT', name: 'it-IT-Wavenet-A'},
+    'pl': {code: 'pl-PL', name: 'pl-PL-Standard-E'},
+    'uk': {code: 'uk-UA', name: 'uk-UA-Standard-A'},
+    'ru': {code: 'ru-RU', name: 'ru-RU-Standard-C'},
 }
 
 export class TextToSpeechApi {
@@ -44,8 +20,7 @@ export class TextToSpeechApi {
         }
 
         const {code, name} = voices[document.querySelector('header select#source').value || 'en'];
-
-        fetch('https://texttospeech.googleapis.com/v1/text:synthesize/', {
+        const options = {
             body: JSON.stringify({
                 input: {text},
                 voice: {
@@ -60,15 +35,27 @@ export class TextToSpeechApi {
                 'Content-Type': 'application/json; charset=utf-8'
             },
             method: 'POST'
-        })
+        };
+
+        fetch('https://texttospeech.googleapis.com/v1/text:synthesize/', options)
             .then(response => response.json())
-            .then(({audioContent}) => {
-                const audio = new Audio('data:audio/mp3;base64,' + audioContent);
-                audio.play();
-            }).catch(async (err) => {
-                if ([401, 403].includes(err.status) && window.gapi) {
-                    window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
-                }
-            });
+            .then(
+                async (response) => {
+                    if ("error" in response && ([401, 403].includes(response.error?.code || response.error?.status) && !!window.gapi)) {
+                        window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
+                        options.headers.Authorization = 'Bearer ' + gapi.auth.getToken().access_token;
+                        fetch('https://texttospeech.googleapis.com/v1/text:synthesize/', options)
+                            .then(response => response.json())
+                            .then(({audioContent}) => {
+                                const audio = new Audio('data:audio/mp3;base64,' + audioContent);
+                                audio.play();
+                            });
+                        return;
+                    }
+
+                    const {audioContent} = response;
+                    const audio = new Audio('data:audio/mp3;base64,' + audioContent);
+                    await audio.play();
+                })
     }
 }

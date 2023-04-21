@@ -75,7 +75,7 @@ export class Word {
 
             let value = input.value;
             [...word].some((letter, index) => {
-                if (letter !== value[index]) {
+                if (letter.toLowerCase() !== value[index]?.toLowerCase()) {
                     input.value = word.substring(0, ++index);
                     return true;
                 }
@@ -276,6 +276,7 @@ export class Word {
         this.#body.querySelector('[data-component="input"]').value = '';
         this.#body.querySelector('[data-component="input"]').setAttribute('data-attempt', '3');
         this.#body.querySelector('[data-component="check"]').disabled = false;
+        this.#body.querySelector('[data-component="check"] .material-icons').innerHTML = `looks_3`;
 
         this.toggle(false);
     }

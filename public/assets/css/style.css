@@ -128,6 +128,7 @@ nav a > i.material-icons {
 
 footer {
     position: fixed;
+    z-index: 10;
 }
 
 footer .navbar-fixed nav.navbar {
@@ -343,7 +344,7 @@ div#dictionaries .collection .scrollable {
     border: 2px solid #ffffff;
     border-top-color: #000000;
     animation: spinner .8s linear infinite;
-    z-index: 1;
+    z-index: 2;
 }
 
 .loader:after {
@@ -356,6 +357,7 @@ div#dictionaries .collection .scrollable {
     left: 0;
     transform: scale(1);
     transition: all 0.2s 0.1s ease-in-out;
+    z-index: 1;
 }
 
 .row .col.collapsible-wrapper {
@@ -393,6 +395,10 @@ div#dictionaries .collection .scrollable {
     color: #009688;
     border-bottom: 1px dashed #009688;
     font-size: 32px;
+}
+
+.waves-effect {
+    z-index: 0;
 }
 
 @media only screen and (max-width: 600px) {
