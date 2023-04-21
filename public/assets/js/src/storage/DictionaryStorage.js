@@ -17,10 +17,12 @@ export class DictionaryStorage extends Storage {
             this.#isLoaded = false;
 
             const {source, target} = this.#direction;
+            document.querySelector('#dictionary-list .scrollable').classList.add('loader');
             this.api.listFiles({type: 'dictionary', source, target})
                 .then(files => files.reverse())
                 .then((files) => {
                     this.#isLoaded = true;
+                    document.querySelector('#dictionary-list .scrollable').classList.remove('loader');
 
                     const ids = files.map((id) => id);
                     Object.keys(this.#items).forEach(id => {

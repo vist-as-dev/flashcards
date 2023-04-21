@@ -65,6 +65,10 @@ class AuthController extends AbstractController
     public function authRefresh(Request $request, Client $client, \Predis\Client $redis): JsonResponse
     {
         $accessToken = $request->cookies->get('access-token');
+        if (!$accessToken) {
+            return $this->json(['error' => 'access token not found'], 400);
+        }
+
         $refreshToken = $redis->get($accessToken) ?? '';
         $token = $client->fetchAccessTokenWithRefreshToken($refreshToken);
 
@@ -76,7 +80,7 @@ class AuthController extends AbstractController
         $response = new JsonResponse();
         $response->headers->setCookie(new Cookie(
             "access-token",
-            $token['access_token'],
+            $token['access_token'] ?? '',
             (new DateTime('now'))->modify("+1 day"),
             "/",
             null,
