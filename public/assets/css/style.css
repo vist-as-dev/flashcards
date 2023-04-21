@@ -128,6 +128,7 @@ nav a > i.material-icons {
 
 footer {
     position: fixed;
+    z-index: 10;
 }
 
 footer .navbar-fixed nav.navbar {
@@ -394,6 +395,10 @@ div#dictionaries .collection .scrollable {
     color: #009688;
     border-bottom: 1px dashed #009688;
     font-size: 32px;
+}
+
+.waves-effect {
+    z-index: 0;
 }
 
 @media only screen and (max-width: 600px) {

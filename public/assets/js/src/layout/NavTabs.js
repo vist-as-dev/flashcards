@@ -25,10 +25,12 @@ export class NavTabs {
         const active = localStorage.getItem('index.tabs.active');
         if (pages.includes(active)) {
             this.instance.select(active);
+            setTimeout(() => this.instance.updateTabIndicator(), 500);
         }
     }
 
     redirect(page) {
         this.instance.select(page);
+        this.instance.updateTabIndicator();
     }
 }
