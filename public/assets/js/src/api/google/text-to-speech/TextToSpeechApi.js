@@ -13,12 +13,6 @@ const voices = {
 
 export class TextToSpeechApi {
     static async speech(text) {
-        if (!TokenService.getToken()) {
-            window.location.href = `${location.protocol}//${location.host}/auth`;
-        } else if (window.gapi) {
-            window.gapi.client.setToken({access_token: TokenService.getToken()});
-        }
-
         const {code, name} = voices[document.querySelector('header select#source').value || 'en'];
         const options = {
             body: JSON.stringify({
@@ -42,7 +36,7 @@ export class TextToSpeechApi {
             .then(
                 async (response) => {
                     if ("error" in response && ([401, 403].includes(response.error?.code || response.error?.status) && !!window.gapi)) {
-                        window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
+                        await TokenService.refreshToken();
                         options.headers.Authorization = 'Bearer ' + gapi.auth.getToken().access_token;
                         fetch('https://texttospeech.googleapis.com/v1/text:synthesize/', options)
                             .then(response => response.json())
