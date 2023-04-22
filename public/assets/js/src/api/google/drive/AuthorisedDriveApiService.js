@@ -5,20 +5,13 @@ export class AuthorisedDriveApiService {
 
     constructor() {
         this.apiService = new DriveApiService();
-        this.isTokenLoading = false;
     }
 
     async authorized(callback, ...args) {
-        if (!TokenService.getToken()) {
-            window.location.href = `${location.protocol}//${location.host}/auth`;
-        } else if (window.gapi) {
-            window.gapi.client.setToken({access_token: TokenService.getToken()});
-        }
-
         return new Promise((resolve, reject) => {
             callback(...args).then(resolve).catch(async (err) => {
                 if ([401, 403].includes(err.status) && window.gapi) {
-                    window.gapi.client.setToken({access_token: await TokenService.refreshToken()});
+                    await TokenService.refreshToken();
                     callback(...args).then(resolve).catch(reject);
                 } else {
                     reject(err);

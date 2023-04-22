@@ -1,5 +1,6 @@
 import {App} from "./src/App";
 import Config from "./config";
+import {TokenService} from "./src/service/TokenService";
 
 
 // Discovery doc URL for APIs used by the quickstart
@@ -56,11 +57,25 @@ window.gisLoaded = gisLoaded;
  */
 function checkBeforeStart() {
     if (gapiInitiated && gisInitiated) {
-        window.tokenClient = tokenClient;
         window.gapi = gapi;
         window.google = google
+        window.tokenClient = tokenClient;
+        window.gapi.client.setToken({access_token: TokenService.getToken()});
 
         const app = new App(Config);
         app.render();
     }
 }
+
+const gapiScript = document.createElement('script');
+gapiScript.setAttribute('async', '');
+gapiScript.setAttribute('defer', '');
+gapiScript.setAttribute('src', 'https://apis.google.com/js/api.js');
+gapiScript.setAttribute('onLoad', 'gapiLoaded()');
+const gsiScript = document.createElement('script');
+gsiScript.setAttribute('async', '');
+gsiScript.setAttribute('defer', '');
+gsiScript.setAttribute('src', 'https://accounts.google.com/gsi/client');
+gsiScript.setAttribute('onLoad', 'gisLoaded()');
+
+document.head.append(gapiScript, gsiScript);
