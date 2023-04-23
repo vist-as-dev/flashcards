@@ -28,7 +28,7 @@ const assets = [
     '/mstile-150x150.png',
     '/safari-pinned-tab.svg',
     '/site.webmanifest',
-    'https://apis.google.com/js/api.js',
+    // 'https://apis.google.com/js/api.js',
     'https://fonts.googleapis.com/icon?family=Material+Icons',
     'https://fonts.gstatic.com/s/materialicons/v47/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2',
     'https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2',
@@ -40,7 +40,7 @@ const nonCacheable = [
     'https://www.google-analytics.com',
     'https://www.googletagmanager.com',
     'https://accounts.google.com/gsi/client',
-    // 'https://apis.google.com',
+    'https://apis.google.com',
 ];
 
 const limitCacheSize = (name, size) => {
@@ -77,7 +77,7 @@ self.addEventListener('fetch', evt => {
     evt.respondWith(
         caches.match(evt.request).then(cacheRes => {
             const url = evt.request.url;
-            console.log(0, url)
+            // console.log(0, url)
             const isNonCacheable = nonCacheable.some(_url => url.startsWith(_url) || url.endsWith(_url))
                 || url.startsWith('chrome-extension')
                 || url.includes('extension')
