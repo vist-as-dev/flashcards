@@ -15,24 +15,21 @@
         <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
         <link rel="apple-touch-icon" href="{{ asset('assets/img/logo192.png') }}"/>
         <title>{% block title %}Flashcard online service for improving your vocabulary.{% endblock %}</title>
-{#        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">#}
+
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-            <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet"/>
-{#            <link href="{{ asset('assets/css/themes/dark.css') }}" rel="stylesheet"/>#}
+            <link rel="stylesheet" href="{{ asset('assets/css/materialize.min.css') }}">
+            <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}"/>
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
 
         {% block javascripts %}
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-PE97QR6H6F"></script>
             <script src="{{ asset('assets/js/libs/google/analytics.js') }}"></script>
             <script src="{{ asset('assets/js/libs/xregexp/xregexp-all.js') }}"></script>
+            <script src="{{ asset('assets/js/libs/materialize/materialize.min.js') }}"></script>
             <script src="{{ asset('assets/js/script.js') }}" type="module"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-            <script async src="https://www.googletagmanager.com/gtag/js?id=G-PE97QR6H6F"></script>
-{#            <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>#}
-{#            <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>#}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
 
