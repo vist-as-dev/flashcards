@@ -1,5 +1,5 @@
-const staticCacheName = 'site-static-v1';
-const dynamicCacheName = 'site-dynamic-v1';
+const staticCacheName = 'static-v1';
+const dynamicCacheName = 'dynamic-v1';
 const assets = [
     '/',
     '/assets/css/materialize.min.css',
@@ -10,15 +10,6 @@ const assets = [
     '/assets/js/libs/materialize/materialize.min.js',
     '/assets/js/script.js',
     '/assets/img/no-image.svg',
-    '/assets/video/friends.s01e02.phrases.step1.mp4',
-    '/assets/video/friends.s01e02.phrases.step2.mp4',
-    '/assets/video/friends.s01e02.phrases.step3.mp4',
-    '/assets/video/alice-in-wonderland.chapter4.step1.mp4',
-    '/assets/video/alice-in-wonderland.chapter4.step2.mp4',
-    '/assets/video/alice-in-wonderland.chapter4.step3.mp4',
-    '/assets/video/my-words.march.step1.mp4',
-    '/assets/video/my-words.march.step2.mp4',
-    '/assets/video/my-words.march.step3.mp4',
     '/android-chrome-192x192.png',
     '/android-chrome-512x512.png',
     '/apple-touch-icon.png',
@@ -37,10 +28,21 @@ const assets = [
 const nonCacheable = [
     '/auth',
     '/auth/refresh',
+    '/auth/complete',
     'https://www.google-analytics.com',
     'https://www.googletagmanager.com',
     'https://accounts.google.com/gsi/client',
     'https://apis.google.com',
+    // '/assets/js/script.js',
+    '/assets/video/friends.s01e02.phrases.step1.mp4',
+    '/assets/video/friends.s01e02.phrases.step2.mp4',
+    '/assets/video/friends.s01e02.phrases.step3.mp4',
+    '/assets/video/alice-in-wonderland.chapter4.step1.mp4',
+    '/assets/video/alice-in-wonderland.chapter4.step2.mp4',
+    '/assets/video/alice-in-wonderland.chapter4.step3.mp4',
+    '/assets/video/my-words.march.step1.mp4',
+    '/assets/video/my-words.march.step2.mp4',
+    '/assets/video/my-words.march.step3.mp4',
 ];
 
 const limitCacheSize = (name, size) => {
@@ -54,6 +56,7 @@ const limitCacheSize = (name, size) => {
 };
 
 self.addEventListener('install', evt => {
+    self.skipWaiting();
     evt.waitUntil(
         caches.open(staticCacheName).then((cache) => {
             console.log('caching shell assets');
@@ -74,38 +77,41 @@ self.addEventListener('activate', evt => {
 });
 
 self.addEventListener('fetch', evt => {
-    evt.respondWith(
-        caches.match(evt.request).then(cacheRes => {
-            const url = evt.request.url;
-            // console.log(0, url)
-            const isNonCacheable = nonCacheable.some(_url => url.startsWith(_url) || url.endsWith(_url))
-                || url.startsWith('chrome-extension')
-                || url.includes('extension')
-                || !(url.indexOf('http') === 0)
-                || evt.request.method !== 'GET';
-            if (isNonCacheable) {
-                return fetch(evt.request);
-            }
-
-            return caches.open(staticCacheName).then(cache => cache.keys().then(keys => {
-                const isStatic = keys.some(key => key.url === evt.request.url);
+    const {request} = evt;
+    const isNonCacheable = nonCacheable.some(url => request.url.startsWith(url) || request.url.endsWith(url))
+        || request.url.startsWith('chrome-extension')
+        || request.url.includes('extension')
+        || !(request.url.indexOf('http') === 0)
+        || request.method !== 'GET'
+        || request.headers.has('range')
+    ;
+    if (isNonCacheable) {
+        return null;
+    } else {
+        evt.respondWith(
+            caches.match(request).then(cacheRes => {
+                const isStatic = assets.some(url => request.url.startsWith(url) || request.url.endsWith(url));
                 if (isStatic && cacheRes) {
                     return cacheRes;
                 }
 
-                return cacheRes || fetch(evt.request).then(fetchRes => {
-                    return caches.open(dynamicCacheName).then(cache => {
-                        cache.put(evt.request.url, fetchRes.clone()).catch(err => console.log(err));
-                        limitCacheSize(dynamicCacheName, 300);
-                        return fetchRes;
-                    })
-                }).catch(err => console.log(err));
-            }));
-        }).catch((err) => {
-            console.log(err)
-            if (evt.request.url.indexOf('.html') > -1) {
-                return caches.match('/pages/fallback.html');
-            }
-        })
-    );
+                return cacheRes || fetch(request).then(fetchRes => {
+                    const fetchResClone = fetchRes.clone();
+                    caches
+                        .open(isStatic ? staticCacheName : dynamicCacheName)
+                        .then(cache => {
+                            cache.put(request, fetchResClone).catch(err => console.log(err));
+                            !isStatic && limitCacheSize(dynamicCacheName, 300);
+                        });
+
+                    return fetchRes;
+                });
+            }).catch((err) => {
+                console.log(err)
+                if (evt.request.url.indexOf('.html') > -1) {
+                    return caches.match('/pages/fallback.html');
+                }
+            })
+        );
+    }
 });
