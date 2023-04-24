@@ -1,8 +1,9 @@
-import {addRxPlugin, createRxDatabase} from "rxdb";
+import {createRxDatabase} from "rxdb";
+// import {addRxPlugin, createRxDatabase} from "rxdb";
 import {getRxStorageDexie} from "rxdb/plugins/storage-dexie";
-import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
-
-addRxPlugin(RxDBDevModePlugin);
+// import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
+//
+// addRxPlugin(RxDBDevModePlugin);
 
 export class MediaStorage {
     #db;
@@ -55,7 +56,7 @@ export class MediaStorage {
     }
 
     subscribe(url, callback) {
-        if (!this.#db) {
+        if (!this.#db?.media) {
             setTimeout(() => this.subscribe(url, callback), 100);
         } else {
             this.#db.media
@@ -63,7 +64,7 @@ export class MediaStorage {
                 .$
                 .subscribe(async ({content}) => {
                     if (content) {
-                        const blob = await fetch(content, false).then(response => response.blob());
+                        const blob = await fetch(content).then(response => response.blob());
                         callback(blob)
                     }
                 });
