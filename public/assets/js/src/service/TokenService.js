@@ -6,7 +6,7 @@ export class TokenService {
             ?.split("=")[1] || localStorage.getItem('token');
 
         if (!token || 'null' === token) {
-            window.location.href = `${location.protocol}//${location.host}/auth`;
+            window.location.href = `${location.origin}/auth`;
         }
 
         return token;
@@ -14,7 +14,12 @@ export class TokenService {
 
     static async refreshToken() {
         document.cookie = `access-token=${TokenService.getToken()}; SameSite=None; Secure`;
-        await fetch('/auth/refresh');
+        localStorage.removeItem('token');
+
+        const {error} = await fetch('/auth/refresh').then(response => response.json());
+        if (error) {
+            window.location.href = `${location.origin}/auth`;
+        }
 
         const token = TokenService.getToken();
         localStorage.setItem('token', token);

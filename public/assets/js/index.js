@@ -2,6 +2,11 @@ import {App} from "./src/App";
 import Config from "./config";
 import {TokenService} from "./src/service/TokenService";
 
+if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('service worker registered', reg))
+        .catch(err => console.log('service worker not registered', err));
+}
 
 // Discovery doc URL for APIs used by the quickstart
 const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';

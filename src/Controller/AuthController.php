@@ -23,7 +23,7 @@ class AuthController extends AbstractController
         $client->addScope(Drive::DRIVE);
         $client->addScope(Drive::DRIVE_APPDATA);
         $client->addScope(Speech::CLOUD_PLATFORM);
-        $client->setRedirectUri($request->getScheme() . '://' . $request->getHost() . '/auth/complete');
+        $client->setRedirectUri($request->getScheme() . '://' . $request->getHttpHost() . '/auth/complete');
         $client->setAccessType('offline');
 
         $client->setPrompt('consent');
@@ -38,7 +38,7 @@ class AuthController extends AbstractController
     public function authComplete(Request $request, Client $client, \Predis\Client $redis): RedirectResponse
     {
         $code = $request->query->get('code');
-        $client->setRedirectUri($request->getScheme() . '://' . $request->getHost() . '/auth/complete');
+        $client->setRedirectUri($request->getScheme() . '://' . $request->getHttpHost() . '/auth/complete');
 
         $token = $client->fetchAccessTokenWithAuthCode($code);
         if (isset($token['access_token']) && isset($token['refresh_token'])) {
@@ -66,16 +66,22 @@ class AuthController extends AbstractController
     {
         $accessToken = $request->cookies->get('access-token');
         if (!$accessToken) {
-            return $this->json(['error' => 'access token not found'], 400);
+            return $this->json(['error' => 'token not found'], 400);
         }
 
-        $refreshToken = $redis->get($accessToken) ?? '';
+        $refreshToken = $redis->get($accessToken);
+        if (null === $refreshToken) {
+            return $this->json(['error' => 'token not found'], 400);
+        }
+
         $token = $client->fetchAccessTokenWithRefreshToken($refreshToken);
 
-        if (isset($token['access_token'])) {
-            $redis->set($token['access_token'], $refreshToken, 'EX', 30 * 24 * 60 * 60);
-            $redis->expire($accessToken, 0);
+        if (!isset($token['access_token'])) {
+            return $this->json(['error' => 'token not found'], 400);
         }
+
+        $redis->set($token['access_token'], $refreshToken, 'EX', 30 * 24 * 60 * 60);
+        $redis->expire($accessToken, 0);
 
         $response = new JsonResponse();
         $response->headers->setCookie(new Cookie(
