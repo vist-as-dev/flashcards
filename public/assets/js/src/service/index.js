@@ -1,2 +1,2 @@
 export * from './WordStatus.js'
-export * from './UpdateWordByAnswer'
+export * from './UpdateFlashcardByAnswer'

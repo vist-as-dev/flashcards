@@ -1,43 +1,55 @@
-import {Dictionary} from "../model";
+import {Direction, Dictionary, Flashcard} from "../model";
 import {Storage} from "./Storage";
-import {WordStorage} from "./WordStorage";
-import {Direction} from "../model/Direction";
+import {DictionaryRepository} from "./DictionaryRepository";
 
 export class DictionaryStorage extends Storage {
     #items = {};
     #direction = {};
     #isLoaded = false;
 
-    constructor(api, direction) {
+    #repo;
+
+    constructor() {
         super();
-        this.api = api;
+        this.#repo = new DictionaryRepository();
+    }
+
+    async init(direction) {
+        await this.#repo.init();
 
         direction.subscribe((direction) => {
             this.#direction = new Direction(direction);
+
             this.#isLoaded = false;
-
-            const {source, target} = this.#direction;
             document.querySelector('#dictionary-list .scrollable').classList.add('loader');
-            this.api.listFiles({type: 'dictionary', source, target})
-                .then(files => files.reverse())
-                .then((files) => {
-                    this.#isLoaded = true;
-                    document.querySelector('#dictionary-list .scrollable').classList.remove('loader');
 
-                    const ids = files.map((id) => id);
-                    Object.keys(this.#items).forEach(id => {
-                        if (!ids.includes(id)) {
-                            this.#items[id]?.unsubscribe && this.#items[id].unsubscribe();
-                            delete this.#items[id];
-                        }
-                    });
-                    this.notify(this.#items);
+            this.#$.subscribe(docs => {
+                this.#isLoaded = true;
+                document.querySelector('#dictionary-list .scrollable').classList.remove('loader');
 
-                    files.forEach(({id, properties}) => {
-                        this.#set(id, properties);
-                        this.api.downloadMetaFile(id).then(data => this.#items[id]?.words.set(data));
-                    });
-                });
+                this.#items = docs ? docs.reduce((items, doc) => ({...items, [doc.id]: this.toModel(doc)}), {}) : {};
+                this.notify(this.#items);
+            });
+        });
+    }
+
+    get #$() {
+        if (this.#repo instanceof DictionaryRepository) {
+            return this.#repo.$(this.#direction);
+        }
+    }
+
+    toModel(doc) {
+        return new Dictionary({
+            id: doc.get('id'),
+            gDriveFileId: doc.get('gDriveFileId'),
+            name: doc.get('name'),
+            source: doc.get('source'),
+            target: doc.get('target'),
+            flashcards: doc.get('flashcards').reduce(
+                (items, card) => ({...items, [card.original]: new Flashcard(card)}),
+                {}
+            ),
         });
     }
 
@@ -46,49 +58,21 @@ export class DictionaryStorage extends Storage {
         return super.subscribe(callback);
     }
 
-    #set(id, data) {
-        if (this.#direction.source !== data.source || this.#direction.target !== data.target) {
-            return;
-        }
-
-        if (id) {
-            const dictionary = new Dictionary({id, ...data});
-            if (this.#items[id]?.words instanceof WordStorage) {
-                dictionary.words = this.#items[id].words;
-                dictionary.unsubscribe = this.#items[id].unsubscribe;
-            } else {
-                dictionary.words = new WordStorage(dictionary);
-                dictionary.unsubscribe = dictionary.words.subscribe(async (words) => {
-                    this.notify(this.#items);
-                    await this.api.updateMetaFile(id, words);
-                    this.update(id, {count: Object.keys(words).length});
-                });
-            }
-            this.#items[id] = dictionary;
-            this.notify(this.#items);
+    create(name) {
+        if (this.#repo instanceof DictionaryRepository) {
+            this.#repo.insert(new Dictionary({name, ...this.#direction}));
         }
     }
 
-    async create(name) {
-        const {source, target} = this.#direction;
-        const data = {name, source, target, type: 'dictionary'};
-        const {id} = await this.api.createMetaFile(encodeURIComponent(name), data);
-
-        this.#set(id, data);
-        this.#items[id]?.words.set({});
+    update(dictionary) {
+        if (this.#repo instanceof DictionaryRepository) {
+            return this.#repo.update({...dictionary, flashcards: Object.values(dictionary.flashcards)});
+        }
     }
 
-    update(id, data) {
-        this.api.updateMetaFileProperties(id, data).then(() => {
-            this.#set(id, {...this.#items[id], ...data});
-        });
-    }
-
-    delete(id) {
-        this.api.deleteMetaFile(id).then(() => {
-            this.#items[id]?.unsubscribe && this.#items[id].unsubscribe();
-            delete this.#items[id];
-            this.notify(this.#items);
-        });
+    delete(dictionary) {
+        if (this.#repo instanceof DictionaryRepository) {
+            return this.#repo.delete(dictionary);
+        }
     }
 }

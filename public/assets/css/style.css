@@ -397,6 +397,10 @@ div#dictionaries .collection .scrollable {
     font-size: 32px;
 }
 
+.card.horizontal .card-content [data-component="input-field"] {
+    margin-top: 24px;
+}
+
 .waves-effect {
     z-index: 0;
 }
@@ -430,8 +434,16 @@ div#dictionaries .collection .scrollable {
         border-bottom: 1px dashed #009688;
     }
 
+    .card .card-content .card-title {
+        overflow: hidden;
+    }
+
     #memorization .card.horizontal .card-content .buttons {
         flex-direction: row;
+    }
+
+    #memorization .card.horizontal .card-content .buttons .btn {
+        font-size: 13px;
     }
 
     .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {

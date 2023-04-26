@@ -19,9 +19,10 @@ export class App {
         this.imageGallery = new ImageGallery(new PexelImageApi(config));
 
         const direction = new DirectionStorage();
+
         this.storage = {
             direction,
-            dictionary: new DictionaryStorage(this.api.gDrive.meta, direction),
+            dictionary: new DictionaryStorage(),
             statistics: new StatisticsStorage(this.api.gDrive.meta, direction),
             languages: new LanguageStorage(),
             media: new MediaStorage([
@@ -46,6 +47,10 @@ export class App {
             new Dictionaries(this),
             new Learning(this),
         ];
+    }
+
+    async init() {
+        await this.storage.dictionary.init(this.storage.direction);
     }
 
     render() {

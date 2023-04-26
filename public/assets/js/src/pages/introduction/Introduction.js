@@ -4,6 +4,11 @@ export class Introduction {
     #media;
 
     constructor({navigation, storage: {media}}) {
+        document.addEventListener('DOMContentLoaded', () => {
+            const elems = document.querySelectorAll('#introduction .modal');
+            M.Modal.init(elems);
+        });
+
         document.getElementById('redirectToPreprocessing').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();

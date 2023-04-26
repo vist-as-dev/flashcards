@@ -1,9 +1,7 @@
 import {createRxDatabase} from "rxdb";
-// import {addRxPlugin, createRxDatabase} from "rxdb";
 import {getRxStorageDexie} from "rxdb/plugins/storage-dexie";
-// import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
-//
-// addRxPlugin(RxDBDevModePlugin);
+
+import {media} from "./schemes";
 
 export class MediaStorage {
     #db;
@@ -14,21 +12,7 @@ export class MediaStorage {
             storage: getRxStorageDexie(),
         }).then(db => {
             this.#db = db;
-            this.#db.addCollections({
-                media: {
-                    schema: {
-                        title: 'media_db_schema',
-                        version: 0,
-                        primaryKey: 'url',
-                        type: 'object',
-                        properties: {
-                            url: {type: 'string', maxLength: 200},
-                            content: {type: 'string'},
-                        },
-                        required: ['url', 'blob'],
-                    }
-                }
-            }).then(() => this.set(assets));
+            this.#db.addCollections({media}).then(() => this.set(assets));
         });
     }
 
@@ -49,10 +33,6 @@ export class MediaStorage {
                 )
             );
         }
-    }
-
-    get(url) {
-        return this.#db.media.findOne(url).exec();
     }
 
     subscribe(url, callback) {

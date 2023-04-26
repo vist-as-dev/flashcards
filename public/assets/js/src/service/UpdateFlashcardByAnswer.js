@@ -1,7 +1,7 @@
-import {Word} from "../model";
+import {Flashcard} from "../model";
 
-export function updateWordByAnswer(word, isCorrect) {
-    let {repetitions, interval, easeFactor} = word;
+export function updateFlashcardByAnswer(card, isCorrect) {
+    let {repetitions, interval, easeFactor} = card;
 
     if (isCorrect) {
         repetitions += 1;
@@ -22,5 +22,5 @@ export function updateWordByAnswer(word, isCorrect) {
     easeFactor = Math.max(easeFactor, 1.3);
     const nextReview = Date.now() + interval * 24 * 60 * 60 * 1000;
 
-    return new Word({...word, repetitions, interval, easeFactor, nextReview});
+    return new Flashcard({...card, repetitions, interval, easeFactor, nextReview});
 }

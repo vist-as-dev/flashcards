@@ -1,7 +1,7 @@
 import {State} from "../../../storage";
-import {Word} from "../../../model";
+import {Flashcard} from "../../../model";
 
-export class MemorizationState extends State{
+export class MemorizationState extends State {
     #direction = {};
     #dictionaries = {};
     #set = [];
@@ -34,9 +34,12 @@ export class MemorizationState extends State{
     }
 
     get #word() {
-        const getRepeating = dictionary => dictionary?.words?.filter(
-            ({step, nextReview}) => step === Word.STATUS_IN_PROGRESS && nextReview < Date.now()
-        ) || {};
+        const getRepeating = dictionary => Object.entries(dictionary?.flashcards || {}).reduce((news, [key, card]) => {
+            if (card.status === Flashcard.STATUS_IN_PROGRESS && card.nextReview < Date.now()) {
+                news[key] = card;
+            }
+            return news;
+        }, {});
 
         const words = Object.values(this.#dictionaries).reduce((words, dictionary) => {
             Object
@@ -49,10 +52,10 @@ export class MemorizationState extends State{
         this.#count = words.length;
 
         if (this.#set.length > 0) {
-            const [dictionaryId, {word}] = this.#set || [];
+            const [dictionaryId, {original}] = this.#set || [];
             const words = getRepeating(this.#dictionaries[dictionaryId]);
-            if (word in words) {
-                this.#set[1] = words[word];
+            if (original in words) {
+                this.#set[1] = words[original];
                 return this.#set;
             }
         }
@@ -64,11 +67,11 @@ export class MemorizationState extends State{
 
     get #choice() {
         let [, word] = this.#set;
-        if (!word?.word) {
+        if (!word?.original) {
             return null;
         }
 
-        word = word?.word;
+        word = word?.original;
 
         function shuffle(array) {
             let currentIndex = array.length,  randomIndex;
@@ -83,7 +86,13 @@ export class MemorizationState extends State{
         }
 
         const words = shuffle(Object.values(this.#dictionaries).reduce((words, dictionary) => {
-            const _words = dictionary?.words?.filter(({step}) => step !== Word.STATUS_WELL_KNOWN);
+            const _words = Object.entries(dictionary?.flashcards || {}).reduce((news, [key, card]) => {
+                if (card.status !== Flashcard.STATUS_WELL_KNOWN) {
+                    news[key] = card;
+                }
+                return news;
+            }, {});
+
             Object.keys(_words).forEach(_word => (_word !== word) && words.push(_word));
             return words;
         }, []));

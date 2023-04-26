@@ -1,4 +1,5 @@
 import {FlashcardSelectDictionary} from "./FlashcardSelectDictionary";
+import {Flashcard} from "../../model";
 
 export class AddToDictionary {
     #dictionaries = {};
@@ -20,13 +21,18 @@ export class AddToDictionary {
                 el.disabled = true;
                 el.classList.add('spinner')
 
-                const words = document
+                document
                     .getElementById('sentences').value.split("\n")
                     .filter(i => !!i.length)
                     .filter((word, index, array) => array.indexOf(word) === index)
+                    .forEach(original => {
+                        if (original in this.#dictionaries[select.value]?.flashcards) {
+                            return;
+                        }
+                        this.#dictionaries[select.value].flashcards[original] = new Flashcard({original});
+                    })
                 ;
-
-                this.#dictionaries[select.value]?.words?.add(words);
+                dictionary.update(this.#dictionaries[select.value]);
 
                 el.classList.remove('spinner')
                 el.disabled = false;

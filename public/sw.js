@@ -33,7 +33,6 @@ const nonCacheable = [
     'https://www.googletagmanager.com',
     'https://accounts.google.com/gsi/client',
     'https://apis.google.com',
-    '/assets/js/script.js',
     '/assets/video/friends.s01e02.phrases.step1.mp4',
     '/assets/video/friends.s01e02.phrases.step2.mp4',
     '/assets/video/friends.s01e02.phrases.step3.mp4',
