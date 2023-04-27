@@ -168,7 +168,9 @@ export class Word {
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
             this.#storage.update(this.#dictionaries[dictionaryId]);
 
-            updated.repetitions > 6 ? this.#statistics.addCompleted() : this.#statistics.addRepeated();
+            this.#dictionaries[dictionaryId].flashcards[word.original].repetitions > 6
+                ? this.#statistics.addCompleted()
+                : this.#statistics.addRepeated();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {

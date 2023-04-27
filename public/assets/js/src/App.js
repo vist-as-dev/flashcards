@@ -1,9 +1,9 @@
 import {Bootstrap} from "./bootstrap";
 import {BingImageApi, GoogleDriveStorage, PexelImageApi, TranslateService} from "./api";
-import {LanguageStorage, MediaStorage} from "./storage";
+import {LanguageStorage, MediaStorage, StatisticsRepository} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
-import {DirectionStorage, DictionaryStorage, StatisticsStorage} from "./storage";
+import {DirectionStorage, DictionaryStorage} from "./storage";
 import {ImageGallery} from "./components";
 
 export class App {
@@ -23,7 +23,7 @@ export class App {
         this.storage = {
             direction,
             dictionary: new DictionaryStorage(),
-            statistics: new StatisticsStorage(this.api.gDrive.meta, direction),
+            statistics: new StatisticsRepository(),
             languages: new LanguageStorage(),
             media: new MediaStorage([
                 '/assets/video/friends.s01e02.phrases.step1.mp4',
@@ -51,6 +51,7 @@ export class App {
 
     async init() {
         await this.storage.dictionary.init(this.storage.direction);
+        await this.storage.statistics.init(this.storage.direction);
     }
 
     render() {

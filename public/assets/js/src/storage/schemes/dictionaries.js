@@ -18,28 +18,25 @@ export const dictionaries = {
                 type: 'array',
                 uniqueItems: true,
                 items: {
-                    type: 'object',
-                    items: {
-                        type: "object",
-                        properties: {
-                            original: {type: "string"},
-                            glossary: {
-                                type: "object",
-                                properties: {
-                                    definitions: {type: "object"},
-                                    examples: {type: "array", items: {type: 'string'}},
-                                    original: {type: "string"},
-                                    translations: {type: "string"},
-                                    transliteration: {type: "string"},
-                                }
-                            },
-                            image: {type: "string"},
-                            status: {type: "number"},
-                            repetitions: {type: "number"},
-                            interval: {type: "number"},
-                            easeFactor: {type: "number"},
-                            nextReview: {type: "number"},
-                        }
+                    type: "object",
+                    properties: {
+                        original: {type: "string"},
+                        glossary: {
+                            type: "object",
+                            properties: {
+                                definitions: {type: "object"},
+                                examples: {type: "array", items: {type: 'string'}},
+                                original: {type: "string"},
+                                translations: {type: "string"},
+                                transliteration: {type: "string"},
+                            }
+                        },
+                        image: {type: "string"},
+                        status: {type: "number"},
+                        repetitions: {type: "number"},
+                        interval: {type: "number"},
+                        easeFactor: {type: "number"},
+                        nextReview: {type: "number"},
                     }
                 }
             }

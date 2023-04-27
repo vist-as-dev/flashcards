@@ -129,6 +129,8 @@ nav a > i.material-icons {
 footer {
     position: fixed;
     z-index: 10;
+    width: 100%;
+    bottom: 0;
 }
 
 footer .navbar-fixed nav.navbar {
