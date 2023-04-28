@@ -8,11 +8,13 @@ export class DictionaryList {
     #active;
 
     #storage;
+    #synchro;
     #body;
 
-    constructor({storage: {dictionary}}, state) {
+    constructor({storage: {dictionary}, synchro: {dictionary: synchro}}, state) {
         this.#body = document.querySelector('div#dictionaries .collection#dictionary-list .collection-body');
         this.#storage = dictionary;
+        this.#synchro = synchro;
         this.#state = state;
 
         this.#storage.subscribe((items) => {
@@ -43,7 +45,7 @@ export class DictionaryList {
         Object.values(this.#dictionaries).forEach(dictionary => {
             new DictionaryListItem(this.#body, {
                 onClick: () => this.#setActive(dictionary),
-                onDelete: () => this.#storage.delete(dictionary.id),
+                onDelete: () => this.#storage.delete(dictionary.id).then(() => this.#synchro.delete(dictionary.id)),
             }).render(dictionary);
         });
 

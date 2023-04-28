@@ -13,13 +13,15 @@ export class WordList {
 
     #dictionary = {};
     #storage;
+    #synchro;
     #form;
 
-    constructor({imageGallery, storage: {dictionary: storage}}, state) {
+    constructor({imageGallery, storage: {dictionary: storage}, synchro: {dictionary: synchro}}, state) {
         const collection = document.querySelector('div#dictionaries .collection#word-list');
         this.#body = collection.querySelector('.collection-body');
         this.#title = collection.querySelector('.collection-header h6');
         this.#storage = storage;
+        this.#synchro = synchro;
         this.#form = new AddFormWord();
 
         state.subscribe(({dictionary}) => {
@@ -33,7 +35,9 @@ export class WordList {
                 this.#dictionary.flashcards[text] = new Flashcard({original: text});
                 TranslateService.translate([text], this.#dictionary.source, this.#dictionary.target)
                     .then(translates => this.#dictionary.flashcards[text].glossary = translates[text])
-                    .finally(() => this.#storage.update(this.#dictionary))
+                    .finally(() => this.#storage.update(this.#dictionary).then(
+                        () => this.#synchro.saveAddedOriginals(this.#dictionary.id, [text])
+                    ))
                 ;
             });
             this.#toggle(!!dictionary);
@@ -97,7 +101,9 @@ export class WordList {
             new WordListItem(this.#body, {
                 onDelete: () => {
                     delete this.#dictionary.flashcards[original];
-                    this.#storage.update(this.#dictionary);
+                    this.#storage
+                        .update(this.#dictionary)
+                        .then(() => this.#synchro.saveDeletedOriginal(this.#dictionary.id, [original]));
                 }
             })
                 .render(

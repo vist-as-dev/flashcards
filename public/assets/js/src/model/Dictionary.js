@@ -1,5 +1,5 @@
 export class Dictionary {
-    constructor({id, gDriveFileId, name, source, target, flashcards = []}) {
+    constructor({id, gDriveFileId, name, source, target, flashcards = {}}) {
         this.id = id;
         this.gDriveFileId = gDriveFileId;
         this.name = name;

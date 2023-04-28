@@ -24,7 +24,8 @@ export const synchroStatistics = {
                         completed: {type: 'number'},
                         wellKnown: {type: 'number'},
                     }
-                }
+                },
+                default: [],
             },
             lastSynchroTimestamp: {type: 'number'},
         }

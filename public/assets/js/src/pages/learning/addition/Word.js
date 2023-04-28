@@ -9,14 +9,16 @@ export class Word {
     #dictionaries = {};
 
     #storage;
+    #synchro;
     #state;
     #statistics;
 
     #word = [];
 
-    constructor({storage: {dictionary, statistics}, imageGallery}, state) {
+    constructor({storage: {dictionary, statistics}, synchro: {statistics: synchro}, imageGallery}, state) {
         this.#body = document.querySelector('div#learning div#addition [data-component="word"]');
         this.#storage = dictionary;
+        this.#synchro = synchro;
         this.#state = state;
         this.#statistics = statistics;
 
@@ -49,8 +51,10 @@ export class Word {
             e.preventDefault();
             const [dictionaryId, {original}] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[original].status = Flashcard.STATUS_WELL_KNOWN;
-            this.#storage.update(this.#dictionaries[dictionaryId]);
-            this.#statistics.addWellKnown();
+            this.#storage
+                .update(this.#dictionaries[dictionaryId])
+                .then(() => this.#statistics.addWellKnown().then(this.#synchro.addWellKnown))
+            ;
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -64,8 +68,10 @@ export class Word {
             e.preventDefault();
             const [dictionaryId, {original}] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[original].status = Flashcard.STATUS_IN_PROGRESS;
-            this.#storage.update(this.#dictionaries[dictionaryId]);
-            this.#statistics.addStarted();
+            this.#storage
+                .update(this.#dictionaries[dictionaryId])
+                .then(() => this.#statistics.addStarted().then(this.#synchro.addStarted))
+            ;
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {

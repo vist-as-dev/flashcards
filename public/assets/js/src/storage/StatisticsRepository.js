@@ -50,7 +50,6 @@ export class StatisticsRepository extends Storage {
     }
 
     #save(key) {
-        console.log(2, key)
         const days = this.#statistics.days.reduce((days, day) => ({...days, [day.localeDate]: {...day}}), {});
         const day = new Date().toLocaleDateString();
 
@@ -61,7 +60,7 @@ export class StatisticsRepository extends Storage {
         const dayStatistics = {...days[new Date().toLocaleDateString()]};
         days[new Date().toLocaleDateString()] = {...dayStatistics, [key]: ++dayStatistics[key]};
 
-        this.#statistics.incrementalPatch({days: Object.values(days)});
+        return this.#statistics.incrementalPatch({days: Object.values(days)});
     }
 
     addStarted = () => this.#save('started');

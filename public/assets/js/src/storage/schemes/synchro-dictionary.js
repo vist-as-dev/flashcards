@@ -2,21 +2,22 @@ export const synchroDictionary = {
     schema: {
         title: 'synchro_dictionary_db_schema',
         version: 0,
-        primaryKey: {
-            key: 'dictionaryId',
-        },
+        primaryKey: 'dictionaryId',
         type: 'object',
         properties: {
             dictionaryId: {type: 'string', maxLength: 100},
-            added: {
+            isDeleted: {type: 'number', default: 0},
+            addedList: {
                 type: 'array',
                 uniqueItems: true,
-                items: {type: 'string'}
+                items: {type: 'string'},
+                default: [],
             },
-            deleted: {
+            deletedList: {
                 type: 'array',
                 uniqueItems: true,
-                items: {type: 'string'}
+                items: {type: 'string'},
+                default: [],
             },
             lastSynchroTimestamp: {type: 'number'},
         }
