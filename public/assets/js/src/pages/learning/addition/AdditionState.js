@@ -1,5 +1,5 @@
 import {State} from "../../../storage";
-import {Word} from "../../../model";
+import {Flashcard} from "../../../model";
 
 const STORAGE_KEY = 'addition.dictionaries';
 
@@ -54,7 +54,12 @@ export class AdditionState extends State{
     }
 
     get #word() {
-        const getNew = dictionary => dictionary?.words?.filter(({step}) => step === Word.STATUS_NEW) || {};
+        const getNew = dictionary => Object.entries(dictionary?.flashcards || {}).reduce((news, [key, card]) => {
+            if (card.status === Flashcard.STATUS_NEW) {
+                news[key] = card;
+            }
+            return news;
+        }, {});
 
         const dictionaries = this.#activeDictionaries.reduce(
             (dictionaries, id) =>([...dictionaries, ...(this.#dictionaries[id] ? [this.#dictionaries[id]] : [])]),
@@ -72,11 +77,11 @@ export class AdditionState extends State{
         this.#count = words.length;
 
         if (this.#set.length > 0) {
-            const [dictionaryId, {word}] = this.#set || [];
+            const [dictionaryId, {original}] = this.#set || [];
             if (this.#activeDictionaries.includes(dictionaryId)) {
                 const words = getNew(this.#dictionaries[dictionaryId]);
-                if (word in words) {
-                    this.#set[1] = words[word];
+                if (original in words) {
+                    this.#set[1] = words[original];
                     return this.#set;
                 }
             }

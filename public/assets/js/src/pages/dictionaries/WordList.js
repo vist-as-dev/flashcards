@@ -1,9 +1,9 @@
 import {WordStatus} from "../../service";
-import {TextToSpeechApi} from "../../api";
-import {Word} from "../../model";
+import {TextToSpeechApi, TranslateService} from "../../api";
 
 import {AddFormWord} from "./forms/AddFormWord";
 import {WordListItem} from "./WordListItem";
+import {Flashcard} from "../../model";
 
 export const GALLERY_CALLBACK_KEY = 'dictionaries.wordList';
 
@@ -12,37 +12,35 @@ export class WordList {
     #title;
 
     #dictionary = {};
-    #words = {};
-    #unsubscribe;
+    #storage;
+    #synchro;
     #form;
 
-    constructor({imageGallery}, state) {
+    constructor({imageGallery, storage: {dictionary: storage}, synchro: {dictionary: synchro}}, state) {
         const collection = document.querySelector('div#dictionaries .collection#word-list');
         this.#body = collection.querySelector('.collection-body');
         this.#title = collection.querySelector('.collection-header h6');
+        this.#storage = storage;
+        this.#synchro = synchro;
         this.#form = new AddFormWord();
 
         state.subscribe(({dictionary}) => {
-            this.#form.toggle(!!dictionary);
-
-            if (!dictionary) {
-                this.#words = {};
-                document.querySelector('div#dictionaries .collection#dictionary-list').classList.remove('hide-on-small-and-down');
-                document.querySelector('div#dictionaries .collection#word-list').classList.add('hide-on-small-and-down');
-            } else {
-                document.querySelector('div#dictionaries .collection#dictionary-list').classList.add('hide-on-small-and-down');
-                document.querySelector('div#dictionaries .collection#word-list').classList.remove('hide-on-small-and-down');
-            }
-
-            if (this.#dictionary?.id !== dictionary?.id) {
-                this.#unsubscribe && this.#unsubscribe();
-                this.#unsubscribe = dictionary?.words?.subscribe(words => {
-                    this.#words = words;
-                    this.render();
-                });
-                this.#form.setStorage(dictionary?.words);
-            }
             this.#dictionary = dictionary;
+            this.#form.toggle(!!dictionary);
+            this.#form.init((text) => {
+                if (text in this.#dictionary.flashcards) {
+                    throw Error('Already exists');
+                }
+
+                this.#dictionary.flashcards[text] = new Flashcard({original: text});
+                TranslateService.translate([text], this.#dictionary.source, this.#dictionary.target)
+                    .then(translates => this.#dictionary.flashcards[text].glossary = translates[text])
+                    .finally(() => this.#storage.update(this.#dictionary).then(
+                        () => this.#synchro.saveAddedOriginals(this.#dictionary.id, [text])
+                    ))
+                ;
+            });
+            this.#toggle(!!dictionary);
             this.render();
         });
 
@@ -61,7 +59,8 @@ export class WordList {
                     wrapper.appendChild(img);
                 });
             }
-            this.#dictionary?.words?.update(word, {image: url});
+            this.#dictionary && (this.#dictionary.flashcards[word].image = url);
+            storage.update(this.#dictionary);
         });
 
         this.#title.closest('.collection-header').querySelector('#back-btn').addEventListener('click', (e) => {
@@ -69,6 +68,16 @@ export class WordList {
             e.preventDefault();
             state.setState({dictionary: null});
         })
+    }
+
+    #toggle(dictionary) {
+        if (!dictionary) {
+            document.querySelector('div#dictionaries .collection#dictionary-list').classList.remove('hide-on-small-and-down');
+            document.querySelector('div#dictionaries .collection#word-list').classList.add('hide-on-small-and-down');
+        } else {
+            document.querySelector('div#dictionaries .collection#dictionary-list').classList.add('hide-on-small-and-down');
+            document.querySelector('div#dictionaries .collection#word-list').classList.remove('hide-on-small-and-down');
+        }
     }
 
     render() {
@@ -79,18 +88,34 @@ export class WordList {
             return;
         }
 
-        Object.values(this.#words).forEach(({word, step, glossary, image}) => {
-            new WordListItem(this.#body, {onDelete: () => this.#dictionary?.words?.delete(word)})
+        Object.values(this.#dictionary.flashcards).forEach(({original, status, glossary, image}) => {
+            if (Object.keys(glossary || {}).length === 0) {
+                TranslateService.translate([original], this.#dictionary.source, this.#dictionary.target)
+                    .then(translates => {
+                        this.#dictionary.flashcards[original].glossary = {...translates[original]};
+                        this.#dictionary && this.#storage.update(this.#dictionary);
+                    })
+                ;
+            }
+
+            new WordListItem(this.#body, {
+                onDelete: () => {
+                    delete this.#dictionary.flashcards[original];
+                    this.#storage
+                        .update(this.#dictionary)
+                        .then(() => this.#synchro.saveDeletedOriginal(this.#dictionary.id, [original]));
+                }
+            })
                 .render(
-                    word,
-                    this.getTitle(word, step, glossary?.transliteration),
+                    original,
+                    this.getTitle(original, status, glossary?.transliteration),
                     glossary,
                     image,
                 );
         });
 
         [...this.#body.querySelectorAll('.collection-item')].forEach((el) => {
-            if (!(el.dataset.word in this.#words)) {
+            if (!(el.dataset.word in this.#dictionary.flashcards)) {
                 el.remove();
             }
         });
@@ -100,7 +125,7 @@ export class WordList {
     }
 
     getTitle(name, step, transliteration) {
-        const {color, text} = WordStatus.map[step] || WordStatus.map[Word.STATUS_NEW];
+        const {color, text} = WordStatus.map[step] || WordStatus.map[Flashcard.STATUS_NEW];
 
         const span = document.createElement('span');
         span.classList.add(...color.split(' '));
@@ -133,7 +158,10 @@ export class WordList {
             el.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                (+el.dataset.value !== step) && this.#dictionary?.words?.update(name, {step: el.dataset.value})
+                if (+el.dataset.value !== step) {
+                    this.#dictionary.flashcards[name].status = +el.dataset.value;
+                    this.#storage.update(this.#dictionary);
+                }
             })
         });
         document.querySelector('div#dictionaries').appendChild(dropdown);

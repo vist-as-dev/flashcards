@@ -29,7 +29,7 @@ export class DictionaryListItem {
 
     get label() {
         const label = document.createElement('p');
-        label.innerHTML = `count: ${this.#dictionary.count || 0}`;
+        label.innerHTML = `count: ${Object.keys(this.#dictionary.flashcards).length || 0}`;
         return label;
     }
 

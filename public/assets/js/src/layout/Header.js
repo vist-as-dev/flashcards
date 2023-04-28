@@ -1,7 +1,9 @@
 import {DirectionComponent} from "../components";
 
 export class Header {
-    constructor({storage: {languages}}) {
+    #isActiveSynchro = false;
+
+    constructor({storage: {languages}, synchro: {service: synchro}}) {
         this.direction = new DirectionComponent(
             'header select#source',
             'header.source',
@@ -17,6 +19,12 @@ export class Header {
             e.preventDefault();
             e.stopPropagation();
             this.toggleTheme();
+        });
+
+        document.querySelector('header #synchro').addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            synchro.run().then(isActive => this.#isActiveSynchro = isActive);
         });
     }
 

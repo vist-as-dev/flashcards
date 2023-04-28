@@ -1,5 +1,5 @@
-import {Word as Model} from '../../../model'
 import {TextToSpeechApi} from "../../../api";
+import {Flashcard} from "../../../model";
 
 const GALLERY_CALLBACK_KEY = 'addition.word'
 
@@ -8,17 +8,21 @@ export class Word {
 
     #dictionaries = {};
 
+    #storage;
+    #synchro;
     #state;
     #statistics;
 
     #word = [];
 
-    constructor({storage: {dictionary, statistics}, imageGallery}, state) {
+    constructor({storage: {dictionary, statistics}, synchro: {statistics: synchro}, imageGallery}, state) {
         this.#body = document.querySelector('div#learning div#addition [data-component="word"]');
+        this.#storage = dictionary;
+        this.#synchro = synchro;
         this.#state = state;
         this.#statistics = statistics;
 
-        dictionary.subscribe((items) => {
+        this.#storage.subscribe((items) => {
             this.#dictionaries = items;
             this.render();
         });
@@ -45,9 +49,12 @@ export class Word {
         this.#body.querySelector('[data-component="well-known"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            const [dictionaryId, {word}] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word, {step: Model.STATUS_WELL_KNOWN});
-            this.#statistics.addWellKnown();
+            const [dictionaryId, {original}] = this.#word || [];
+            this.#dictionaries[dictionaryId].flashcards[original].status = Flashcard.STATUS_WELL_KNOWN;
+            this.#storage
+                .update(this.#dictionaries[dictionaryId])
+                .then(() => this.#statistics.addWellKnown().then(this.#synchro.addWellKnown))
+            ;
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -59,13 +66,16 @@ export class Word {
         this.#body.querySelector('[data-component="add"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            const [dictionaryId, {word}] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word, {step: Model.STATUS_IN_PROGRESS});
-            this.#statistics.addStarted();
+            const [dictionaryId, {original}] = this.#word || [];
+            this.#dictionaries[dictionaryId].flashcards[original].status = Flashcard.STATUS_IN_PROGRESS;
+            this.#storage
+                .update(this.#dictionaries[dictionaryId])
+                .then(() => this.#statistics.addStarted().then(this.#synchro.addStarted))
+            ;
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {
-            const [, {word, glossary}] = this.#word || [];
+            const [, {original, glossary}] = this.#word || [];
 
             const synonyms = Object.entries(glossary?.definitions || {})
                 .reduce((set, [, definitions]) => {
@@ -77,7 +87,7 @@ export class Word {
                 }, new Set());
 
             const modal = document.querySelector('#modal-select-word-image');
-            modal.setAttribute('data-query', word);
+            modal.setAttribute('data-query', original);
             modal.setAttribute('data-synonyms', [...synonyms].join('|'));
             modal.setAttribute('data-callback', GALLERY_CALLBACK_KEY);
         });
@@ -95,7 +105,8 @@ export class Word {
             });
 
             const [dictionaryId] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word, {image: url});
+            this.#dictionaries[dictionaryId].flashcards[word].image = url;
+            this.#storage.update(this.#dictionaries[dictionaryId]);
         });
     }
 
@@ -110,7 +121,7 @@ export class Word {
 
         image?.setAttribute('src', word?.image || 'assets/img/no-image.svg');
 
-        original.innerHTML = word?.word || '';
+        original.innerHTML = word?.original || '';
         transliteration.innerHTML = word?.glossary?.transliteration || '';
         translations.innerHTML = word?.glossary?.translations || '';
         definitions.innerHTML = Object.entries(word?.glossary?.definitions || {})

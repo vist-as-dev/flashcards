@@ -1,5 +1,5 @@
 import {TextToSpeechApi} from "../../../api";
-import {updateWordByAnswer} from "../../../service";
+import {updateFlashcardByAnswer} from "../../../service";
 
 const GALLERY_CALLBACK_KEY = 'memorization.word'
 
@@ -8,18 +8,22 @@ export class Word {
 
     #dictionaries = {};
 
+    #storage;
+    #sychro;
     #state;
     #statistics;
 
     #word = [];
     #choice = [];
 
-    constructor({storage: {dictionary, statistics}, imageGallery}, state) {
+    constructor({storage: {dictionary, statistics}, synchro: {statistics: synchro}, imageGallery}, state) {
         this.#body = document.querySelector('div#learning div#memorization [data-component="word"]');
+        this.#storage = dictionary;
+        this.#sychro = synchro;
         this.#state = state;
         this.#statistics = statistics;
 
-        dictionary.subscribe((items) => {
+        this.#storage.subscribe((items) => {
             this.#dictionaries = items;
             this.render();
         });
@@ -56,7 +60,7 @@ export class Word {
 
                 const [, word] = this.#word;
 
-                if (el.innerText === word?.word) {
+                if (el.innerText === word?.original) {
                     this.toggle()
                     el.closest('.card-reveal').querySelector('.card-title').click();
                     [...el.closest('[data-component="choice"]').querySelectorAll('a.collection-item')].forEach(i => i.setAttribute('style', ''));
@@ -69,14 +73,14 @@ export class Word {
         this.#body.querySelector('[data-component="prompt"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            const [, {word}] = this.#word || [];
+            const [, {original}] = this.#word || [];
             const input = this.#body.querySelector('[data-component="input"]');
             input.focus();
 
             let value = input.value;
-            [...word].some((letter, index) => {
+            [...original].some((letter, index) => {
                 if (letter.toLowerCase() !== value[index]?.toLowerCase()) {
-                    input.value = word.substring(0, ++index);
+                    input.value = original.substring(0, ++index);
                     return true;
                 }
             });
@@ -85,11 +89,11 @@ export class Word {
         this.#body.querySelector('[data-component="check"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            const [, {word}] = this.#word || [];
+            const [, {original}] = this.#word || [];
             const input = this.#body.querySelector('[data-component="input"]');
-            let attempt = input.dataset.attempt || 3;
+            let attempt = +input.dataset.attempt || 3;
 
-            if (word.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
+            if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
                 input.classList.add('invalid');
                 input.focus();
@@ -121,11 +125,11 @@ export class Word {
 
             e.stopPropagation();
             e.preventDefault();
-            const [, {word}] = this.#word || [];
+            const [, {original}] = this.#word || [];
             const input = e.target;
-            let attempt = input.dataset.attempt || 3;
+            let attempt = +input.dataset.attempt || 3;
 
-            if (word.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
+            if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
                 input.classList.add('invalid');
                 input.focus();
@@ -161,10 +165,14 @@ export class Word {
         this.#body.querySelector('[data-component="success"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
+
             const [dictionaryId, word] = this.#word || [];
-            const updated = updateWordByAnswer(word, true);
-            this.#dictionaries[dictionaryId]?.words.update(word.word, updated);
-            updated.repetitions > 6 ? this.#statistics.addCompleted() : this.#statistics.addRepeated();
+            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
+            this.#storage.update(this.#dictionaries[dictionaryId]);
+
+            this.#dictionaries[dictionaryId].flashcards[word.original].repetitions > 6
+                ? this.#statistics.addCompleted().then(this.#sychro.addCompleted)
+                : this.#statistics.addRepeated().then(this.#sychro.addRepeated);
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -176,12 +184,14 @@ export class Word {
         this.#body.querySelector('[data-component="failure"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
+
             const [dictionaryId, word] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word.word, updateWordByAnswer(word, false));
+            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, false);
+            this.#storage.update(this.#dictionaries[dictionaryId]);
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {
-            const [, {word, glossary}] = this.#word || [];
+            const [, {original, glossary}] = this.#word || [];
 
             const synonyms = Object.entries(glossary?.definitions || {})
                 .reduce((set, [, definitions]) => {
@@ -193,7 +203,7 @@ export class Word {
                 }, new Set());
 
             const modal = document.querySelector('#modal-select-word-image');
-            modal.setAttribute('data-query', word);
+            modal.setAttribute('data-query', original);
             modal.setAttribute('data-synonyms', [...synonyms].join('|'));
             modal.setAttribute('data-callback', GALLERY_CALLBACK_KEY);
         });
@@ -211,7 +221,8 @@ export class Word {
             });
 
             const [dictionaryId] = this.#word || [];
-            this.#dictionaries[dictionaryId]?.words.update(word, {image: url});
+            this.#dictionaries[dictionaryId].flashcards[word.original].image = url;
+            this.#storage.update(this.#dictionaries[dictionaryId]);
         });
     }
 
@@ -229,7 +240,7 @@ export class Word {
         image?.setAttribute('src', word?.image || 'assets/img/no-image.svg');
 
         repetitions.innerHTML = word?.repetitions || 0;
-        original.innerHTML = word?.word || '';
+        original.innerHTML = word?.original || '';
         transliteration.innerHTML = word?.glossary?.transliteration || '';
         translations.innerHTML = word?.glossary?.translations || '';
         definitions.innerHTML = Object.entries(word?.glossary?.definitions || {})

@@ -1,9 +1,10 @@
 import {FlashcardSelectDictionary} from "./FlashcardSelectDictionary";
+import {Flashcard} from "../../model";
 
 export class AddToDictionary {
     #dictionaries = {};
 
-    constructor({storage: {dictionary}}) {
+    constructor({storage: {dictionary}, synchro: {dictionary: synchro}}) {
         const select = new FlashcardSelectDictionary();
         dictionary.subscribe((dictionaries) => {
             this.#dictionaries = dictionaries;
@@ -20,13 +21,21 @@ export class AddToDictionary {
                 el.disabled = true;
                 el.classList.add('spinner')
 
-                const words = document
+                const flashcards = document
                     .getElementById('sentences').value.split("\n")
                     .filter(i => !!i.length)
                     .filter((word, index, array) => array.indexOf(word) === index)
-                ;
+                    .filter(original => !(original in this.#dictionaries[select.value]?.flashcards))
+                    .map(original => new Flashcard({original}));
 
-                this.#dictionaries[select.value]?.words?.add(words);
+                flashcards.forEach(card => this.#dictionaries[select.value].flashcards[card.original] = card);
+
+                dictionary
+                    .update(this.#dictionaries[select.value])
+                    .then(() => synchro.saveAddedOriginals(
+                        this.#dictionaries[select.value].id,
+                        flashcards.map(card => card.original)
+                    ));
 
                 el.classList.remove('spinner')
                 el.disabled = false;

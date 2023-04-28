@@ -1,5 +1,5 @@
 import {Storage} from "./Storage";
-import {DayStatistics} from "../model/DayStatistics";
+import {DayStatistics} from "../model";
 
 export class StatisticsStorage extends Storage {
     #file = {};
@@ -14,7 +14,7 @@ export class StatisticsStorage extends Storage {
             this.#isLoaded = false;
 
             const {source, target} = direction;
-            this.api.listFiles({type: 'statistics', source, target}).then(async ([file]) => {
+            this.api.listFiles({type: 'statistics1', source, target}).then(async ([file]) => {
                 if (!file) {
                     file = await this.api.createMetaFile(
                         `statistics-${source}-${target}.json`,

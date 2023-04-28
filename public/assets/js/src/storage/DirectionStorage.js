@@ -1,5 +1,5 @@
 import {Storage} from "./Storage";
-import {Direction} from "../model/Direction";
+import {Direction} from "../model";
 
 export class DirectionStorage extends Storage {
     #direction = {};

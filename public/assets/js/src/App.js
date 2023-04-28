@@ -1,10 +1,18 @@
 import {Bootstrap} from "./bootstrap";
 import {BingImageApi, GoogleDriveStorage, PexelImageApi, TranslateService} from "./api";
-import {LanguageStorage, MediaStorage} from "./storage";
+import {
+    DirectionStorage,
+    LanguageStorage,
+    MediaStorage,
+    StatisticsRepository,
+    DictionaryRepository,
+    SynchroDictionaryRepository,
+    SynchroStatisticsRepository
+} from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
-import {DirectionStorage, DictionaryStorage, StatisticsStorage} from "./storage";
 import {ImageGallery} from "./components";
+import {SynchroService} from "./service";
 
 export class App {
     constructor(config) {
@@ -16,27 +24,21 @@ export class App {
             bing: new BingImageApi(config),
         };
 
-        this.imageGallery = new ImageGallery(new PexelImageApi(config));
-
-        const direction = new DirectionStorage();
         this.storage = {
-            direction,
-            dictionary: new DictionaryStorage(this.api.gDrive.meta, direction),
-            statistics: new StatisticsStorage(this.api.gDrive.meta, direction),
+            direction: new DirectionStorage(),
+            dictionary: new DictionaryRepository(),
+            statistics: new StatisticsRepository(),
             languages: new LanguageStorage(),
-            media: new MediaStorage([
-                '/assets/video/friends.s01e02.phrases.step1.mp4',
-                '/assets/video/friends.s01e02.phrases.step2.mp4',
-                '/assets/video/friends.s01e02.phrases.step3.mp4',
-                '/assets/video/alice-in-wonderland.chapter4.step1.mp4',
-                '/assets/video/alice-in-wonderland.chapter4.step2.mp4',
-                '/assets/video/alice-in-wonderland.chapter4.step3.mp4',
-                '/assets/video/my-words.march.step1.mp4',
-                '/assets/video/my-words.march.step2.mp4',
-                '/assets/video/my-words.march.step3.mp4',
-            ]),
+            media: new MediaStorage(),
         }
 
+        this.synchro = {
+            service: new SynchroService(),
+            dictionary: new SynchroDictionaryRepository(),
+            statistics: new SynchroStatisticsRepository(),
+        }
+
+        this.imageGallery = new ImageGallery(new PexelImageApi(config));
         this.navigation = new Layout(this).navigation;
 
         this.pages = [
@@ -46,6 +48,34 @@ export class App {
             new Dictionaries(this),
             new Learning(this),
         ];
+    }
+
+    async init() {
+        await this.synchro.dictionary.init();
+        await this.synchro.statistics.init(this.storage.direction);
+
+        await this.storage.dictionary.init(this.storage.direction);
+        await this.storage.statistics.init(this.storage.direction);
+
+        await this.synchro.service.init(
+            this.api.gDrive.meta,
+            this.synchro.dictionary,
+            this.synchro.statistics,
+            this.storage.dictionary,
+            this.storage.statistics,
+        );
+
+        await this.storage.media.init([
+            '/assets/video/friends.s01e02.phrases.step1.mp4',
+            '/assets/video/friends.s01e02.phrases.step2.mp4',
+            '/assets/video/friends.s01e02.phrases.step3.mp4',
+            '/assets/video/alice-in-wonderland.chapter4.step1.mp4',
+            '/assets/video/alice-in-wonderland.chapter4.step2.mp4',
+            '/assets/video/alice-in-wonderland.chapter4.step3.mp4',
+            '/assets/video/my-words.march.step1.mp4',
+            '/assets/video/my-words.march.step2.mp4',
+            '/assets/video/my-words.march.step3.mp4',
+        ]);
     }
 
     render() {

@@ -60,15 +60,12 @@ window.gisLoaded = gisLoaded;
 /**
  * Enables user interaction after all libraries are loaded.
  */
-function checkBeforeStart() {
+async function checkBeforeStart() {
     if (gapiInitiated && gisInitiated) {
         window.gapi = gapi;
         window.google = google
         window.tokenClient = tokenClient;
         window.gapi.client.setToken({access_token: TokenService.getToken()});
-
-        const app = new App(Config);
-        app.render();
     }
 }
 
@@ -84,3 +81,6 @@ gsiScript.setAttribute('src', 'https://accounts.google.com/gsi/client');
 gsiScript.setAttribute('onLoad', 'gisLoaded()');
 
 document.head.append(gapiScript, gsiScript);
+
+const app = new App(Config);
+app.init().then(() => app.render());

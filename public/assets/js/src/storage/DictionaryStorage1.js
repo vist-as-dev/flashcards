@@ -1,9 +1,8 @@
-import {Dictionary} from "../model";
+import {Direction, Dictionary} from "../model";
 import {Storage} from "./Storage";
 import {WordStorage} from "./WordStorage";
-import {Direction} from "../model/Direction";
 
-export class DictionaryStorage extends Storage {
+export class DictionaryStorage1 extends Storage {
     #items = {};
     #direction = {};
     #isLoaded = false;
@@ -18,6 +17,7 @@ export class DictionaryStorage extends Storage {
 
             const {source, target} = this.#direction;
             document.querySelector('#dictionary-list .scrollable').classList.add('loader');
+
             this.api.listFiles({type: 'dictionary', source, target})
                 .then(files => files.reverse())
                 .then((files) => {
