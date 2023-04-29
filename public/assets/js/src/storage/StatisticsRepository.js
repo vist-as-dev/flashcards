@@ -68,7 +68,15 @@ export class StatisticsRepository extends Storage {
     addCompleted = () => this.#save('completed');
     addWellKnown = () => this.#save('wellKnown');
 
+    find() {
+        return this.#db.find().exec();
+    }
+
     findOne({source, target}) {
         return this.#db.findOne({selector: {source, target}}).exec();
+    }
+
+    insert({source, target, days}) {
+        return this.#db.insert({source, target, days});
     }
 }
