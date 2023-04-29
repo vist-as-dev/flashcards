@@ -6,6 +6,7 @@ export const synchroDictionary = {
         type: 'object',
         properties: {
             dictionaryId: {type: 'string', maxLength: 100},
+            gDriveFileId: {type: 'string', default: null},
             isDeleted: {type: 'number', default: 0},
             addedList: {
                 type: 'array',

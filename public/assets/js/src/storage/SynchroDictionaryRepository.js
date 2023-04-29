@@ -40,10 +40,31 @@ export class SynchroDictionaryRepository {
 
     delete(dictionaryId) {
         return this.#db.findOne(dictionaryId).exec().then(async doc => {
-            if (null === doc) {
-                doc = await this.#db.insert({dictionaryId});
+            if (doc?.gDriveFileId) {
+                doc.incrementalPatch({isDeleted: 1});
+            } else {
+                doc.remove();
             }
-            doc.incrementalPatch({isDeleted: 1});
         });
+    }
+
+    getDeleted() {
+        return this.#db.find({selector: {isDeleted: 1}}).exec();
+    }
+
+    getAddedFlashcards(dictionaryId) {
+        return this.#db.findOne(dictionaryId).exec().then(doc => doc?.addedList || []);
+    }
+
+    resetAddedFlashcards(dictionaryId) {
+        return this.#db.findOne(dictionaryId).exec().then(doc => doc?.incrementalPatch({addedList: []}));
+    }
+
+    getDeletedFlashcards(dictionaryId) {
+        return this.#db.findOne(dictionaryId).exec().then(doc => doc?.deletedList || []);
+    }
+
+    resetDeletedFlashcards(dictionaryId) {
+        return this.#db.findOne(dictionaryId).exec().then(doc => doc?.incrementalPatch({deletedList: []}));
     }
 }
