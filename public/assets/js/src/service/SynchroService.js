@@ -68,6 +68,14 @@ export class SynchroService {
                     dictionary.flashcards[original] = remoteList[i].flashcards[original];
                 }
 
+                if (dictionary.flashcards[original].image.length > 0 && remoteList[i].flashcards[original].image.length === 0) {
+                    remoteList[i].flashcards[original].image = dictionary.flashcards[original].image;
+                }
+
+                if (dictionary.flashcards[original].image.length === 0 && remoteList[i].flashcards[original].image.length > 0) {
+                    dictionary.flashcards[original].image = remoteList[i].flashcards[original].image;
+                }
+
                 if (dictionary.flashcards[original].nextReview > remoteList[i].flashcards[original].nextReview) {
                     remoteList[i].flashcards[original] = {...dictionary.flashcards[original]};
                 } else {
@@ -123,7 +131,6 @@ export class SynchroService {
 
             statisticsFiles[index].days = data;
 
-            console.log({days, data})
             local.incrementalPatch({days});
             await this.#api.updateMetaFile(statisticsFiles[index].id, data);
         }
