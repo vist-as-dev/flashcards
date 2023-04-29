@@ -2,7 +2,6 @@ export class OnSubmit {
     constructor({api: {gDrive: {storage}}}) {
         this.storage = storage;
     }
-
     render() {
         document.getElementById("flashcard-form").addEventListener("submit", (event) => {
             event.preventDefault();

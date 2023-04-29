@@ -6,8 +6,7 @@ import {
     MediaStorage,
     StatisticsRepository,
     DictionaryRepository,
-    SynchroDictionaryRepository,
-    SynchroStatisticsRepository
+    SynchroDictionaryRepository
 } from "./storage";
 import {Layout} from "./layout";
 import {Dictionaries, Flashcards, Introduction, Learning, Preprocessing} from "./pages";
@@ -35,7 +34,6 @@ export class App {
         this.synchro = {
             service: new SynchroService(),
             dictionary: new SynchroDictionaryRepository(),
-            statistics: new SynchroStatisticsRepository(),
         }
 
         this.imageGallery = new ImageGallery(new PexelImageApi(config));
@@ -51,16 +49,14 @@ export class App {
     }
 
     async init() {
-        await this.synchro.dictionary.init();
-        await this.synchro.statistics.init(this.storage.direction);
 
         await this.storage.dictionary.init(this.storage.direction);
         await this.storage.statistics.init(this.storage.direction);
 
+        await this.synchro.dictionary.init();
         await this.synchro.service.init(
             this.api.gDrive.meta,
             this.synchro.dictionary,
-            this.synchro.statistics,
             this.storage.dictionary,
             this.storage.statistics,
         );

@@ -54,9 +54,12 @@ export class DictionaryRepository extends Storage {
         this.#db.insert(new Dictionary({name, ...this.#direction, flashcards: []}));
     }
 
+    insert(dictionary) {
+        return this.#db.upsert({...dictionary});
+    }
+
     all() {
-        return this.#db.find().exec()
-            .then(docs => docs.reduce((items, doc) => ({...items, [doc.id]: this.#toModel(doc)}), {}));
+        return this.#db.find().exec().then(docs => docs.map(doc => this.#toModel(doc)));
     }
 
     update(dictionary) {

@@ -1,4 +1,4 @@
-import {WordStatus} from "../../service";
+import {ExportDictionaryService, WordStatus} from "../../service";
 import {TextToSpeechApi, TranslateService} from "../../api";
 
 import {AddFormWord} from "./forms/AddFormWord";
@@ -63,6 +63,13 @@ export class WordList {
             storage.update(this.#dictionary);
         });
 
+        this.#title.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+
+            ExportDictionaryService.download(this.#dictionary);
+        })
+
         this.#title.closest('.collection-header').querySelector('#back-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -81,7 +88,7 @@ export class WordList {
     }
 
     render() {
-        this.#title.innerHTML = `${this.#dictionary?.name || 'Words'} <label>${this.#dictionary?.count || 0} items</label>`;
+        this.#title.innerHTML = `${this.#dictionary?.name || 'Words'} <label>${Object.keys(this.#dictionary?.flashcards || {}).length} items</label>`;
 
         if (!this.#dictionary) {
             this.#body.innerHTML = '';
