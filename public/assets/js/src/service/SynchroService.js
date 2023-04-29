@@ -93,6 +93,11 @@ export class SynchroService {
 
             const days = [...local.days];
             for (const localeDate in data) {
+                if (!days.some(day => day.localeDate === localeDate)) {
+                    days.push({...data[localeDate], localeDate});
+                    continue;
+                }
+
                 for (const i in days) {
                     if (days[i].localeDate === localeDate) {
                         data[localeDate].started = Math.max(data[localeDate].started, days[i].started);
@@ -118,6 +123,7 @@ export class SynchroService {
 
             statisticsFiles[index].days = data;
 
+            console.log({days, data})
             local.incrementalPatch({days});
             await this.#api.updateMetaFile(statisticsFiles[index].id, data);
         }
