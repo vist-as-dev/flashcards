@@ -1,16 +1,14 @@
 <div id="modal-select-word-image" class="modal">
-    <div class="modal-content">
-        <a href="#" onclick="return false" class="modal-close right">
-            <i class="material-icons right">close</i>
-        </a>
+    <div class="modal-content scrollable">
         <div class="input-field">
             <i class="material-icons prefix">search</i>
             <input id="modal-word-image-query" type="text" />
             <label for="modal-word-image-query">search image query</label>
+            <button class="btn btn-flat"><i class="material-icons">send</i></button>
         </div>
         <div data-component="synonyms"></div>
 
-        <div class="scrollable">
+        <div>
             <ul id="modal-select-word-image-list" class="image-gallery"></ul>
         </div>
     </div>

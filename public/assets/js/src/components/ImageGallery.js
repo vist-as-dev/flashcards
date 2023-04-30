@@ -39,12 +39,12 @@ export class ImageGallery {
 
     render() {
         this.imageList.innerHTML = '';
-        this.modalSelectWordImage.querySelector('.scrollable').classList.add('loader');
+        this.modalSelectWordImage.querySelector('.input-field .prefix').classList.add('pulse');
 
         this.api
             .search(this.queryInput.value)
             .then(response => {
-                this.modalSelectWordImage.querySelector('.scrollable').classList.remove('loader');
+                this.modalSelectWordImage.querySelector('.input-field .prefix').classList.remove('pulse');
 
                 response.forEach(({url, text}) => {
                     const img = document.createElement('img');

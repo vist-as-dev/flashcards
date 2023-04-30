@@ -26,7 +26,7 @@ export class MediaStorage {
                                 .then(blob => {
                                     const reader = new FileReader();
                                     reader.onloadend = () => {
-                                        this.#db.media.incrementalUpsert({url, content: reader.result});
+                                        this.#db.incrementalUpsert({url, content: reader.result});
                                     }
                                     reader.readAsDataURL(blob);
                                 })
@@ -39,9 +39,9 @@ export class MediaStorage {
     }
 
     subscribe(url, callback) {
-        this.#db.findOne(url).$.subscribe(async ({content}) => {
-            if (content) {
-                fetch(content)
+        this.#db.findOne(url).$.subscribe(async (doc) => {
+            if (doc?.content) {
+                fetch(doc.content)
                     .then(response => response.blob())
                     .then(callback)
                 ;

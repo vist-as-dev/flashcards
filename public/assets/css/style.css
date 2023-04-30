@@ -260,8 +260,16 @@ div#dictionaries .collection .scrollable {
     flex: 1 1 auto;
 }
 
+.image-gallery[data-component="choice"] {
+    height: calc(100% - 64px);
+}
+
+.image-gallery[data-component="choice"]:after {
+    display: none;
+}
+
 .image-gallery[data-component="choice"] > li {
-    height: 100px;
+    height: auto;
     flex: 1 1 calc((100% - 1rem) / 2);
 }
 
@@ -306,6 +314,17 @@ div#dictionaries .collection .scrollable {
     max-height: 80%;
 }
 
+#modal-select-word-image .input-field input {
+    padding-right: 50px;
+    width: calc(100% - 3rem - 50px);
+}
+
+#modal-select-word-image .input-field button {
+    position: absolute;
+    right: 0;
+    background: transparent;
+}
+
 #modal-select-word-image .modal-content {
     overflow: hidden;
     display: flex;
@@ -315,7 +334,6 @@ div#dictionaries .collection .scrollable {
 
 #modal-select-word-image .scrollable {
     overflow-y: auto;
-    margin-top: 24px;
     flex: 1;
     position: relative;
 }
@@ -444,8 +462,9 @@ div#dictionaries .collection .scrollable {
         flex-direction: row;
     }
 
-    #memorization .card.horizontal .card-content .buttons .btn {
+    #memorization .card.horizontal .card-content .buttons .btn[data-component='check'] {
         font-size: 13px;
+        flex: 1;
     }
 
     .card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating) {
@@ -495,7 +514,7 @@ div#dictionaries .collection .scrollable {
     100% { top: 0; }
 }
 
-.icon-pulse {
+.pulse {
     display: inline-block;
     -moz-animation: pulse 2s infinite linear;
     -o-animation: pulse 2s infinite linear;

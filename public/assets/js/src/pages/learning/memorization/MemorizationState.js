@@ -107,7 +107,7 @@ export class MemorizationState extends State {
                 for (const _word of words) {
                     if (Math.abs(_word.length - word.length) < diff && !result.includes(_word)) {
                         result.push(_word);
-                        if (result.length === 4) {
+                        if (result.length === 6) {
                             break;
                         }
                     }

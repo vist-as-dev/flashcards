@@ -14,7 +14,7 @@ export class SynchroService {
     }
 
     async run() {
-        document.querySelector('header #synchro i').classList.add('icon-pulse');
+        document.querySelector('header #synchro i').classList.add('pulse');
         for (const deleted of await this.#synchroDictionary.getDeleted()) {
             deleted.gDriveFileId && await this.#api.deleteMetaFile(deleted.gDriveFileId).then(deleted.remove);
         }
@@ -25,7 +25,7 @@ export class SynchroService {
                 const {gDriveFileId, flashcards, ...data} = {...localList[i], type: 'dictionary'};
                 localList[i].gDriveFileId = await this.#api.createMetaFile(encodeURIComponent(data.name), data).then(({id}) => id);
                 this.#storageDictionary.update(localList[i]);
-                this.#api.updateMetaFile(localList[i].gDriveFileId, flashcards);
+                this.#api.updateMetaFile(localList[i].gDriveFileId, {...flashcards});
             }
         }
 
@@ -68,6 +68,14 @@ export class SynchroService {
                     dictionary.flashcards[original] = remoteList[i].flashcards[original];
                 }
 
+                if (dictionary.flashcards[original].image.length > 0 && remoteList[i].flashcards[original].image.length === 0) {
+                    remoteList[i].flashcards[original].image = dictionary.flashcards[original].image;
+                }
+
+                if (dictionary.flashcards[original].image.length === 0 && remoteList[i].flashcards[original].image.length > 0) {
+                    dictionary.flashcards[original].image = remoteList[i].flashcards[original].image;
+                }
+
                 if (dictionary.flashcards[original].nextReview > remoteList[i].flashcards[original].nextReview) {
                     remoteList[i].flashcards[original] = {...dictionary.flashcards[original]};
                 } else {
@@ -87,41 +95,53 @@ export class SynchroService {
             const data = await this.#api.downloadMetaFile(statisticsFiles[index].id).then(data => data || {});
             const local = await this.#storageStatistics.findOne({...statisticsFiles[index].properties});
             if (null === local) {
-                await this.#storageStatistics.insert({...statisticsFiles[index].properties, days: data});
+                await this.#storageStatistics.insert({...statisticsFiles[index].properties, days: Object.values(data)});
                 continue;
             }
 
+            const days = [...local.days];
             for (const localeDate in data) {
-                for (const i in local.days) {
-                    if (local.days[i].localeDate === localeDate) {
-                        data[localeDate].started = Math.max(data[localeDate].started, local.days[i].started);
-                        data[localeDate].repeated = Math.max(data[localeDate].repeated, local.days[i].repeated);
-                        data[localeDate].completed = Math.max(data[localeDate].completed, local.days[i].completed);
-                        data[localeDate].wellKnown = Math.max(data[localeDate].wellKnown, local.days[i].wellKnown);
-                        local.days[i].started = Math.max(data[localeDate].started, local.days[i].started);
-                        local.days[i].repeated = Math.max(data[localeDate].repeated, local.days[i].repeated);
-                        local.days[i].completed = Math.max(data[localeDate].completed, local.days[i].completed);
-                        local.days[i].wellKnown = Math.max(data[localeDate].wellKnown, local.days[i].wellKnown);
+                if (!days.some(day => day.localeDate === localeDate)) {
+                    days.push({...data[localeDate], localeDate});
+                    continue;
+                }
+
+                for (const i in days) {
+                    if (days[i].localeDate === localeDate) {
+                        data[localeDate].started = Math.max(data[localeDate].started, days[i].started);
+                        data[localeDate].repeated = Math.max(data[localeDate].repeated, days[i].repeated);
+                        data[localeDate].completed = Math.max(data[localeDate].completed, days[i].completed);
+                        data[localeDate].wellKnown = Math.max(data[localeDate].wellKnown, days[i].wellKnown);
+                        days[i] = {
+                            ...days[i],
+                            started: Math.max(data[localeDate].started, days[i].started),
+                            repeated: Math.max(data[localeDate].repeated, days[i].repeated),
+                            completed: Math.max(data[localeDate].completed, days[i].completed),
+                            wellKnown: Math.max(data[localeDate].wellKnown, days[i].wellKnown),
+                        };
                     }
                 }
             }
 
-            for (const i in local.days) {
-                if (!(local.days[i].localeDate in data)) {
-                    data[local.days[i].localeDate] = local.days[i];
+            for (const i in days) {
+                if (!(days[i].localeDate in data)) {
+                    data[days[i].localeDate] = days[i];
                 }
             }
 
             statisticsFiles[index].days = data;
 
-            local.incrementalPatch({days: local.days});
+            local.incrementalPatch({days});
             await this.#api.updateMetaFile(statisticsFiles[index].id, data);
         }
 
         this.#storageStatistics.find().then(docs => {
             for (const doc of docs) {
                 const isNew = !statisticsFiles.some(
-                    ({property: {source, target}}) => source === doc.source && target === doc.target
+                    (file) => {
+                        const {properties: {source, target}} = file;
+                        return source === doc.source && target === doc.target;
+                    }
                 );
 
                 if (isNew) {
@@ -136,6 +156,6 @@ export class SynchroService {
             }
         })
 
-        document.querySelector('header #synchro i').classList.remove('icon-pulse');
+        document.querySelector('header #synchro i').classList.remove('pulse');
     };
 }

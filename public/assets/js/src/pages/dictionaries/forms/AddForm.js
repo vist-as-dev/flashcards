@@ -25,6 +25,15 @@ export class AddForm {
         });
 
         this.input.addEventListener('keydown', (e) => {
+            if (e.keyCode === 27) {
+                if (this.input.value.trim().length > 0) {
+                    this.input.value = '';
+                } else {
+                    this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
+                    this.#isOpen = false;
+                }
+                return;
+            }
             if (e.keyCode !== 13 || this.input.value.trim().length === 0) {
                 return;
             }
