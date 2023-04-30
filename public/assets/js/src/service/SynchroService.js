@@ -14,7 +14,7 @@ export class SynchroService {
     }
 
     async run() {
-        document.querySelector('header #synchro i').classList.add('icon-pulse');
+        document.querySelector('header #synchro i').classList.add('pulse');
         for (const deleted of await this.#synchroDictionary.getDeleted()) {
             deleted.gDriveFileId && await this.#api.deleteMetaFile(deleted.gDriveFileId).then(deleted.remove);
         }
@@ -156,6 +156,6 @@ export class SynchroService {
             }
         })
 
-        document.querySelector('header #synchro i').classList.remove('icon-pulse');
+        document.querySelector('header #synchro i').classList.remove('pulse');
     };
 }

@@ -34,7 +34,7 @@ export class Word {
             }
 
             this.#word = word;
-            this.#choice = choice ? [choice[0] || '', choice[1] || '', choice[2] || '', choice[3] || ''] : ['', '', '', ''];
+            this.#choice = choice ? [choice[0] || '', choice[1] || '', choice[2] || '', choice[3] || '', choice[4] || '', choice[5] || ''] : ['', '', '', '', '', ''];
 
             if (word.length === 0) {
                 this.#body.classList.add('hide');
@@ -153,13 +153,6 @@ export class Word {
             this.toggle();
         });
 
-        this.#body.querySelector('[data-component="open"]').addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-
-            this.toggle();
-        });
-
         this.#body.querySelector('[data-component="success"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -275,7 +268,7 @@ export class Word {
             this.#body.querySelector('[data-component="choice"]'),
         ].forEach(el => isOpen ? el.classList.add('hide') : el.classList.remove('hide'));
         [
-            this.#body.querySelector('[data-component="original"]'),
+            this.#body.querySelector('.card-title'),
             this.#body.querySelector('[data-component="transliteration"]'),
             this.#body.querySelector('[data-component="examples"]'),
         ].forEach(el => isOpen ? el.classList.remove('hide') : el.classList.add('hide'));

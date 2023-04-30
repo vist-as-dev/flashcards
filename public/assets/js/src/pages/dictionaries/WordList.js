@@ -29,6 +29,11 @@ export class WordList {
             this.#form.toggle(!!dictionary);
             this.#form.init((text) => {
                 if (text in this.#dictionary.flashcards) {
+                    const item = this.#body.querySelector(`[data-word="${text}"]`);
+                    this.#body.removeChild(this.#body.querySelector(`[data-word="${text}"]`));
+                    this.#body.prepend(item);
+                    item.classList.add('pulse');
+                    setTimeout(() => item.classList.remove('pulse'), 1000);
                     throw Error('Already exists');
                 }
 
