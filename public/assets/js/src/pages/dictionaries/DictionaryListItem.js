@@ -94,6 +94,7 @@ export class DictionaryListItem {
 
         el.classList.add('avatar');
         el.setAttribute('data-id', dictionary.id);
+        el.setAttribute('data-dictionary', dictionary.name);
 
         el.addEventListener('blur', (e) => {
             this.#lw.listener(e, () => {
