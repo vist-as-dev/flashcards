@@ -1,13 +1,13 @@
-// import {createRxDatabase} from "rxdb";
-import {addRxPlugin, createRxDatabase} from "rxdb";
+import {createRxDatabase} from "rxdb";
+// import {addRxPlugin, createRxDatabase} from "rxdb";
 import {getRxStorageDexie} from "rxdb/plugins/storage-dexie";
-import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
+// import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
 
 import {Storage} from "./Storage";
 import {dictionaries as schema} from "./schemes";
 import {Dictionary, Direction, Flashcard} from "../model";
 
-addRxPlugin(RxDBDevModePlugin);
+// addRxPlugin(RxDBDevModePlugin);
 
 export class DictionaryRepository extends Storage {
     #db;

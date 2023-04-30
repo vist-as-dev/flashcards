@@ -1,13 +1,13 @@
-// import {createRxDatabase} from "rxdb";
-import {addRxPlugin, createRxDatabase} from "rxdb";
+import {createRxDatabase} from "rxdb";
+// import {addRxPlugin, createRxDatabase} from "rxdb";
 import {getRxStorageDexie} from "rxdb/plugins/storage-dexie";
-import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
+// import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
 
 import {statistics as schema} from "./schemes";
 import {DayStatistics} from "../model";
 import {Storage} from "./Storage";
 
-addRxPlugin(RxDBDevModePlugin);
+// addRxPlugin(RxDBDevModePlugin);
 
 export class StatisticsRepository extends Storage {
     #db;
