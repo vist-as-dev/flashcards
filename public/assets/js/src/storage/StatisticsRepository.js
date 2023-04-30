@@ -49,16 +49,21 @@ export class StatisticsRepository extends Storage {
         return super.subscribe(callback);
     }
 
+    get #key() {
+        const now = new Date();
+        return `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`
+    }
+
     #save(key) {
         const days = this.#statistics.days.reduce((days, day) => ({...days, [day.localeDate]: {...day}}), {});
-        const day = new Date().toLocaleDateString();
+        const day = this.#key;
 
         if (!(day in days)) {
             days[day] = {localeDate: day, ...new DayStatistics()};
         }
 
-        const dayStatistics = {...days[new Date().toLocaleDateString()]};
-        days[new Date().toLocaleDateString()] = {...dayStatistics, [key]: ++dayStatistics[key]};
+        const dayStatistics = {...days[this.#key]};
+        days[this.#key] = {...dayStatistics, [key]: ++dayStatistics[key]};
 
         return this.#statistics.incrementalPatch({days: Object.values(days)});
     }

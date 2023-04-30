@@ -63,9 +63,12 @@ export class Chart {
         const now = new Date();
         const endDate = new Date(now.getTime());
 
+        const key = (date) => `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+
+
         const byDay = () => {
             while (endDate.getTime() <= now.getTime()) {
-                result[`${endDate.getMonth() + 1}/${endDate.getDate()}`] = this.#statistics[endDate.toLocaleDateString()] || {};
+                result[`${endDate.getMonth() + 1}/${endDate.getDate()}`] = this.#statistics[key(endDate)] || {};
                 endDate.setDate(endDate.getDate() + 1);
             }
             return result;
@@ -76,8 +79,8 @@ export class Chart {
                 if (!result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`]) {
                     result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`] = {};
                 }
-                Object.keys(this.#statistics[endDate.toLocaleDateString()] || {}).forEach(key => {
-                    result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`][key] = (result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`][key] || 0) + ((this.#statistics[endDate.toLocaleDateString()] || {})[key] || 0)
+                Object.keys(this.#statistics[key(endDate)] || {}).forEach(key => {
+                    result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`][key] = (result[`${endDate.getFullYear()}/${endDate.getMonth() + 1}`][key] || 0) + ((this.#statistics[key(endDate)] || {})[key] || 0)
                 });
                 endDate.setDate(endDate.getDate() + 1);
             }
