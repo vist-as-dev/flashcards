@@ -51,7 +51,7 @@ export class StatisticsRepository extends Storage {
 
     get #key() {
         const now = new Date();
-        return `${now.getMonth()}/${now.getDate()}/${now.getFullYear()}`
+        return `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`
     }
 
     #save(key) {

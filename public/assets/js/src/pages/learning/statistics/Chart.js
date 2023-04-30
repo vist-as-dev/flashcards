@@ -63,8 +63,7 @@ export class Chart {
         const now = new Date();
         const endDate = new Date(now.getTime());
 
-        const key = (date) => `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
-
+        const key = (date) => `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
 
         const byDay = () => {
             while (endDate.getTime() <= now.getTime()) {
