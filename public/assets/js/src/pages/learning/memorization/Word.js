@@ -157,6 +157,8 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
 
+            this.#body.querySelector('.card').classList.add('loader');
+
             const [dictionaryId, word] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
             this.#storage.update(this.#dictionaries[dictionaryId]);
@@ -164,6 +166,8 @@ export class Word {
             this.#dictionaries[dictionaryId].flashcards[word.original].repetitions > 6
                 ? this.#statistics.addCompleted()
                 : this.#statistics.addRepeated();
+
+            this.#body.querySelector('.card').classList.remove('loader');
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -212,7 +216,7 @@ export class Word {
             });
 
             const [dictionaryId] = this.#word || [];
-            this.#dictionaries[dictionaryId].flashcards[word.original].image = url;
+            this.#dictionaries[dictionaryId].flashcards[word].image = url;
             this.#storage.update(this.#dictionaries[dictionaryId]);
         });
     }
