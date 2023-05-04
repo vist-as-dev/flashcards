@@ -1,11 +1,11 @@
-// import {createRxDatabase} from "rxdb";
-import {addRxPlugin, createRxDatabase} from "rxdb";
+import {createRxDatabase} from "rxdb";
+// import {addRxPlugin, createRxDatabase} from "rxdb";
 import {getRxStorageDexie} from "rxdb/plugins/storage-dexie";
-import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
+// import {RxDBDevModePlugin} from "rxdb/plugins/dev-mode";
 
 import {synchroDictionary as schema} from "./schemes";
 
-addRxPlugin(RxDBDevModePlugin);
+// addRxPlugin(RxDBDevModePlugin);
 
 export class SynchroDictionaryRepository {
     #db;
