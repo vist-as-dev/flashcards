@@ -77,8 +77,10 @@ export class Word {
 
             let value = input.value;
             [...original].some((letter, index) => {
-                if (letter.toLowerCase() !== value[index]?.toLowerCase()) {
-                    input.value = original.substring(0, ++index);
+                const a = letter.toLowerCase();
+                const b = value[index]?.toLowerCase();
+                if (a !== b) {
+                    input.value = original.substring(0, index + (a !== ' ' ? 1 : 2));
                     return true;
                 }
             });
@@ -266,6 +268,10 @@ export class Word {
     }
 
     toggle(isOpen = true) {
+        if (isOpen) {
+            const [, {original}] = this.#word || [];
+            TextToSpeechApi.speech(original);
+        }
         [
             this.#body.querySelector('.input-field'),
             this.#body.querySelector('.buttons'),
