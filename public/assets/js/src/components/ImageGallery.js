@@ -5,7 +5,13 @@ export class ImageGallery {
         this.modalSelectWordImage = document.querySelector('#modal-select-word-image');
         this.imageList = this.modalSelectWordImage.querySelector('#modal-select-word-image-list');
         this.queryInput = this.modalSelectWordImage.querySelector('#modal-word-image-query');
-        this.queryInput.addEventListener('change', () => this.render());
+        this.queryInput.addEventListener('change', () => {
+            try {
+                Boolean(new URL(this.queryInput.value)) && this.#select(this.queryInput.value);
+            } catch(e){
+                this.render();
+            }
+        });
         this.api = api;
 
         M.Modal.init(this.modalSelectWordImage, {
@@ -54,13 +60,7 @@ export class ImageGallery {
                     const overlay = document.createElement('div');
                     overlay.classList.add('overlay');
                     overlay.innerHTML = '<span>Select image</span>';
-                    overlay.addEventListener('click', () => {
-                        const onClick = this.#callbacks[this.modalSelectWordImage.dataset.callback];
-                        onClick && onClick(this.modalSelectWordImage.dataset.query, url);
-
-                        const instance = M.Modal.getInstance(this.modalSelectWordImage);
-                        instance.close();
-                    });
+                    overlay.addEventListener('click', () => this.#select(url));
 
                     const li = document.createElement('li');
                     li.appendChild(img);
@@ -69,5 +69,13 @@ export class ImageGallery {
                     this.imageList.appendChild(li);
                 });
             });
+    }
+
+    #select(url) {
+        const onClick = this.#callbacks[this.modalSelectWordImage.dataset.callback];
+        onClick && onClick(this.modalSelectWordImage.dataset.query, url);
+
+        const instance = M.Modal.getInstance(this.modalSelectWordImage);
+        instance.close();
     }
 }

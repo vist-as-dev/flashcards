@@ -126,7 +126,7 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
             const [, {original}] = this.#word || [];
-            const input = e.target;
+            const input = this.#body.querySelector('[data-component="input"]');
             let attempt = +input.dataset.attempt || 3;
 
             if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
@@ -287,6 +287,8 @@ export class Word {
     reset() {
         this.#body.querySelector('[data-component="input"]').value = '';
         this.#body.querySelector('[data-component="input"]').setAttribute('data-attempt', '3');
+        this.#body.querySelector('[data-component="input"]').classList.remove('invalid');
+        this.#body.querySelector('[data-component="input"]').focus();
         this.#body.querySelector('[data-component="check"]').disabled = false;
         this.#body.querySelector('[data-component="check"] .material-icons').innerHTML = `looks_3`;
 
