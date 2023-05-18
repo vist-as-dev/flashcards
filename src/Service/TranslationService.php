@@ -74,16 +74,19 @@ class TranslationService
                 return null;
             }
 
-            $row = new $entity();
-            $row->setOriginal($word);
-            $row->setTranslation($response);
+            $row = $translationRepo->findOneBy(['original' => $word]);
+            if (null === $row) {
+                $row = new $entity();
+                $row->setOriginal($word);
+                $row->setTranslation($response);
 
-            $data = $row->getTranslation();
-            $orig = $data['sentences'][0]['orig'];
-            $trans = $data['sentences'][0]['trans'];
+                $data = $row->getTranslation();
+                $orig = $data['sentences'][0]['orig'];
+                $trans = $data['sentences'][0]['trans'];
 
-            if (strlen($word) < 60 && ($orig !== $trans || isset($data['dict']))) {
-                $this->em->persist($row);
+                if (strlen($word) < 60 && ($orig !== $trans || isset($data['dict']))) {
+                    $this->em->persist($row);
+                }
             }
         }
 

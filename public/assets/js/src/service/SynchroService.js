@@ -76,10 +76,16 @@ export class SynchroService {
                     dictionary.flashcards[original].image = remoteList[i].flashcards[original].image;
                 }
 
-                if (dictionary.flashcards[original].nextReview > remoteList[i].flashcards[original].nextReview) {
-                    remoteList[i].flashcards[original] = {...dictionary.flashcards[original]};
+                if (dictionary.flashcards[original].status > remoteList[i].flashcards[original].status) {
+                    remoteList[i].flashcards[original].status = dictionary.flashcards[original].status;
                 } else {
-                    dictionary.flashcards[original] = {...remoteList[i].flashcards[original]};
+                    dictionary.flashcards[original].status = remoteList[i].flashcards[original].status;
+                }
+
+                if (dictionary.flashcards[original].nextReview > remoteList[i].flashcards[original].nextReview) {
+                    remoteList[i].flashcards[original].nextReview = dictionary.flashcards[original].nextReview;
+                } else {
+                    dictionary.flashcards[original].nextReview = remoteList[i].flashcards[original].nextReview;
                 }
             }
 

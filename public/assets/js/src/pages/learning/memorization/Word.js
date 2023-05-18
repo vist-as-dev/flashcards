@@ -126,7 +126,7 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
             const [, {original}] = this.#word || [];
-            const input = e.target;
+            const input = this.#body.querySelector('[data-component="input"]');
             let attempt = +input.dataset.attempt || 3;
 
             if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
@@ -159,8 +159,6 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
 
-            this.#body.querySelector('.card').classList.add('loader');
-
             const [dictionaryId, word] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
             this.#storage.update(this.#dictionaries[dictionaryId]);
@@ -169,7 +167,7 @@ export class Word {
                 ? this.#statistics.addCompleted()
                 : this.#statistics.addRepeated();
 
-            this.#body.querySelector('.card').classList.remove('loader');
+            this.#state.skip();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -287,6 +285,8 @@ export class Word {
     reset() {
         this.#body.querySelector('[data-component="input"]').value = '';
         this.#body.querySelector('[data-component="input"]').setAttribute('data-attempt', '3');
+        this.#body.querySelector('[data-component="input"]').classList.remove('invalid');
+        this.#body.querySelector('[data-component="input"]').focus();
         this.#body.querySelector('[data-component="check"]').disabled = false;
         this.#body.querySelector('[data-component="check"] .material-icons').innerHTML = `looks_3`;
 
