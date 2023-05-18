@@ -159,8 +159,6 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
 
-            this.#body.querySelector('.card').classList.add('loader');
-
             const [dictionaryId, word] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
             this.#storage.update(this.#dictionaries[dictionaryId]);
@@ -169,7 +167,7 @@ export class Word {
                 ? this.#statistics.addCompleted()
                 : this.#statistics.addRepeated();
 
-            this.#body.querySelector('.card').classList.remove('loader');
+            this.#state.skip();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {

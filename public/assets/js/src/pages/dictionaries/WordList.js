@@ -16,6 +16,8 @@ export class WordList {
     #synchro;
     #form;
 
+    #progress = new Set();
+
     constructor({imageGallery, storage: {dictionary: storage}, synchro: {dictionary: synchro}}, state) {
         const collection = document.querySelector('div#dictionaries .collection#word-list');
         this.#body = collection.querySelector('.collection-body');
@@ -92,7 +94,7 @@ export class WordList {
         }
     }
 
-    render() {
+    async render() {
         this.#title.innerHTML = `${this.#dictionary?.name || 'Words'} <label>${Object.keys(this.#dictionary?.flashcards || {}).length} items</label>`;
 
         if (!this.#dictionary) {
@@ -100,10 +102,12 @@ export class WordList {
             return;
         }
 
-        Object.values(this.#dictionary.flashcards).forEach(({original, status, glossary, image}) => {
-            if (Object.keys(glossary || {}).length === 0) {
-                TranslateService.translate([original], this.#dictionary.source, this.#dictionary.target)
+        for (const {original, status, glossary, image} of Object.values(this.#dictionary.flashcards)) {
+            if (Object.keys(glossary || {}).length === 0 && !this.#progress.has(original)) {
+                this.#progress.add(original);
+                await TranslateService.translate([original], this.#dictionary.source, this.#dictionary.target)
                     .then(translates => {
+                        this.#progress.delete(original);
                         this.#dictionary.flashcards[original].glossary = {...translates[original]};
                         this.#dictionary && this.#storage.update(this.#dictionary);
                     })
@@ -124,7 +128,7 @@ export class WordList {
                     glossary,
                     image,
                 );
-        });
+        }
 
         [...this.#body.querySelectorAll('.collection-item')].forEach((el) => {
             if (!(el.dataset.word in this.#dictionary.flashcards)) {
