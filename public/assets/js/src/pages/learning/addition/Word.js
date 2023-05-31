@@ -25,7 +25,7 @@ export class Word {
             this.render();
         });
 
-        state.subscribe(({word, count}) => {
+        state.subscribe(async ({word, count}) => {
             this.#word = word;
             if (word.length === 0) {
                 this.#body.classList.add('hide');
@@ -53,6 +53,7 @@ export class Word {
                 .update(this.#dictionaries[dictionaryId])
                 .then(() => this.#statistics.addWellKnown())
             ;
+            this.#state.skip();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
@@ -61,7 +62,7 @@ export class Word {
             this.#state.skip();
         });
 
-        this.#body.querySelector('[data-component="add"]').addEventListener('click', (e) => {
+        this.#body.querySelector('[data-component="add"]').addEventListener('click', async (e) => {
             e.stopPropagation();
             e.preventDefault();
             const [dictionaryId, {original}] = this.#word || [];
@@ -70,6 +71,7 @@ export class Word {
                 .update(this.#dictionaries[dictionaryId])
                 .then(() => this.#statistics.addStarted())
             ;
+            TextToSpeechApi.speech(original).then(() => this.#state.skip());
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {

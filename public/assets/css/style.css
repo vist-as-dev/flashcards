@@ -262,6 +262,7 @@ div#dictionaries .collection .scrollable {
 
 .image-gallery[data-component="choice"] {
     height: calc(100% - 64px);
+    margin-bottom: 0;
 }
 
 .image-gallery[data-component="choice"]:after {
@@ -404,11 +405,16 @@ div#dictionaries .collection .scrollable {
 .card.horizontal .card-image .badge {
     position: absolute;
     z-index: 1;
-    font-weight: bold;
     margin: 0;
     min-width: auto;
     left: 10px;
     top: 10px;
+    background-color: var(--background-device-shadow);
+    border-radius: 50%;
+    display: block;
+    width: 24px;
+    height: 24px;
+    color: var(--line-primary);
 }
 
 .card.horizontal .card-content a[data-component="original"] {
