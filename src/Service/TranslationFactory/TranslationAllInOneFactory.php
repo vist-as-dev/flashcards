@@ -36,7 +36,9 @@ class TranslationAllInOneFactory extends TranslationFactory
         if (null !== $dictionaries) {
             $scores = [];
             foreach ($dictionaries as $key => $dictionary) {
-                ['terms' => $terms, 'entry' => $entry] = $dictionary;
+                $entry = $dictionary['entry'] ?? [];
+                $terms = $dictionary['terms'] ?? [];
+
                 $mean = 0;
                 foreach ($entry as $e) {
                     if (isset($e['score'])) {
@@ -59,7 +61,9 @@ class TranslationAllInOneFactory extends TranslationFactory
             krsort($scores, SORT_NUMERIC);
 
             foreach ($scores as $key) {
-                $result[] = $dictionaries[$key]['terms'];
+                if (isset($dictionaries[$key]['terms'])) {
+                    $result[] = $dictionaries[$key]['terms'];
+                }
             }
         }
 
