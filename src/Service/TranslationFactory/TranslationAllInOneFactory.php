@@ -39,6 +39,15 @@ class TranslationAllInOneFactory extends TranslationFactory
                 $entry = $dictionary['entry'] ?? [];
                 $terms = $dictionary['terms'] ?? [];
 
+                if (empty($terms)) {
+                    foreach ($entry as $e) {
+                        if (isset($e['word'])) {
+                            $terms[] = $e['word'];
+                        }
+                    }
+                    $dictionaries[$key]['terms'] = $terms;
+                }
+
                 $mean = 0;
                 foreach ($entry as $e) {
                     if (isset($e['score'])) {
