@@ -34,6 +34,8 @@ export class SynchroService {
             gDriveFileId: id,
             ...properties,
         }));
+
+
         for (const i in remoteList) {
             remoteList[i].flashcards = await this.#api.downloadMetaFile(remoteList[i].gDriveFileId).then(cards => {
                 for (const original in cards) {
@@ -44,7 +46,18 @@ export class SynchroService {
                 }
                 return cards;
             });
+        }
 
+        const images = {}
+        for (const {flashcards} of remoteList) {
+            for (const {original, image} of Object.values(flashcards)) {
+                if (!(original in images) && image.length > 0) {
+                    images[original] = image
+                }
+            }
+        }
+
+        for (const i in remoteList) {
             const dictionary = localList.find(({gDriveFileId}) => gDriveFileId === remoteList[i].gDriveFileId);
             if (!dictionary) {
                 this.#storageDictionary.insert({...remoteList[i], flashcards: Object.values(remoteList[i].flashcards)});
@@ -66,6 +79,10 @@ export class SynchroService {
             for (const original in remoteList[i].flashcards) {
                 if (!(original in dictionary.flashcards)) {
                     dictionary.flashcards[original] = remoteList[i].flashcards[original];
+                }
+
+                if (remoteList[i].flashcards[original].image.length === 0 && original in images) {
+                    remoteList[i].flashcards[original].image = images[original];
                 }
 
                 if (dictionary.flashcards[original].image.length > 0 && remoteList[i].flashcards[original].image.length === 0) {
