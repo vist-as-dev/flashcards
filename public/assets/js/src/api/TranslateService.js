@@ -23,4 +23,12 @@ export class TranslateService {
                 {}
             ));
     }
+
+    static setImage(original, image, source, target) {
+        return fetch('/api/image', {
+            method: 'POST',
+            headers: new Headers({'Content-Type': 'application/json'}),
+            body: JSON.stringify({original, image, source, target}),
+        });
+    }
 }

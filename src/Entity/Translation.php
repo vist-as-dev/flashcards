@@ -19,6 +19,9 @@ class Translation
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $translation = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
     #[ORM\Column]
     private ?int $counter = 0;
 
@@ -47,6 +50,18 @@ class Translation
     public function setTranslation(?string $translation): self
     {
         $this->translation = $translation;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

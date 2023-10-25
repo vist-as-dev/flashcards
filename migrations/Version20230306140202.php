@@ -33,6 +33,7 @@ final class Version20230306140202 extends AbstractMigration
                                 id INT AUTO_INCREMENT NOT NULL, 
                                 original VARCHAR(255) NOT NULL, 
                                 translation TEXT DEFAULT NULL, 
+                                image VARCHAR(255) DEFAULT NULL, 
                                 counter INT DEFAULT 0 NOT NULL,
                                 PRIMARY KEY(id)
                             ) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB'
