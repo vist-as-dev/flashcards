@@ -195,6 +195,11 @@ export class Word {
             const [dictionaryId, word] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, false);
             this.#storage.update(this.#dictionaries[dictionaryId]);
+
+            this.#state.skip();
+
+            const input = this.#body.querySelector('[data-component="input"]');
+            input.focus();
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {
