@@ -7,7 +7,7 @@ use App\Provider\LanguageProvider;
 use App\Request\SetImageRequest;
 use Doctrine\ORM\EntityManagerInterface;
 
-class SetImageService
+class ImageService
 {
     protected EntityManagerInterface $em;
     protected GoogleTranslate $gt;
@@ -62,5 +62,20 @@ class SetImageService
                 }
             }
         }
+    }
+
+    public function get(string $source, string $target, string $original): ?string
+    {
+        $entity = $this->lp->getEntity($source, $target);
+        if (null === $entity) {
+            return null;
+        }
+
+        $translationRepo = $this->em->getRepository($entity);
+
+        /** @var Translation $row */
+        $row = $translationRepo->findOneBy(['original' => $original]);
+
+        return $row?->getImage();
     }
 }

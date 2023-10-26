@@ -5,7 +5,7 @@ namespace App\Controller\Api;
 use App\Provider\TranslationServiceProvider;
 use App\Request\SetImageRequest;
 use App\Request\TranslationRequest;
-use App\Service\SetImageService;
+use App\Service\ImageService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,13 +27,16 @@ class TranslationController extends AbstractController
     }
 
     #[Route('/image', methods: ['POST'])]
-    public function image(
-        SetImageRequest $request,
-        SetImageService $service,
-    ): JsonResponse
+    public function setImage(SetImageRequest $request, ImageService $service): JsonResponse
     {
         $service->set($request);
 
         return $this->json(null);
+    }
+
+    #[Route('/image/{source}/{target}/{original}', methods: ['GET'])]
+    public function getImage(string $source, string $target, string $original, ImageService $service): JsonResponse
+    {
+        return $this->json(['image' => $service->get($source, $target, $original)]);
     }
 }
