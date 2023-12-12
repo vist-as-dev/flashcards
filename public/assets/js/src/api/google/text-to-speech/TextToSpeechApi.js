@@ -25,7 +25,7 @@ export class TextToSpeechApi {
                 audioConfig: {audioEncoding: "MP3"},
             }),
             headers: {
-                Authorization: 'Bearer ' + gapi.auth.getToken().access_token,
+                Authorization: 'Bearer ' + gapi.auth.getToken()?.access_token,
                 'Content-Type': 'application/json; charset=utf-8'
             },
             method: 'POST'

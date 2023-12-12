@@ -68,6 +68,11 @@ export class Word {
             })
         );
 
+        this.#body.querySelector('.card-reveal .card-title').addEventListener('click', () => {
+            const input = this.#body.querySelector('[data-component="input"]');
+            input.focus();
+        });
+
         this.#body.querySelector('[data-component="prompt"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -163,17 +168,24 @@ export class Word {
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
             this.#storage.update(this.#dictionaries[dictionaryId]);
 
-            this.#dictionaries[dictionaryId].flashcards[word.original].repetitions > 6
+            this.#dictionaries[dictionaryId].flashcards[word.original].repetitions > 12
                 ? this.#statistics.addCompleted()
                 : this.#statistics.addRepeated();
 
             this.#state.skip();
+
+            const input = this.#body.querySelector('[data-component="input"]');
+            input.focus();
         });
 
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
+
             this.#state.skip();
+
+            const input = this.#body.querySelector('[data-component="input"]');
+            input.focus();
         });
 
         this.#body.querySelector('[data-component="failure"]').addEventListener('click', (e) => {
@@ -183,6 +195,11 @@ export class Word {
             const [dictionaryId, word] = this.#word || [];
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, false);
             this.#storage.update(this.#dictionaries[dictionaryId]);
+
+            this.#state.skip();
+
+            const input = this.#body.querySelector('[data-component="input"]');
+            input.focus();
         });
 
         this.#body.querySelector('[data-component="image-wrapper"]').addEventListener('click', () => {
