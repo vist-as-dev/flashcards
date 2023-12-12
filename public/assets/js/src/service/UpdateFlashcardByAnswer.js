@@ -19,7 +19,7 @@ export function updateFlashcardByAnswer(card, isCorrect) {
         easeFactor -= 0.8;
     }
 
-    easeFactor = Math.max(easeFactor, 1.3);
+    easeFactor = Math.max(easeFactor, 1.8);
     const nextReview = Date.now() + interval * 24 * 60 * 60 * 1000;
 
     return new Flashcard({...card, repetitions, interval, easeFactor, nextReview});

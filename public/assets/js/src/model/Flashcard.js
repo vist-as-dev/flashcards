@@ -13,7 +13,7 @@ export class Flashcard {
 
                     repetitions = 0,
                     interval = 1,
-                    easeFactor = 2.5,
+                    easeFactor = 3,
                     nextReview = Date.now()
                 }) {
         this.original = original;
