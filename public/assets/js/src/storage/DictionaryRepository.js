@@ -43,10 +43,10 @@ export class DictionaryRepository extends Storage {
             name: doc.get('name'),
             source: doc.get('source'),
             target: doc.get('target'),
-            flashcards: doc.get('flashcards').reduce(
+            flashcards: Array.isArray(doc.get('flashcards')) ? doc.get('flashcards').reduce(
                 (items, card) => ({...items, [card.original]: new Flashcard(card)}),
                 {}
-            ),
+            ) : [],
         });
     }
 

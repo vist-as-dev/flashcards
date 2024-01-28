@@ -56,8 +56,8 @@ export class Upload {
                 reader.onerror = function (evt) {
                     console.log(evt)
                 }
-            }}
-        );
+            }
+        });
     }
 
     render() {

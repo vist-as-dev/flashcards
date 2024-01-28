@@ -8,7 +8,7 @@ const assets = [
     '/assets/js/libs/google/analytics.js',
     '/assets/js/libs/xregexp/xregexp-all.js',
     '/assets/js/libs/materialize/materialize.min.js',
-    '/assets/js/script.js',
+    // '/assets/js/script.js',
     '/assets/img/no-image.svg',
     '/android-chrome-192x192.png',
     '/android-chrome-512x512.png',

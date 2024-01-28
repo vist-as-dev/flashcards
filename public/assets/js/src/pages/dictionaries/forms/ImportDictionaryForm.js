@@ -1,7 +1,8 @@
 import {ListenerWrapper} from "../../../share/ListenerWrapper";
 import {HideToggler} from "../../../share/HideToggler";
+import {Dictionary} from "../../../model";
 
-export class AddFormDictionary {
+export class ImportDictionaryForm {
     #dictionaries = {};
     #isOpen = false;
 
@@ -16,14 +17,15 @@ export class AddFormDictionary {
         this.confirmButton = this.header.querySelector('#confirm-btn');
         this.cancelButton = this.header.querySelector('#cancel-btn');
 
-        this.form = this.el.querySelector('.new');
+        this.form = this.el.querySelector('.import');
         this.input = this.form.querySelector('input[type=text]');
+        this.file = this.form.querySelector('input[type=file]');
         this.helperText = this.form.querySelector('.helper-text');
 
         storage.subscribe(dictionaries => this.#dictionaries = dictionaries);
 
-        this.init(async (name) => {
-            if (Object.values(this.#dictionaries).some(dictionary => dictionary.name === name)) {
+        this.init(async (imported) => {
+            if (Object.values(this.#dictionaries).some(dictionary => dictionary.name === imported.name)) {
                 const body = document.querySelector('div#dictionaries .collection#dictionary-list .collection-body');
                 const item = body.querySelector(`[data-dictionary="${name}"]`);
                 body.removeChild(body.querySelector(`[data-dictionary="${name}"]`));
@@ -34,7 +36,7 @@ export class AddFormDictionary {
                 throw Error('Already exists');
             }
 
-            await storage.create(name);
+            await storage.insert(imported);
         });
     }
 
@@ -48,7 +50,7 @@ export class AddFormDictionary {
                 if (this.input.value.trim().length > 0) {
                     this.input.value = '';
                 } else {
-                    this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton, this.addButton]);
+                    this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.importButton, this.addButton]);
                     this.#isOpen = false;
                 }
                 return;
@@ -59,7 +61,7 @@ export class AddFormDictionary {
             this.lw.listener(e, () => this.process(onSubmit));
         });
 
-        this.addButton.addEventListener('click', (e) => {
+        this.importButton.addEventListener('click', (e) => {
             this.lw.listener(e, () => {
                 this.ht.toggle([this.importButton, this.addButton], [this.form, this.confirmButton, this.cancelButton]);
                 this.#isOpen = true;
@@ -93,9 +95,55 @@ export class AddFormDictionary {
     }
 
     async process(handle) {
-        this.form.classList.add('loader');
         try {
-            await handle(this.input.value.trim());
+            const name = this.input.value.trim();
+            const [file] = this.file.files;
+            const maxSize = 7 * 1024 * 1024;
+            if (file) {
+                if (!name || file.size > maxSize) {
+                    return
+                }
+
+                this.form.classList.add('loader');
+
+                const reader = new FileReader();
+                reader.readAsText(file, "UTF-8");
+                reader.onload = (evt) => {
+                    let content = evt.target.result;
+                    try {
+                        content = JSON.parse(content)
+                        if ('gDriveFileId' in content) {
+                            delete content.gDriveFileId
+                        }
+                        if ('id' in content) {
+                            delete content.id
+                        }
+                        if ('name' in content) {
+                            delete content.gDriveFileId
+                        }
+                        const flashcards = []
+                        if ('flashcards' in content) {
+                            for (const origin in content.flashcards) {
+                                content.flashcards[origin].status = 0
+                                content.flashcards[origin].interval = 1
+                                content.flashcards[origin].easeFactor = 0
+                                content.flashcards[origin].repetitions = 0
+                                content.flashcards[origin].nextReview = Date.now()
+
+                                flashcards.push(content.flashcards[origin])
+                            }
+                        }
+
+                        handle(new Dictionary({...content, name, flashcards}))
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }
+                reader.onerror = function (evt) {
+                    console.log(evt)
+                }
+            }
+
             this.input.value = '';
             this.reset();
         } catch (e) {

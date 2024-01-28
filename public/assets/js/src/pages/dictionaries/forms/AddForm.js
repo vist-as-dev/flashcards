@@ -45,21 +45,21 @@ export class AddForm {
                 this.ht.toggle([this.addButton], [this.form, this.confirmButton, this.cancelButton]);
                 this.#isOpen = true;
                 this.input.focus();
-            });
-        });
 
-        this.cancelButton.addEventListener('click', (e) => {
-            this.lw.listener(e, () => {
-                this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
-                this.#isOpen = false;
-            });
-        });
+                this.cancelButton.onclick = (e) => {
+                    this.lw.listener(e, () => {
+                        this.ht.toggle([this.form, this.confirmButton, this.cancelButton], [this.addButton]);
+                        this.#isOpen = false;
+                    });
+                };
 
-        this.confirmButton.addEventListener('click', (e) => {
-            if (this.input.value.trim().length === 0) {
-                return;
-            }
-            this.lw.listener(e, () => this.process(onSubmit));
+                this.confirmButton.onclick = (e) => {
+                    if (this.input.value.trim().length === 0) {
+                        return;
+                    }
+                    this.lw.listener(e, () => this.process(onSubmit));
+                };
+            });
         });
     }
 
