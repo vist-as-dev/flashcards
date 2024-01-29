@@ -60,6 +60,7 @@ export class Word {
 
                 if (el.innerText === word?.original) {
                     this.toggle()
+                    this.#body.querySelector('[data-component="success"]').classList.add('hide');
                     el.closest('.card-reveal').querySelector('.card-title').click();
                     [...el.closest('[data-component="choice"]').querySelectorAll('a.collection-item')].forEach(i => i.setAttribute('style', ''));
                 } else {
@@ -121,6 +122,10 @@ export class Word {
 
             input.classList.remove('invalid');
             this.toggle();
+
+            if (attempt < 3) {
+                this.#body.querySelector('[data-component="success"]').classList.add('hide');
+            }
         });
 
         this.#body.querySelector('[data-component="input"]').addEventListener('keydown', (e) => {
@@ -158,6 +163,10 @@ export class Word {
 
             input.classList.remove('invalid');
             this.toggle();
+
+            if (attempt < 3) {
+                this.#body.querySelector('[data-component="success"]').classList.add('hide');
+            }
         });
 
         this.#body.querySelector('[data-component="success"]').addEventListener('click', (e) => {
