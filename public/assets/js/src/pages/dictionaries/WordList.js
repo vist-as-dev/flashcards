@@ -102,7 +102,8 @@ export class WordList {
             return;
         }
 
-        for (const {original, status, glossary, image} of Object.values(this.#dictionary.flashcards)) {
+        const flashcards = Object.values(this.#dictionary.flashcards).filter((v, i) => i < 1000)
+        for (const {original, status, glossary, image} of flashcards) {
             if (Object.keys(glossary || {}).length === 0 && !this.#progress.has(original)) {
                 this.#progress.add(original);
                 await TranslateService.translate([original], this.#dictionary.source, this.#dictionary.target)

@@ -100,7 +100,7 @@ self.addEventListener('fetch', evt => {
                         .open(isStatic ? staticCacheName : dynamicCacheName)
                         .then(cache => {
                             cache.put(request, fetchResClone).catch(err => console.log(err));
-                            !isStatic && limitCacheSize(dynamicCacheName, 300);
+                            !isStatic && limitCacheSize(dynamicCacheName, 100);
                         });
 
                     return fetchRes;
