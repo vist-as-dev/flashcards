@@ -71,6 +71,8 @@ export class Word {
 
         this.#body.querySelector('.card-reveal .card-title').addEventListener('click', () => {
             const input = this.#body.querySelector('[data-component="input"]');
+            let attempt = +input.dataset.attempt || 3;
+            input.setAttribute('data-attempt', --attempt);
             input.focus();
         });
 
