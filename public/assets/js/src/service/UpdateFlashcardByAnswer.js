@@ -38,7 +38,7 @@ export function updateFlashcardByAnswerNew(card, isCorrect) {
                 interval = 3
                 easeFactor += 0.5
                 break
-            case 1:
+            default:
                 if (repetitions <= 1) {
                     interval = 1
                 } else if (repetitions <= 3) {
