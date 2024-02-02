@@ -71,7 +71,7 @@ export class Word {
 
         this.#body.querySelector('.card-reveal .card-title').addEventListener('click', () => {
             const input = this.#body.querySelector('[data-component="input"]');
-            let attempt = +input.dataset.attempt || 3;
+            let attempt = input.dataset.attempt ? +input.dataset.attempt : 3;
             input.setAttribute('data-attempt', --attempt);
             input.focus();
         });
@@ -99,7 +99,7 @@ export class Word {
             e.preventDefault();
             const [, {original}] = this.#word || [];
             const input = this.#body.querySelector('[data-component="input"]');
-            let attempt = +input.dataset.attempt || 3;
+            let attempt = input.dataset.attempt ? +input.dataset.attempt : 3;
 
             if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
@@ -139,7 +139,7 @@ export class Word {
             e.preventDefault();
             const [, {original}] = this.#word || [];
             const input = this.#body.querySelector('[data-component="input"]');
-            let attempt = +input.dataset.attempt || 3;
+            let attempt = input.dataset.attempt ? +input.dataset.attempt : 3;
 
             if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
