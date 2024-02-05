@@ -212,6 +212,11 @@ export class Word {
             this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswerNew(word, false);
             this.#storage.update(this.#dictionaries[dictionaryId]);
 
+            const {nextReview} = this.#dictionaries[dictionaryId].flashcards[word.original];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date = new Date(nextReview);
+            M.toast({html: `<ul><li>origin: ${word.original}</li><li>next review: ${months[date.getMonth()]} ${date.getDate()}</li></ul>`});
+
             this.#state.skip();
 
             const input = this.#body.querySelector('[data-component="input"]');
