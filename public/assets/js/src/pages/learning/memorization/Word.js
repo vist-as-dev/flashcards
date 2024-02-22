@@ -270,7 +270,12 @@ export class Word {
         const examples = this.#body.querySelector('[data-component="examples"]');
         const choice = this.#body.querySelector('[data-component="choice"]');
 
-        image?.setAttribute('src', word?.repetitions < 7 ? word?.image : 'assets/img/no-image.svg');
+        if (image) {
+            const isSenior = word?.repetitions > 6;
+            image.setAttribute('src', isSenior ? 'assets/img/no-image.svg' : word?.image);
+            image.style.width = isSenior ? "16px" : "auto";
+            image.style.opacity = isSenior ? "0" : "1";
+        }
 
         repetitions.innerHTML = word?.repetitions || 0;
         original.innerHTML = word?.original || '';
