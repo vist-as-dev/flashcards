@@ -198,6 +198,10 @@ export class Word {
             e.stopPropagation();
             e.preventDefault();
 
+            const [dictionaryId, word] = this.#word || [];
+            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswerNew(word);
+            this.#storage.update(this.#dictionaries[dictionaryId]);
+
             this.#state.skip();
 
             const input = this.#body.querySelector('[data-component="input"]');
