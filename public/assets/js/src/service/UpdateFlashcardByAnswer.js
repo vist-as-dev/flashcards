@@ -29,6 +29,10 @@ export function updateFlashcardByAnswerNew(card, isCorrect) {
     let {repetitions, interval, easeFactor} = card;
 
     if (undefined === isCorrect && easeFactor > 0) {
+        if (easeFactor > 1) {
+            easeFactor = 1
+        }
+
         return new Flashcard({...card, easeFactor: easeFactor - 0.5});
     }
 
