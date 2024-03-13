@@ -166,8 +166,10 @@ export class Word {
             input.classList.remove('invalid');
             this.toggle();
 
+            this.#body.querySelector('[data-component="success"]').focus();
             if (attempt < 3) {
                 this.#body.querySelector('[data-component="success"]').classList.add('hide');
+                this.#body.querySelector('[data-component="skip"]').focus();
             }
         });
 

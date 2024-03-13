@@ -244,6 +244,10 @@ nav a > i.material-icons {
     color: var(--color-primary);
 }
 
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-small):not(.btn-large):not(.btn-floating):focus {
+    color: var(--color-hover);
+}
+
 footer .tabs {
     background-color: var(--card-primary);
 }
