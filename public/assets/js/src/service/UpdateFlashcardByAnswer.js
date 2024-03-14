@@ -60,10 +60,11 @@ export function updateFlashcardByAnswerNew(card, isCorrect) {
                 } else {
                     interval = 90
                 }
+
+                repetitions += 1;
+
                 break
         }
-
-        repetitions += 1;
     } else {
         repetitions = Math.max(repetitions - 1, 0);
         interval = 1;
