@@ -43,7 +43,7 @@ export class SynchroDictionaryRepository {
             if (doc?.gDriveFileId) {
                 doc.incrementalPatch({isDeleted: 1});
             } else {
-                doc.remove();
+                doc?.remove();
             }
         });
     }

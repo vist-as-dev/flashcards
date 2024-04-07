@@ -1,5 +1,5 @@
 import {TextToSpeechApi} from "../../../api";
-import {updateFlashcardByAnswer} from "../../../service";
+import {updateFlashcardByAnswerNew} from "../../../service";
 
 const GALLERY_CALLBACK_KEY = 'memorization.word'
 
@@ -60,6 +60,7 @@ export class Word {
 
                 if (el.innerText === word?.original) {
                     this.toggle()
+                    this.#body.querySelector('[data-component="success"]').classList.add('hide');
                     el.closest('.card-reveal').querySelector('.card-title').click();
                     [...el.closest('[data-component="choice"]').querySelectorAll('a.collection-item')].forEach(i => i.setAttribute('style', ''));
                 } else {
@@ -70,6 +71,8 @@ export class Word {
 
         this.#body.querySelector('.card-reveal .card-title').addEventListener('click', () => {
             const input = this.#body.querySelector('[data-component="input"]');
+            let attempt = input.dataset.attempt ? +input.dataset.attempt : 3;
+            input.setAttribute('data-attempt', --attempt);
             input.focus();
         });
 
@@ -96,7 +99,7 @@ export class Word {
             e.preventDefault();
             const [, {original}] = this.#word || [];
             const input = this.#body.querySelector('[data-component="input"]');
-            let attempt = +input.dataset.attempt || 3;
+            let attempt = input.dataset.attempt ? +input.dataset.attempt : 3;
 
             if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
@@ -121,6 +124,10 @@ export class Word {
 
             input.classList.remove('invalid');
             this.toggle();
+
+            if (attempt < 3) {
+                this.#body.querySelector('[data-component="success"]').classList.add('hide');
+            }
         });
 
         this.#body.querySelector('[data-component="input"]').addEventListener('keydown', (e) => {
@@ -132,7 +139,7 @@ export class Word {
             e.preventDefault();
             const [, {original}] = this.#word || [];
             const input = this.#body.querySelector('[data-component="input"]');
-            let attempt = +input.dataset.attempt || 3;
+            let attempt = input.dataset.attempt ? +input.dataset.attempt : 3;
 
             if (original.toLowerCase().trim() !== input.value.toLowerCase().trim()) {
                 input.setAttribute('data-attempt', --attempt);
@@ -158,6 +165,12 @@ export class Word {
 
             input.classList.remove('invalid');
             this.toggle();
+
+            this.#body.querySelector('[data-component="success"]').focus();
+            if (attempt < 3) {
+                this.#body.querySelector('[data-component="success"]').classList.add('hide');
+                this.#body.querySelector('[data-component="skip"]').focus();
+            }
         });
 
         this.#body.querySelector('[data-component="success"]').addEventListener('click', (e) => {
@@ -165,12 +178,17 @@ export class Word {
             e.preventDefault();
 
             const [dictionaryId, word] = this.#word || [];
-            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, true);
+            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswerNew(word, true);
             this.#storage.update(this.#dictionaries[dictionaryId]);
 
             this.#dictionaries[dictionaryId].flashcards[word.original].repetitions > 12
                 ? this.#statistics.addCompleted()
                 : this.#statistics.addRepeated();
+
+            const {nextReview} = this.#dictionaries[dictionaryId].flashcards[word.original];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date = new Date(nextReview);
+            M.toast({html: `<ul><li>origin: ${word.original}</li><li>next review: ${months[date.getMonth()]} ${date.getDate()}</li></ul>`});
 
             this.#state.skip();
 
@@ -181,6 +199,10 @@ export class Word {
         this.#body.querySelector('[data-component="skip"]').addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
+
+            const [dictionaryId, word] = this.#word || [];
+            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswerNew(word);
+            this.#storage.update(this.#dictionaries[dictionaryId]);
 
             this.#state.skip();
 
@@ -193,8 +215,13 @@ export class Word {
             e.preventDefault();
 
             const [dictionaryId, word] = this.#word || [];
-            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswer(word, false);
+            this.#dictionaries[dictionaryId].flashcards[word.original] = updateFlashcardByAnswerNew(word, false);
             this.#storage.update(this.#dictionaries[dictionaryId]);
+
+            const {nextReview} = this.#dictionaries[dictionaryId].flashcards[word.original];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date = new Date(nextReview);
+            M.toast({html: `<ul><li>origin: ${word.original}</li><li>next review: ${months[date.getMonth()]} ${date.getDate()}</li></ul>`});
 
             this.#state.skip();
 
@@ -249,7 +276,12 @@ export class Word {
         const examples = this.#body.querySelector('[data-component="examples"]');
         const choice = this.#body.querySelector('[data-component="choice"]');
 
-        image?.setAttribute('src', word?.image || 'assets/img/no-image.svg');
+        if (image) {
+            const isSenior = word?.repetitions > 6;
+            image.setAttribute('src', isSenior ? 'assets/img/no-image.svg' : word?.image);
+            image.style.width = isSenior ? "16px" : "auto";
+            image.style.opacity = isSenior ? "0" : "1";
+        }
 
         repetitions.innerHTML = word?.repetitions || 0;
         original.innerHTML = word?.original || '';
@@ -296,6 +328,8 @@ export class Word {
             this.#body.querySelector('.card-title'),
             this.#body.querySelector('[data-component="transliteration"]'),
             this.#body.querySelector('[data-component="examples"]'),
+            this.#body.querySelector('[data-component="failure"]'),
+            this.#body.querySelector('[data-component="success"]'),
         ].forEach(el => isOpen ? el.classList.remove('hide') : el.classList.add('hide'));
     }
 

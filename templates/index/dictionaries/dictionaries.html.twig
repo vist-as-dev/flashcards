@@ -7,6 +7,10 @@
                                                 <h6>Dictionaries</h6>
                                                 <span class="secondary-content">
                                                     <i class="material-icons tooltipped"
+                                                       id="import-btn"
+                                                       data-position="right"
+                                                       data-tooltip="Import dictionary">file_download</i>
+                                                    <i class="material-icons tooltipped"
                                                        id="add-btn"
                                                        data-position="right"
                                                        data-tooltip="Add dictionary">add</i>
@@ -26,6 +30,29 @@
                                                         <input id="dictionary-name" type="text" class="validate">
                                                         <label for="dictionary-name">Type dictionary name</label>
                                                         <span class="helper-text hide red-text"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="collection-item import hide">
+                                                    <div class="input-field">
+                                                        <input id="dictionary-name" type="text" class="validate">
+                                                        <label for="dictionary-name">Type dictionary name</label>
+                                                        <span class="helper-text hide red-text"></span>
+                                                    </div>
+                                                    <div class="file-field input-field">
+                                                        <div class="btn waves-effect waves-light">
+                                                            <span>File</span>
+                                                            <input type="file" id="upload_file">
+                                                        </div>
+                                                        <div class="file-path-wrapper">
+                                                            <input id="upload_file_text"
+                                                                   class="file-path validate"
+                                                                   type="text"
+                                                                   placeholder="Upload file"
+                                                            >
+                                                            <span id="upload_file_helper" class="helper-text">
+                                                                Maximum file size: 7Mb
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="collection-body"></div>

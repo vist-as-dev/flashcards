@@ -1,3 +1,4 @@
+import {ImportDictionaryForm} from "./forms/ImportDictionaryForm";
 import {AddFormDictionary} from "./forms/AddFormDictionary";
 import {DictionaryListItem} from "./DictionaryListItem";
 
@@ -33,6 +34,7 @@ export class DictionaryList {
 
         this.#state.subscribe(({dictionary}) => this.#active = dictionary);
 
+        new ImportDictionaryForm(this.#storage);
         new AddFormDictionary(this.#storage);
     }
 
@@ -45,7 +47,7 @@ export class DictionaryList {
         Object.values(this.#dictionaries).forEach(dictionary => {
             new DictionaryListItem(this.#body, {
                 onClick: () => this.#setActive(dictionary),
-                onDelete: () => this.#storage.delete(dictionary.id).then(() => this.#synchro.delete(dictionary.id)),
+                onDelete: () => this.#storage.delete(dictionary).then(() => this.#synchro.delete(dictionary.id)),
             }).render(dictionary);
         });
 
