@@ -30,11 +30,31 @@ export class SynchroService {
         }
 
         const files = await this.#api.listFiles({type: 'dictionary'});
-        const remoteList = files.map(({id, properties}) => new Dictionary({
+
+        const deleted = []
+        for (const i in files) {
+            const {gDriveFileId, name, source, target} = files[i].properties
+
+            for (const local of localList) {
+                if (local.source === source && local.target === target && local.name === name) {
+                    if (local.gDriveFileId !== gDriveFileId) {
+                        // await this.#api.deleteMetaFile(gDriveFileId)
+                        deleted.push(gDriveFileId)
+                    }
+                }
+            }
+        }
+
+        if (deleted.length > 0) {
+            console.log({deleted})
+        }
+
+        const remoteList = files
+            .filter(({id}) => !deleted.includes(id))
+            .map(({id, properties}) => new Dictionary({
             gDriveFileId: id,
             ...properties,
         }));
-
 
         for (const i in remoteList) {
             remoteList[i].flashcards = await this.#api.downloadMetaFile(remoteList[i].gDriveFileId).then(cards => {
